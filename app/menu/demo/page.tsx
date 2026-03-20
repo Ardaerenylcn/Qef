@@ -26,7 +26,7 @@ const CATS = ["Kahveler", "Soğuk İçecekler", "Tatlılar"];
 
 export default function DemoMenuPage() {
   return (
-    <main style={{ backgroundColor: "#fffbf7", color: "#1f2937" }} className="min-h-screen overflow-x-hidden">
+    <main style={{ backgroundColor: "#fffbf7", color: "#1f2937", overscrollBehavior: "contain" }} className="min-h-screen overflow-x-hidden">
 
       {/* Header */}
       <div className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-100 px-4 py-3 flex items-center gap-3">

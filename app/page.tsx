@@ -137,13 +137,12 @@ export default function HomePage() {
                 {/* Hoparlör */}
                 <div className="w-20 h-1.5 bg-gray-700 rounded-full mx-auto mb-2" />
                 {/* Ekran */}
-                <div className="rounded-[32px] overflow-hidden bg-white" style={{ height: 560 }}>
+                <div className="rounded-[32px] overflow-hidden bg-white relative" style={{ height: 560 }}>
                   <iframe
                     src="/menu/demo"
                     className="w-full h-full border-0"
                     title="Demo Menü"
-                    scrolling="yes"
-                    style={{ touchAction: "pan-y", maxWidth: "100%" }}
+                    style={{ touchAction: "pan-y", maxWidth: "100%", overscrollBehavior: "contain" } as React.CSSProperties}
                   />
                 </div>
                 {/* Alt çubuk */}
