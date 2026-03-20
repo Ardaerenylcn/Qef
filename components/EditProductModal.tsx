@@ -50,7 +50,7 @@ export default function EditProductModal({ product, cafeId, onClose, onSave }: P
       const path = `${cafeId}/${product.id}.${ext}`;
       await supabase.storage.from("product-images").upload(path, imageFile, { upsert: true });
       const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
-      image_url = urlData.publicUrl;
+      image_url = `${urlData.publicUrl}?t=${Date.now()}`;
     }
 
     const updates = {

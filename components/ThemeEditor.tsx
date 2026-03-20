@@ -45,9 +45,11 @@ export default function ThemeEditor() {
   }
 
   async function uploadAsset(file: File, path: string): Promise<string> {
-    await supabase.storage.from("cafe-assets").upload(path, file, { upsert: true });
+    const { error } = await supabase.storage.from("cafe-assets").upload(path, file, { upsert: true });
+    if (error) throw error;
     const { data } = supabase.storage.from("cafe-assets").getPublicUrl(path);
-    return data.publicUrl;
+    // Cache-busting: aynı URL tarayıcıda önbelleklenmesini önler
+    return `${data.publicUrl}?t=${Date.now()}`;
   }
 
   async function handleSave() {
