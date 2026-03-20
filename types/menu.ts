@@ -9,6 +9,7 @@ export interface Product {
   image_url: string;
   position: number;
   tags: string[];
+  in_stock: boolean;
 }
 
 export const PRODUCT_TAGS: { label: string; labelEn: string; color: string; bg: string }[] = [

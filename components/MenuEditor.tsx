@@ -240,6 +240,12 @@ export default function MenuEditor() {
     );
   }
 
+  // --- Stok durumu değiştir ---
+  async function handleToggleStock(id: string, inStock: boolean) {
+    await supabase.from("products").update({ in_stock: inStock }).eq("id", id);
+    setProducts((prev) => prev.map((p) => p.id === id ? { ...p, in_stock: inStock } : p));
+  }
+
   // --- Kategori sırası değişti ---
   async function handleCategoryDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -448,6 +454,7 @@ export default function MenuEditor() {
                     onDeleteProduct={handleDelete}
                     onEditProduct={setEditingProduct}
                     onProductReorder={handleProductReorder}
+                    onToggleStock={handleToggleStock}
                   />
                 ))}
               </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe } from "lucide-react";
+import DemoCustomizer from "@/components/DemoCustomizer";
 
 export default function HomePage() {
   return (
@@ -93,6 +94,66 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* DEMO */}
+      <section className="py-20 px-6 bg-gradient-to-b from-orange-50/50 to-white">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+
+          {/* Sol: metin */}
+          <div className="flex-1 space-y-6 text-center md:text-left">
+            <p className="text-orange-500 font-bold text-sm uppercase tracking-widest">Canlı Demo</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+              Müşteriniz tam olarak<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">
+                bunu görecek
+              </span>
+            </h2>
+            <p className="text-gray-500 leading-relaxed max-w-sm mx-auto md:mx-0">
+              Gerçek bir kafe menüsü. Ürün ara, kategorilere bak, fiyatları gör. Hepsi saniyeler içinde senin için hazır.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-6 py-3 rounded-2xl transition-all text-sm shadow-lg shadow-orange-200"
+              >
+                Kendi menünü oluştur →
+              </Link>
+              <Link
+                href="/menu/demo"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-600 font-semibold px-6 py-3 rounded-2xl transition-all text-sm border border-gray-200 shadow-sm"
+              >
+                Tam ekranda aç
+              </Link>
+            </div>
+          </div>
+
+          {/* Sağ: telefon mockup */}
+          <div className="flex-shrink-0 flex justify-center">
+            <div className="relative">
+              {/* Arka plan glow */}
+              <div className="absolute inset-0 bg-orange-200 rounded-full blur-3xl opacity-30 scale-110" />
+              {/* Telefon çerçevesi */}
+              <div className="relative w-[280px] bg-gray-900 rounded-[44px] p-3 shadow-2xl ring-1 ring-white/10">
+                {/* Hoparlör */}
+                <div className="w-20 h-1.5 bg-gray-700 rounded-full mx-auto mb-2" />
+                {/* Ekran */}
+                <div className="rounded-[32px] overflow-hidden bg-white" style={{ height: 560 }}>
+                  <iframe
+                    src="/menu/demo"
+                    className="w-full h-full border-0"
+                    title="Demo Menü"
+                    scrolling="yes"
+                  />
+                </div>
+                {/* Alt çubuk */}
+                <div className="w-24 h-1.5 bg-gray-700 rounded-full mx-auto mt-2" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* ÖZELLİKLER */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-20 px-6">
         <div className="max-w-6xl mx-auto">
@@ -152,6 +213,123 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* GÜÇLÜ ARAÇLAR */}
+      <section className="py-20 px-6 bg-gray-950">
+        <div className="max-w-6xl mx-auto space-y-14">
+          <div className="text-center space-y-3">
+            <p className="text-orange-400 font-bold text-sm uppercase tracking-widest">Güçlü Araçlar</p>
+            <h2 className="text-3xl font-extrabold text-white">Menünüzün kontrolü sizde</h2>
+            <p className="text-gray-400 max-w-md mx-auto">Sadece menü değil — analizler, toplu düzenleme ve tam özelleştirme.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            {/* Menü Analizi */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-orange-500/10">
+                <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">Menü Analizi</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Hangi ürün en çok ilgi görüyor? Kaç kişi menünüzü ziyaret etti? Günlük ve haftalık istatistiklerle kararlarınızı veriye dayandırın.</p>
+              </div>
+              {/* Mini grafik mockup */}
+              <div className="space-y-2">
+                {[
+                  { name: "Türk Kahvesi", pct: 85, color: "bg-orange-500" },
+                  { name: "Latte",        pct: 62, color: "bg-orange-400" },
+                  { name: "Cheesecake",   pct: 48, color: "bg-orange-300" },
+                  { name: "Waffle",       pct: 31, color: "bg-orange-200" },
+                ].map(({ name, pct, color }) => (
+                  <div key={name} className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-500 w-24 truncate">{name}</span>
+                    <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                      <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="text-[10px] text-gray-500">{pct}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Toplu Fiyat Güncelleme */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-green-500/10">
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">Kolay Fiyat Güncelleme</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Tüm kategoriye tek seferde zam veya indirim yapın. Tek tek düzenlemek zorunda kalmadan fiyatları anında güncelleyin.</p>
+              </div>
+              {/* Mini fiyat mockup */}
+              <div className="bg-gray-800 rounded-xl p-3 space-y-2">
+                <p className="text-[10px] text-gray-500 font-medium">Kahveler kategorisi</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-gray-700 rounded-lg px-3 py-1.5 text-xs text-white">+%10</div>
+                  <div className="bg-orange-500 rounded-lg px-3 py-1.5 text-xs text-white font-bold">Uygula</div>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span className="text-gray-500">Türk Kahvesi</span>
+                  <span className="text-gray-400 line-through">35₺</span>
+                  <span className="text-green-400 font-bold">38.50₺</span>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span className="text-gray-500">Latte</span>
+                  <span className="text-gray-400 line-through">55₺</span>
+                  <span className="text-green-400 font-bold">60.50₺</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Banner & Logo */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-purple-500/10">
+                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">Banner & Logo</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Kafenizin kapak fotoğrafını ve logosunu yükleyin. Müşteriler menüyü açtığında sizi hemen tanısın.</p>
+              </div>
+              {/* Mini banner mockup */}
+              <div className="rounded-xl overflow-hidden border border-gray-700">
+                <div className="relative h-16 bg-gradient-to-r from-orange-900/50 to-orange-800/30 flex items-center justify-center">
+                  <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "url('/demo/cafe-cover.png')", backgroundSize: "cover", backgroundPosition: "center" }} />
+                  <span className="relative text-xs font-bold text-white drop-shadow">Arôme Café</span>
+                </div>
+                <div className="bg-gray-800 px-3 py-2 flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500/20 border border-orange-500/30 flex items-center justify-center">
+                    <div className="w-4 h-4 rounded bg-orange-400/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="h-1.5 w-16 bg-gray-600 rounded" />
+                    <div className="h-1 w-10 bg-gray-700 rounded" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ÖZELLEŞTİRME */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-3">
+            <p className="text-orange-500 font-bold text-sm uppercase tracking-widest">Özelleştirme</p>
+            <h2 className="text-3xl font-extrabold text-gray-900">Kafenizin kimliğini yansıtın</h2>
+            <p className="text-gray-400 max-w-md mx-auto">Renkler, yazı tipleri, ürün düzeni — hepsini tek panelden ayarlayın.</p>
+          </div>
+          <DemoCustomizer />
         </div>
       </section>
 

@@ -21,6 +21,7 @@ interface Props {
   onDeleteProduct: (id: string) => void;
   onEditProduct: (product: Product) => void;
   onProductReorder: (category: string, newOrder: Product[]) => void;
+  onToggleStock: (id: string, inStock: boolean) => void;
 }
 
 export function SortableCategoryBlock({
@@ -29,6 +30,7 @@ export function SortableCategoryBlock({
   onDeleteProduct,
   onEditProduct,
   onProductReorder,
+  onToggleStock,
 }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: category });
@@ -88,6 +90,7 @@ export function SortableCategoryBlock({
                 product={product}
                 onDelete={onDeleteProduct}
                 onEdit={onEditProduct}
+                onToggleStock={onToggleStock}
               />
             ))}
           </div>

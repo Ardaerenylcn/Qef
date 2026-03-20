@@ -10,10 +10,12 @@ export function SortableProductCard({
   product,
   onDelete,
   onEdit,
+  onToggleStock,
 }: {
   product: Product;
   onDelete: (id: string) => void;
   onEdit: (product: Product) => void;
+  onToggleStock: (id: string, inStock: boolean) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: product.id });
@@ -36,7 +38,7 @@ export function SortableProductCard({
         <GripVertical className="w-4 h-4" />
       </button>
       <div className="flex-1">
-        <ProductCard product={product} onDelete={onDelete} onEdit={onEdit} />
+        <ProductCard product={product} onDelete={onDelete} onEdit={onEdit} onToggleStock={onToggleStock} />
       </div>
     </div>
   );

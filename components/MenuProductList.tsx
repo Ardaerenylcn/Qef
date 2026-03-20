@@ -15,6 +15,7 @@ interface Product {
   description_en: string | null;
   image_url: string | null;
   tags: string[] | null;
+  in_stock: boolean | null;
 }
 
 interface Props {
@@ -84,8 +85,9 @@ export default function MenuProductList({
   }
 
   function renderListProduct(product: Product) {
+    const inStock = product.in_stock !== false;
     return (
-      <div key={product.id} className="flex items-center gap-4">
+      <div key={product.id} className={`flex items-center gap-4 ${!inStock ? "opacity-50" : ""}`}>
         {product.image_url ? (
           <ImageZoomModal
             src={product.image_url}
@@ -104,9 +106,16 @@ export default function MenuProductList({
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <p className="font-medium">
-            {isEn && product.name_en ? product.name_en : product.name}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className={`font-medium ${!inStock ? "line-through" : ""}`}>
+              {isEn && product.name_en ? product.name_en : product.name}
+            </p>
+            {!inStock && (
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-red-100 text-red-400 shrink-0">
+                {isEn ? "Sold Out" : "Tükendi"}
+              </span>
+            )}
+          </div>
           {(isEn && product.description_en ? product.description_en : product.description) && (
             <p className="text-xs opacity-50 mt-0.5">
               {isEn && product.description_en ? product.description_en : product.description}
@@ -137,8 +146,9 @@ export default function MenuProductList({
   }
 
   function renderCardProduct(product: Product) {
+    const inStock = product.in_stock !== false;
     return (
-      <div key={product.id} className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm bg-white">
+      <div key={product.id} className={`rounded-2xl border border-gray-100 overflow-hidden shadow-sm bg-white ${!inStock ? "opacity-50" : ""}`}>
         {product.image_url ? (
           <ImageZoomModal
             src={product.image_url}
@@ -158,9 +168,16 @@ export default function MenuProductList({
           </div>
         )}
         <div className="p-3 space-y-1">
-          <p className="font-medium text-sm">
-            {isEn && product.name_en ? product.name_en : product.name}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className={`font-medium text-sm ${!inStock ? "line-through" : ""}`}>
+              {isEn && product.name_en ? product.name_en : product.name}
+            </p>
+            {!inStock && (
+              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-red-100 text-red-400 shrink-0">
+                {isEn ? "Sold Out" : "Tükendi"}
+              </span>
+            )}
+          </div>
           {(isEn && product.description_en ? product.description_en : product.description) && (
             <p className="text-xs opacity-50">
               {isEn && product.description_en ? product.description_en : product.description}
