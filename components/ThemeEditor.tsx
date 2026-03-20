@@ -12,6 +12,7 @@ export default function ThemeEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState("");
@@ -55,23 +56,31 @@ export default function ThemeEditor() {
   async function handleSave() {
     if (!cafeId) return;
     setSaving(true);
+    setError("");
 
-    let newTheme = { ...theme };
+    try {
+      let newTheme = { ...theme };
 
-    if (logoFile) {
-      newTheme.logoUrl = await uploadAsset(logoFile, `${cafeId}/logo`);
-      setLogoFile(null);
+      if (logoFile) {
+        newTheme.logoUrl = await uploadAsset(logoFile, `${cafeId}/logo`);
+        setLogoFile(null);
+      }
+      if (coverFile) {
+        newTheme.coverUrl = await uploadAsset(coverFile, `${cafeId}/cover`);
+        setCoverFile(null);
+      }
+
+      const { error: dbErr } = await supabase.from("cafes").update({ theme: newTheme }).eq("id", cafeId);
+      if (dbErr) throw dbErr;
+
+      setTheme(newTheme);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Bir hata oluştu.");
+    } finally {
+      setSaving(false);
     }
-    if (coverFile) {
-      newTheme.coverUrl = await uploadAsset(coverFile, `${cafeId}/cover`);
-      setCoverFile(null);
-    }
-
-    await supabase.from("cafes").update({ theme: newTheme }).eq("id", cafeId);
-    setTheme(newTheme);
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
   }
 
   function handleFileChange(
@@ -262,6 +271,13 @@ export default function ThemeEditor() {
           </div>
         </div>
       </div>
+
+      {/* Hata */}
+      {error && (
+        <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-sm text-red-500">
+          {error}
+        </div>
+      )}
 
       {/* Kaydet */}
       <button onClick={handleSave} disabled={saving}
