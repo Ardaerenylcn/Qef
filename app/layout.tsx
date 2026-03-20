@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Qef - Kafen için ücretsiz dijital menü",
   description: "Saniyeler içinde kafen için dijital menü oluştur. Qef ile QR kodunu tara, menünü gör.",
+  other: {
+    "google-adsense-account": "ca-pub-9433411352609938",
+  },
 };
 
 export default function RootLayout({
