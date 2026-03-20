@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Save, Loader2, ImagePlus, X, Wifi, Instagram } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
+import { validateImage } from "@/lib/validateImage";
+import { compressImage } from "@/lib/compressImage";
 
 export default function ThemeEditor() {
   const [cafeId, setCafeId] = useState<string | null>(null);
@@ -83,15 +85,18 @@ export default function ThemeEditor() {
     }
   }
 
-  function handleFileChange(
+  async function handleFileChange(
     e: React.ChangeEvent<HTMLInputElement>,
     type: "logo" | "cover"
   ) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const preview = URL.createObjectURL(file);
-    if (type === "logo") { setLogoFile(file); setLogoPreview(preview); }
-    else { setCoverFile(file); setCoverPreview(preview); }
+    const err = validateImage(file, "asset");
+    if (err) { setError(err); e.target.value = ""; return; }
+    const compressed = await compressImage(file, "asset");
+    const preview = URL.createObjectURL(compressed);
+    if (type === "logo") { setLogoFile(compressed); setLogoPreview(preview); }
+    else { setCoverFile(compressed); setCoverPreview(preview); }
   }
 
   if (loading) {

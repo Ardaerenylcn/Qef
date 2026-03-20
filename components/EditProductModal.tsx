@@ -6,6 +6,8 @@ import { X, Save, Loader2, ImagePlus, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/types/menu";
 import TagSelector from "./TagSelector";
+import { validateImage } from "@/lib/validateImage";
+import { compressImage } from "@/lib/compressImage";
 
 interface Props {
   product: Product;
@@ -30,11 +32,14 @@ export default function EditProductModal({ product, cafeId, onClose, onSave }: P
 
   const supabase = createClient();
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    const err = validateImage(file, "product");
+    if (err) { setError(err); e.target.value = ""; return; }
+    const compressed = await compressImage(file, "product");
+    setImageFile(compressed);
+    setImagePreview(URL.createObjectURL(compressed));
   }
 
   async function handleSave() {

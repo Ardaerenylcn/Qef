@@ -19,6 +19,8 @@ import BulkPriceUpdate from "./BulkPriceUpdate";
 import { createClient } from "@/lib/supabase/client";
 import type { Product, OpeningHour } from "@/types/menu";
 import { DEFAULT_HOURS } from "@/types/menu";
+import { validateImage } from "@/lib/validateImage";
+import { compressImage } from "@/lib/compressImage";
 import OpeningHoursEditor from "./OpeningHoursEditor";
 
 interface Cafe {
@@ -156,11 +158,14 @@ export default function MenuEditor() {
   }
 
   // --- Görsel ---
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    const err = validateImage(file, "product");
+    if (err) { setError(err); e.target.value = ""; return; }
+    const compressed = await compressImage(file, "product");
+    setImageFile(compressed);
+    setImagePreview(URL.createObjectURL(compressed));
   }
 
   function clearImage() { setImageFile(null); setImagePreview(""); }
