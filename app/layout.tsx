@@ -14,15 +14,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <head>
+      <body className="bg-gray-50 text-gray-900 antialiased">
+        {children}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9433411352609938"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body className="bg-gray-50 text-gray-900 antialiased">{children}</body>
+      </body>
     </html>
   );
 }
