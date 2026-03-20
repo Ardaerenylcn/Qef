@@ -1,6 +1,6 @@
 import Script from "next/script";
 
-const PUBLISHER_ID = "ca-pub-XXXXXXXXXXXXXXXX"; // ← AdSense Publisher ID buraya
+const PUBLISHER_ID = "ca-pub-9433411352609938";
 
 export default function MenuLayout({ children }: { children: React.ReactNode }) {
   return (
