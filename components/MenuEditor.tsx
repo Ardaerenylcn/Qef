@@ -327,7 +327,7 @@ export default function MenuEditor() {
             <a href={`/menu/${cafe.slug}`} target="_blank"
               className="flex items-center gap-1 text-xs text-orange-400 hover:underline">
               <Link2 className="w-3 h-3" />
-              localhost:3000/menu/{cafe.slug}
+              {typeof window !== "undefined" ? window.location.host : ""}/menu/{cafe.slug}
             </a>
           )}
         </div>
