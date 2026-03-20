@@ -5,7 +5,7 @@ import DemoCustomizer from "@/components/DemoCustomizer";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white overflow-x-hidden">
+    <main className="min-h-screen bg-white overflow-x-hidden" style={{ overscrollBehavior: "none" }}>
 
       {/* NAV */}
       <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
@@ -143,6 +143,7 @@ export default function HomePage() {
                     className="w-full h-full border-0"
                     title="Demo Menü"
                     scrolling="yes"
+                    style={{ touchAction: "pan-y", maxWidth: "100%" }}
                   />
                 </div>
                 {/* Alt çubuk */}
