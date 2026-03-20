@@ -18,8 +18,6 @@ export default function AdUnit({ slot, format = "auto", className = "" }: Props)
     } catch {}
   }, []);
 
-  if (PUBLISHER_ID === "ca-pub-XXXXXXXXXXXXXXXX") return null; // ID eklenmeden reklam gösterme
-
   return (
     <div className={className}>
       <ins
