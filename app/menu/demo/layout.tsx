@@ -1,8 +1,14 @@
 export default function DemoLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html style={{ height: "100%", overflow: "hidden" }}>
-      <body style={{ height: "100%", overflow: "hidden", margin: 0 }}>
-        <div style={{ height: "100%", overflowY: "auto", overscrollBehavior: "contain" }}>
+    <html style={{ overflow: "hidden" }}>
+      <body style={{ overflow: "hidden", margin: 0 }}>
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+          WebkitOverflowScrolling: "touch",
+        } as React.CSSProperties}>
           {children}
         </div>
       </body>
