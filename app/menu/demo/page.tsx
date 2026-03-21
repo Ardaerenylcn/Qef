@@ -1,6 +1,7 @@
 import Image from "next/image";
 import CategoryTabs from "@/components/CategoryTabs";
 import MenuProductList from "@/components/MenuProductList";
+import DemoScrollFix from "@/components/DemoScrollFix";
 
 const PRIMARY = "#f97316";
 const LOGO  = "/demo/logo.png";
@@ -26,7 +27,8 @@ const CATS = ["Kahveler", "Soğuk İçecekler", "Tatlılar"];
 
 export default function DemoMenuPage() {
   return (
-    <main style={{ backgroundColor: "#fffbf7", color: "#1f2937", overscrollBehavior: "contain" }} className="min-h-screen overflow-x-hidden">
+    <div style={{ position: "fixed", inset: 0, overflowY: "auto", overscrollBehavior: "contain", backgroundColor: "#fffbf7", color: "#1f2937" } as React.CSSProperties}>
+      <DemoScrollFix />
 
       {/* Header */}
       <div className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-100 px-4 py-3 flex items-center gap-3">
@@ -60,6 +62,6 @@ export default function DemoMenuPage() {
       </div>
 
       <p className="text-center text-[10px] text-gray-300 pb-6">Bu bir demo menüdür · qef.app</p>
-    </main>
+    </div>
   );
 }
