@@ -55,7 +55,20 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      {/* Loading bar */}
+      {loading && (
+        <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-orange-100 overflow-hidden">
+          <div className="h-full bg-orange-500 animate-pulse" style={{ width: "60%", animation: "loading-bar 1.2s ease-in-out infinite" }} />
+        </div>
+      )}
       <div className="max-w-sm w-full space-y-8">
+        {/* Ana sayfaya dön */}
+        <div>
+          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-orange-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Ana Sayfa
+          </Link>
+        </div>
         {/* Logo */}
         <div className="text-center space-y-2">
           <div className="inline-flex bg-orange-100 p-3 rounded-2xl">

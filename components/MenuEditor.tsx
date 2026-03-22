@@ -47,6 +47,7 @@ export default function MenuEditor() {
   const [cafeDesc, setCafeDesc] = useState("");
   const [cafeDescEn, setCafeDescEn] = useState("");
   const [cafeSlug, setCafeSlug] = useState("");
+  const [slugAutoMode, setSlugAutoMode] = useState(true);
   const [slugError, setSlugError] = useState("");
   const [savingCafe, setSavingCafe] = useState(false);
   const [showCafeEn, setShowCafeEn] = useState(false);
@@ -98,7 +99,10 @@ export default function MenuEditor() {
         setCafeNameEn(cafeData.name_en ?? "");
         setCafeDesc(cafeData.description);
         setCafeDescEn(cafeData.description_en ?? "");
-        setCafeSlug(cafeData.slug);
+        // Slug UUID ise (yeni kullanıcı varsayılanı) auto-mode'da tut
+        const isUuidSlug = /^[0-9a-f-]{36}$/.test(cafeData.slug);
+        setSlugAutoMode(isUuidSlug || !cafeData.slug);
+        setCafeSlug(isUuidSlug ? "" : (cafeData.slug ?? ""));
         setOpeningHours(cafeData.opening_hours?.length ? cafeData.opening_hours : DEFAULT_HOURS);
         setAddress(cafeData.address ?? "");
         setMapsUrl(cafeData.maps_url ?? "");
@@ -118,6 +122,26 @@ export default function MenuEditor() {
     }
     load();
   }, []);
+
+  function generateSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/ı/g, "i").replace(/İ/g, "i")
+      .replace(/ş/g, "s").replace(/Ş/g, "s")
+      .replace(/ğ/g, "g").replace(/Ğ/g, "g")
+      .replace(/ü/g, "u").replace(/Ü/g, "u")
+      .replace(/ö/g, "o").replace(/Ö/g, "o")
+      .replace(/ç/g, "c").replace(/Ç/g, "c")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function handleCafeNameChange(value: string) {
+    setCafeName(value);
+    if (slugAutoMode) {
+      setCafeSlug(generateSlug(value));
+    }
+  }
 
   function buildCategoryOrder(order: string[], prods: Product[]): string[] {
     const fromProducts = [...new Set(prods.map((p) => p.category || "Genel"))];
@@ -292,7 +316,7 @@ export default function MenuEditor() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
         <h2 className="font-semibold text-gray-700">Kafe bilgileri</h2>
         <input type="text" placeholder="Kafe adı" value={cafeName}
-          onChange={(e) => setCafeName(e.target.value)}
+          onChange={(e) => handleCafeNameChange(e.target.value)}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
         <input type="text" placeholder="Kısa açıklama (isteğe bağlı)" value={cafeDesc}
           onChange={(e) => setCafeDesc(e.target.value)}
@@ -314,21 +338,33 @@ export default function MenuEditor() {
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
         )}
-        <div className="space-y-1">
-          <label className="text-xs text-gray-400 font-medium">Menü URL'i</label>
+        <div className="space-y-1.5">
+          <label className="text-xs text-gray-500 font-medium">Menü URL'i</label>
           <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-300">
             <span className="bg-gray-50 text-gray-400 text-xs px-3 py-2.5 border-r border-gray-200 shrink-0">/menu/</span>
-            <input type="text" value={cafeSlug} onChange={(e) => setCafeSlug(e.target.value)}
+            <input type="text" value={cafeSlug}
+              onChange={(e) => { setCafeSlug(e.target.value); setSlugAutoMode(false); }}
               placeholder="kafe-adiniz"
               className="flex-1 px-3 py-2 text-sm focus:outline-none" />
           </div>
           {slugError && <p className="text-xs text-red-400">{slugError}</p>}
-          {cafe?.slug && (
-            <a href={`/menu/${cafe.slug}`} target="_blank"
-              className="flex items-center gap-1 text-xs text-orange-400 hover:underline">
-              <Link2 className="w-3 h-3" />
-              {typeof window !== "undefined" ? window.location.host : ""}/menu/{cafe.slug}
-            </a>
+          {cafeSlug && !slugError && (
+            <div className="flex flex-col gap-0.5">
+              <p className="text-xs text-gray-400">Müşterileriniz bu link üzerinden menüye erişebilecek:</p>
+              {cafe?.slug === cafeSlug && !/^[0-9a-f-]{36}$/.test(cafe.slug) ? (
+                <a href={`/menu/${cafe.slug}`} target="_blank"
+                  className="flex items-center gap-1 text-xs text-orange-400 hover:underline font-medium">
+                  <Link2 className="w-3 h-3" />
+                  {typeof window !== "undefined" ? window.location.host : ""}/menu/{cafe.slug}
+                </a>
+              ) : (
+                <p className="flex items-center gap-1 text-xs text-gray-300 italic">
+                  <Link2 className="w-3 h-3" />
+                  {typeof window !== "undefined" ? window.location.host : ""}/menu/{cafeSlug}
+                  <span className="text-orange-300 not-italic">(kaydet butonuna bas)</span>
+                </p>
+              )}
+            </div>
           )}
         </div>
 
@@ -420,9 +456,10 @@ export default function MenuEditor() {
               </button>
             </div>
           ) : (
-            <label className="flex items-center gap-2 w-fit cursor-pointer text-sm text-gray-400 hover:text-orange-400 transition-colors">
-              <ImagePlus className="w-4 h-4" />
-              Görsel ekle
+            <label className="flex flex-col items-center justify-center gap-2 w-full py-5 rounded-xl border-2 border-dashed border-gray-200 cursor-pointer text-gray-400 hover:border-orange-400 hover:text-orange-400 hover:bg-orange-50 transition-all">
+              <ImagePlus className="w-6 h-6" />
+              <span className="text-sm font-medium">Görsel Ekle</span>
+              <span className="text-xs text-gray-300">JPEG, PNG, WebP · Maks 8MB</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
             </label>
           )}
