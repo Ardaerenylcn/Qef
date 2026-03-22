@@ -27,7 +27,7 @@ const CATS = ["Kahveler", "Soğuk İçecekler", "Tatlılar"];
 
 export default function DemoMenuPage() {
   return (
-    <div style={{ position: "fixed", inset: 0, overflowY: "auto", overscrollBehavior: "none", touchAction: "pan-y", backgroundColor: "#fffbf7", color: "#1f2937" } as React.CSSProperties}>
+    <div data-demo-scroll style={{ position: "fixed", inset: 0, overflowY: "auto", overscrollBehavior: "none", touchAction: "pan-y", backgroundColor: "#fffbf7", color: "#1f2937" } as React.CSSProperties}>
       <DemoScrollFix />
 
       {/* Header */}
