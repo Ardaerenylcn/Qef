@@ -83,7 +83,7 @@ export default function DemoPhoneMockup() {
 
   return (
     <div className="flex-shrink-0 flex justify-center">
-      <div className="relative">
+      <div className="relative overflow-hidden rounded-[44px]">
         <div className="absolute inset-0 bg-orange-200 rounded-full blur-3xl opacity-30 scale-110" />
         <div className="relative w-[270px] bg-gray-900 rounded-[44px] p-3 shadow-2xl ring-1 ring-white/10">
           <div className="w-20 h-1.5 bg-gray-700 rounded-full mx-auto mb-2" />

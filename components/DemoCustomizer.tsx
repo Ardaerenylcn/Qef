@@ -108,7 +108,7 @@ export default function DemoCustomizer() {
 
       {/* Önizleme */}
       <div className="flex-shrink-0">
-        <div className="relative">
+        <div className="relative overflow-hidden rounded-[40px]">
           <div className="absolute inset-0 rounded-full blur-3xl opacity-20 scale-110" style={{ backgroundColor: color }} />
           <div className="relative w-[260px] bg-gray-900 rounded-[40px] p-3 shadow-2xl ring-1 ring-white/10">
             <div className="w-16 h-1.5 bg-gray-700 rounded-full mx-auto mb-2" />

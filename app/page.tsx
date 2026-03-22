@@ -48,11 +48,11 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative max-w-6xl mx-auto px-6 pt-6 pb-20 flex flex-col-reverse md:flex-row items-center gap-12">
+      <section className="relative max-w-6xl mx-auto px-6 pt-6 pb-20 flex flex-col-reverse md:flex-row items-center gap-12 overflow-hidden">
 
         {/* Arka plan dekorasyon */}
-        <div className="absolute -top-20 -right-20 w-96 h-96 bg-orange-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-        <div className="absolute top-40 -left-10 w-64 h-64 bg-yellow-100 rounded-full blur-3xl opacity-40 pointer-events-none" />
+        <div className="absolute -top-10 right-0 w-96 h-96 bg-orange-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
+        <div className="absolute top-40 left-0 w-64 h-64 bg-yellow-100 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
         {/* Sol: metin */}
         <div className="flex-1 space-y-7 text-center md:text-left relative z-10">
