@@ -2,9 +2,38 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 
+const BASE_URL = "https://qef-sepia.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Qef - Kafen için ücretsiz dijital menü",
-  description: "Saniyeler içinde kafen için dijital menü oluştur. Qef ile QR kodunu tara, menünü gör.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Qef — Kafen için ücretsiz dijital menü",
+    template: "%s | Qef",
+  },
+  description: "Saniyeler içinde kafen için dijital QR menü oluştur. QR kodu tarat, menünü gör. Ücretsiz, kurulum gerektirmez.",
+  keywords: ["qr menü", "dijital menü", "kafe menü", "restoran menü", "qr kod menü", "online menü", "ücretsiz menü"],
+  authors: [{ name: "Qef" }],
+  creator: "Qef",
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    locale: "tr_TR",
+    url: BASE_URL,
+    siteName: "Qef",
+    title: "Qef — Kafen için ücretsiz dijital menü",
+    description: "Saniyeler içinde kafen için dijital QR menü oluştur. QR kodu tarat, menünü gör.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Qef - Dijital QR Menü" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Qef — Kafen için ücretsiz dijital menü",
+    description: "Saniyeler içinde kafen için dijital QR menü oluştur.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   other: {
     "google-adsense-account": "ca-pub-9433411352609938",
   },

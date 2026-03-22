@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -12,9 +13,53 @@ import ParallaxCover from "@/components/ParallaxCover";
 import OpenStatusBadge from "@/components/OpenStatusBadge";
 import AdUnit from "@/components/AdUnit";
 
+const BASE_URL = "https://qef-sepia.vercel.app";
+
 interface Props {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ lang?: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: cafe } = await supabase
+    .from("cafes")
+    .select("name, description, theme, address")
+    .eq("slug", slug)
+    .single();
+
+  if (!cafe) return { title: "Menü Bulunamadı" };
+
+  const theme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
+  const title = `${cafe.name} — Dijital Menü`;
+  const description = cafe.description
+    ? `${cafe.name} menüsü: ${cafe.description}`
+    : `${cafe.name} dijital menüsünü inceleyin. QR kodu taratın, kolayca sipariş verin.`;
+  const pageUrl = `${BASE_URL}/menu/${slug}`;
+  const ogImage = theme.coverUrl || theme.logoUrl || `${BASE_URL}/og-image.png`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      type: "website",
+      locale: "tr_TR",
+      url: pageUrl,
+      siteName: "Qef",
+      title,
+      description,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${cafe.name} menü görseli` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function PublicMenuPage({ params, searchParams }: Props) {
@@ -63,9 +108,26 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const address = cafe.address ?? "";
   const mapsUrl = cafe.maps_url ?? "";
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    name: cafeName,
+    ...(cafeDesc && { description: cafeDesc }),
+    ...(address && { address: { "@type": "PostalAddress", streetAddress: address } }),
+    ...(mapsUrl && { hasMap: mapsUrl }),
+    url: `${BASE_URL}/menu/${slug}`,
+    ...(theme.logoUrl && { image: theme.logoUrl }),
+    servesCuisine: "Cafe",
+    menu: `${BASE_URL}/menu/${slug}`,
+  };
+
   return (
     <main style={{ backgroundColor: theme.bgColor, fontFamily: fontCss, color: theme.textColor }}
       className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Sticky header */}
       <StickyMenuHeader

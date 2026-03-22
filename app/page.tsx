@@ -1,12 +1,35 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe } from "lucide-react";
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 
+export const metadata: Metadata = {
+  title: "Qef — Kafen için ücretsiz dijital QR menü",
+  description: "Saniyeler içinde kafen için dijital QR menü oluştur. Müşterilerine linki ver veya QR kodu tarat, anında menü görünsün. Ücretsiz, kurulum gerektirmez.",
+  alternates: { canonical: "https://qef-sepia.vercel.app" },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Qef",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: "https://qef-sepia.vercel.app",
+  description: "Kafe ve restoranlar için ücretsiz dijital QR menü oluşturma platformu.",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "TRY" },
+  inLanguage: "tr",
+};
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* NAV */}
       <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
