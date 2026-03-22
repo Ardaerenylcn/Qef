@@ -14,11 +14,13 @@ export default function DemoScrollFix() {
     };
 
     html.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
     body.style.overflow = "hidden";
-    body.style.overscrollBehavior = "contain";
+    body.style.overscrollBehavior = "none";
 
     return () => {
       html.style.overflow = prev.htmlOverflow;
+      html.style.overscrollBehavior = "";
       body.style.overflow = prev.bodyOverflow;
       body.style.overscrollBehavior = prev.bodyOverscroll;
     };
