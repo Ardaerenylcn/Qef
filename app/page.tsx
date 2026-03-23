@@ -113,6 +113,7 @@ export default function HomePage() {
               height={380}
               className="relative drop-shadow-2xl hover:scale-105 transition-transform duration-500"
               priority
+              style={{ width: 380, height: 380 }}
             />
           </div>
         </div>
