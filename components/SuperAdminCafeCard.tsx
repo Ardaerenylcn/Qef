@@ -39,11 +39,15 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   function handleSendMessage() {
     if (!msgTitle.trim() || !msgBody.trim()) return;
     startTransition(async () => {
-      await sendMessageAction(cafe.user_id, msgTitle.trim(), msgBody.trim());
-      setMsgSent(true);
-      setMsgTitle("");
-      setMsgBody("");
-      setTimeout(() => { setShowMessage(false); setMsgSent(false); }, 1500);
+      try {
+        await sendMessageAction(cafe.user_id, msgTitle.trim(), msgBody.trim());
+        setMsgSent(true);
+        setMsgTitle("");
+        setMsgBody("");
+        setTimeout(() => { setShowMessage(false); setMsgSent(false); }, 1500);
+      } catch {
+        // sessizce geç
+      }
     });
   }
 
