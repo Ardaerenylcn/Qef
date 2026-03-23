@@ -27,6 +27,7 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const [slugError, setSlugError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [impersonateError, setImpersonateError] = useState("");
+  const [impersonateLink, setImpersonateLink] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [msgTitle, setMsgTitle] = useState("");
   const [msgBody, setMsgBody] = useState("");
@@ -39,11 +40,13 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
 
   function handleImpersonate() {
     if (!userInfo.email) return;
+    setImpersonateError("");
+    setImpersonateLink("");
     startTransition(async () => {
       try {
         const res = await impersonateUserAction(cafe.user_id, userInfo.email);
         if (res?.error) { setImpersonateError(res.error); return; }
-        if (res?.link) window.open(res.link, "_blank");
+        if (res?.link) setImpersonateLink(res.link);
       } catch {
         setImpersonateError("Bir hata oluştu");
       }
@@ -218,6 +221,40 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
 
         {impersonateError && (
           <p className="text-xs text-red-400">{impersonateError}</p>
+        )}
+
+        {/* Giriş linki modal */}
+        {impersonateLink && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+            onClick={() => setImpersonateLink("")}>
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-5 space-y-4"
+              onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-800 text-sm">Giriş Linki</h3>
+                <button onClick={() => setImpersonateLink("")} className="text-gray-300 hover:text-gray-500">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-orange-500 bg-orange-50 rounded-xl px-3 py-2">
+                Bu linki gizli / özel sekmede aç — aksi halde mevcut oturumun değişir.
+              </p>
+              <div className="bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-500 break-all">
+                {impersonateLink.slice(0, 60)}...
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { navigator.clipboard.writeText(impersonateLink); }}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded-xl text-sm transition-colors">
+                  Kopyala
+                </button>
+                <button
+                  onClick={() => window.open(impersonateLink, "_blank")}
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-xl text-sm transition-colors">
+                  Aç
+                </button>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Kayıt tarihi */}
