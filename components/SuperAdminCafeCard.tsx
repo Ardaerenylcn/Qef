@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send } from "lucide-react";
-import { deleteUserAction, updateSlugAction, sendMessageAction } from "@/app/superadmin/actions";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn } from "lucide-react";
+import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -26,6 +26,7 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const [slugInput, setSlugInput] = useState(cafe.slug ?? "");
   const [slugError, setSlugError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [impersonateError, setImpersonateError] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [msgTitle, setMsgTitle] = useState("");
   const [msgBody, setMsgBody] = useState("");
@@ -35,6 +36,19 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const logoUrl = cafe.theme?.logoUrl;
   const productCount = cafe.products?.[0]?.count ?? 0;
   const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
+
+  function handleImpersonate() {
+    if (!userInfo.email) return;
+    startTransition(async () => {
+      try {
+        const res = await impersonateUserAction(cafe.user_id, userInfo.email);
+        if (res?.error) { setImpersonateError(res.error); return; }
+        if (res?.link) window.open(res.link, "_blank");
+      } catch {
+        setImpersonateError("Bir hata oluştu");
+      }
+    });
+  }
 
   function handleSendMessage() {
     if (!msgTitle.trim() || !msgBody.trim()) return;
@@ -149,6 +163,13 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
 
           {/* Aksiyonlar — sağa yaslanmış */}
           <div className="ml-auto flex items-center gap-2">
+            {/* Kullanıcı olarak giriş yap */}
+            <button onClick={handleImpersonate} disabled={isPending || !userInfo.email}
+              title="Bu kullanıcı olarak giriş yap"
+              className="text-gray-200 hover:text-green-400 transition-colors disabled:opacity-30">
+              <LogIn className="w-3.5 h-3.5" />
+            </button>
+
             {/* Mesaj butonu */}
             <button onClick={() => setShowMessage(true)}
               className="text-gray-200 hover:text-blue-400 transition-colors">
@@ -193,6 +214,10 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
               </div>
             )}
           </div>
+        )}
+
+        {impersonateError && (
+          <p className="text-xs text-red-400">{impersonateError}</p>
         )}
 
         {/* Kayıt tarihi */}

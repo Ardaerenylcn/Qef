@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createServerClient } from "@supabase/ssr";
 
 async function verifySuperAdmin() {
   const supabase = await createClient();
@@ -32,6 +33,23 @@ export async function sendMessageAction(userId: string, title: string, body: str
   const { error } = await admin.from("messages").insert({ user_id: userId, title, body });
   if (error) return { error: "Mesaj gönderilemedi" };
   return { success: true };
+}
+
+export async function impersonateUserAction(userId: string, userEmail: string) {
+  await verifySuperAdmin();
+  const admin = createAdminClient();
+
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: "magiclink",
+    email: userEmail,
+    options: { redirectTo: "https://qefmenu.com/admin" },
+  });
+
+  if (error || !data?.properties?.action_link) {
+    return { error: "Giriş linki oluşturulamadı" };
+  }
+
+  return { link: data.properties.action_link };
 }
 
 export async function updateSlugAction(cafeId: string, newSlug: string) {
