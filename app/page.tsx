@@ -390,6 +390,8 @@ export default function HomePage() {
       <footer className="text-center text-xs text-gray-300 pb-10 pt-4 space-y-2 border-t border-gray-100">
         <p className="font-medium">© 2025 Qef — Tüm hakları saklıdır</p>
         <p className="space-x-3">
+          <Link href="/blog" className="hover:text-orange-400 transition-colors">Blog</Link>
+          <span>·</span>
           <Link href="/privacy" className="hover:text-orange-400 transition-colors">Gizlilik Politikası</Link>
           <span>·</span>
           <Link href="/terms" className="hover:text-orange-400 transition-colors">Kullanım Koşulları</Link>
