@@ -30,25 +30,33 @@ export default async function SuperAdminPage() {
     { data: allCafes },
     { data: allViews },
     { data: recentViews },
+    { data: { users: authUsers } },
   ] = await Promise.all([
     admin.from("cafes").select("*", { count: "exact", head: true }),
     admin.from("cafes").select("*", { count: "exact", head: true }),
     admin.from("products").select("*", { count: "exact", head: true }),
     admin.from("menu_views").select("*", { count: "exact", head: true }),
-    // Tüm kafeler — ürün sayısıyla birlikte
     admin
       .from("cafes")
-      .select("id, name, slug, created_at, theme, products(count)")
+      .select("id, name, slug, created_at, user_id, theme, products(count)")
       .order("created_at", { ascending: false }),
-    // Tüm zamanların görüntülenmeleri (cafe_id bazlı saymak için)
     admin.from("menu_views").select("cafe_id"),
-    // Son 7 günlük günlük görüntülenme
     admin
       .from("menu_views")
       .select("viewed_at")
       .gte("viewed_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .order("viewed_at", { ascending: true }),
+    admin.auth.admin.listUsers({ perPage: 1000 }),
   ]);
+
+  // user_id → { email, phone }
+  const userMap: Record<string, { email: string; phone: string }> = {};
+  (authUsers ?? []).forEach((u) => {
+    userMap[u.id] = {
+      email: u.email ?? "",
+      phone: (u.user_metadata?.phone as string) ?? "",
+    };
+  });
 
   // Cafe bazında toplam görüntülenme sayısı
   const viewsPerCafe: Record<string, number> = {};
@@ -147,6 +155,7 @@ export default async function SuperAdminPage() {
                 key={cafe.id}
                 cafe={cafe}
                 views={viewsPerCafe[cafe.id] ?? 0}
+                userInfo={userMap[cafe.user_id] ?? { email: "", phone: "" }}
               />
             ))}
           </div>

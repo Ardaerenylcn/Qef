@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X } from "lucide-react";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone } from "lucide-react";
 import { deleteUserAction, updateSlugAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
@@ -16,9 +16,10 @@ interface Props {
     products?: { count: number }[];
   };
   views: number;
+  userInfo: { email: string; phone: string };
 }
 
-export default function SuperAdminCafeCard({ cafe, views }: Props) {
+export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [editingSlug, setEditingSlug] = useState(false);
@@ -149,6 +150,24 @@ export default function SuperAdminCafeCard({ cafe, views }: Props) {
             )}
           </div>
         </div>
+
+        {/* Email + Telefon */}
+        {(userInfo.email || userInfo.phone) && (
+          <div className="space-y-1 pt-1 border-t border-gray-50">
+            {userInfo.email && (
+              <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Mail className="w-3 h-3 text-gray-300 shrink-0" />
+                <span className="truncate">{userInfo.email}</span>
+              </div>
+            )}
+            {userInfo.phone && (
+              <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Phone className="w-3 h-3 text-gray-300 shrink-0" />
+                <span>{userInfo.phone}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Kayıt tarihi */}
         <p className="text-xs text-gray-300 text-right -mt-1">
