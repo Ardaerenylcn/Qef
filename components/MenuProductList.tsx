@@ -254,8 +254,8 @@ export default function MenuProductList({
       ) : (
         /* Normal kategori görünümü */
         <div
-          className={`space-y-8 transition-all duration-500 ${
-            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`space-y-8 transition-opacity duration-300 ${
+            mounted ? "opacity-100" : "opacity-0"
           }`}
         >
           {orderedCats.map((cat) => (
