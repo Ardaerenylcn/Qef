@@ -107,7 +107,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-br from-orange-200 to-yellow-100 rounded-full scale-[0.85] blur-3xl opacity-80" />
             <div className="absolute inset-0 bg-orange-50 rounded-full scale-75" />
             <Image
-              src="/mascot.png"
+              src="/mascot.webp"
               alt="Qef Maskotu"
               width={380}
               height={380}
