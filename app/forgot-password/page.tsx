@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
 
     const supabase = createClient();
     const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: "https://qefmenu.com/auth/callback?next=/reset-password",
     });
 
     if (err) {
