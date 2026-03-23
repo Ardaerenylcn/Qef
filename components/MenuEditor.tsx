@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { PlusCircle, UtensilsCrossed, Save, Loader2, Link2, ImagePlus, X, ChevronDown, MapPin, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import {
@@ -70,6 +71,7 @@ export default function MenuEditor() {
   const [adding, setAdding] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  const router = useRouter();
   const supabase = createClient();
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -177,7 +179,7 @@ export default function MenuEditor() {
         maps_url: mapsUrl.trim(),
       })
       .eq("id", cafe.id).select().single();
-    if (data) { setCafe(data); setCafeSlug(data.slug); }
+    if (data) { setCafe(data); setCafeSlug(data.slug); router.refresh(); }
     setSavingCafe(false);
   }
 
