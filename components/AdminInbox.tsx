@@ -85,7 +85,7 @@ export default function AdminInbox({ messages }: Props) {
                   <div key={msg.id} className="px-5 py-4 space-y-1">
                     <p className="text-sm font-semibold text-gray-800">{msg.title}</p>
                     <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-wrap">{msg.body}</p>
-                    <p className="text-xs text-gray-300">
+                    <p className="text-xs text-gray-300" suppressHydrationWarning>
                       {new Date(msg.created_at).toLocaleDateString("tr-TR", {
                         day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit"
                       })}

@@ -9,7 +9,7 @@ async function verifySuperAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || user.email !== process.env.SUPER_ADMIN_EMAIL) {
-    redirect("/");
+    throw new Error("Yetkisiz");
   }
   return createAdminClient();
 }
