@@ -199,8 +199,8 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
         {/* Reklam — menü listesinin altında */}
         <AdUnit
-          slot="XXXXXXXXXX"
-          format="horizontal"
+          slot="1760366540"
+          format="auto"
           className="overflow-hidden rounded-xl"
         />
 
@@ -238,7 +238,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
         {/* Reklam — footer üstünde */}
         <AdUnit
-          slot="YYYYYYYYYY"
+          slot="3917291443"
           format="auto"
           className="overflow-hidden rounded-xl"
         />
