@@ -33,6 +33,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         password,
         options: {
           data: { phone: phone.trim() },
+          emailRedirectTo: "https://qefmenu.com/auth/callback",
         },
       });
       if (error) {
