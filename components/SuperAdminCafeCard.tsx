@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone } from "lucide-react";
-import { deleteUserAction, updateSlugAction } from "@/app/superadmin/actions";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send } from "lucide-react";
+import { deleteUserAction, updateSlugAction, sendMessageAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -26,11 +26,26 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const [slugInput, setSlugInput] = useState(cafe.slug ?? "");
   const [slugError, setSlugError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [msgTitle, setMsgTitle] = useState("");
+  const [msgBody, setMsgBody] = useState("");
+  const [msgSent, setMsgSent] = useState(false);
 
   const primaryColor = cafe.theme?.primaryColor ?? "#f97316";
   const logoUrl = cafe.theme?.logoUrl;
   const productCount = cafe.products?.[0]?.count ?? 0;
   const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
+
+  function handleSendMessage() {
+    if (!msgTitle.trim() || !msgBody.trim()) return;
+    startTransition(async () => {
+      await sendMessageAction(cafe.user_id, msgTitle.trim(), msgBody.trim());
+      setMsgSent(true);
+      setMsgTitle("");
+      setMsgBody("");
+      setTimeout(() => { setShowMessage(false); setMsgSent(false); }, 1500);
+    });
+  }
 
   function handleDelete() {
     if (!confirmDelete) { setConfirmDelete(true); return; }
@@ -128,8 +143,15 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
             <span><span className="font-semibold text-gray-700">{views.toLocaleString("tr-TR")}</span> görüntülenme</span>
           </div>
 
-          {/* Silme butonu — sağa yaslanmış */}
-          <div className="ml-auto">
+          {/* Aksiyonlar — sağa yaslanmış */}
+          <div className="ml-auto flex items-center gap-2">
+            {/* Mesaj butonu */}
+            <button onClick={() => setShowMessage(true)}
+              className="text-gray-200 hover:text-blue-400 transition-colors">
+              <Send className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Silme butonu */}
             {confirmDelete ? (
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-red-400">Emin misin?</span>
@@ -174,6 +196,48 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
           {new Date(cafe.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" })}
         </p>
       </div>
+      {/* Mesaj gönder modal */}
+      {showMessage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          onClick={() => setShowMessage(false)}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-5 space-y-4"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-gray-800 text-sm">{cafe.name} — Mesaj Gönder</h3>
+              <button onClick={() => setShowMessage(false)} className="text-gray-300 hover:text-gray-500">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {msgSent ? (
+              <div className="py-6 text-center text-green-500 font-medium text-sm">Mesaj gönderildi ✓</div>
+            ) : (
+              <>
+                <input
+                  value={msgTitle}
+                  onChange={(e) => setMsgTitle(e.target.value)}
+                  placeholder="Başlık"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400"
+                />
+                <textarea
+                  value={msgBody}
+                  onChange={(e) => setMsgBody(e.target.value)}
+                  placeholder="Mesajınızı yazın..."
+                  rows={4}
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400 resize-none"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={isPending || !msgTitle.trim() || !msgBody.trim()}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
+                >
+                  {isPending ? "Gönderiliyor..." : "Gönder"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

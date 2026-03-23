@@ -27,6 +27,13 @@ export async function deleteUserAction(userId: string, cafeId: string) {
   await admin.auth.admin.deleteUser(userId);
 }
 
+export async function sendMessageAction(userId: string, title: string, body: string) {
+  const admin = await verifySuperAdmin();
+  const { error } = await admin.from("messages").insert({ user_id: userId, title, body });
+  if (error) return { error: "Mesaj gönderilemedi" };
+  return { success: true };
+}
+
 export async function updateSlugAction(cafeId: string, newSlug: string) {
   const admin = await verifySuperAdmin();
 

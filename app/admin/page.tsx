@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AdminHeader from "@/components/AdminHeader";
 import AdminTabs from "@/components/AdminTabs";
+import AdminInbox from "@/components/AdminInbox";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -9,17 +10,19 @@ export default async function AdminPage() {
 
   if (!user) redirect("/login");
 
-  const { data: cafe } = await supabase
-    .from("cafes")
-    .select("slug, name")
-    .eq("user_id", user.id)
-    .single();
+  const [{ data: cafe }, { data: messages }] = await Promise.all([
+    supabase.from("cafes").select("slug, name").eq("user_id", user.id).single(),
+    supabase.from("messages").select("id, title, body, is_read, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false }),
+  ]);
 
   return (
     <main className="min-h-screen px-4 py-8 bg-gray-50">
       <AdminHeader
         slug={cafe?.slug ?? ""}
         cafeName={cafe?.name ?? "Kafem"}
+        messages={messages ?? []}
       />
 
       <div className="max-w-lg mx-auto mb-4">

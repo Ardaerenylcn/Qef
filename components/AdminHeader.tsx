@@ -5,13 +5,23 @@ import Link from "next/link";
 import { Eye, QrCode } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 import QRCodeModal from "./QRCodeModal";
+import AdminInbox from "./AdminInbox";
+
+interface Message {
+  id: string;
+  title: string;
+  body: string;
+  is_read: boolean;
+  created_at: string;
+}
 
 interface Props {
   slug: string;
   cafeName: string;
+  messages: Message[];
 }
 
-export default function AdminHeader({ slug, cafeName }: Props) {
+export default function AdminHeader({ slug, cafeName, messages }: Props) {
   const [showQR, setShowQR] = useState(false);
 
   return (
@@ -25,6 +35,7 @@ export default function AdminHeader({ slug, cafeName }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
+          <AdminInbox messages={messages} />
           <button
             onClick={() => setShowQR(true)}
             className="flex items-center gap-1.5 text-sm bg-orange-500 hover:bg-orange-600 text-white font-medium px-3 py-1.5 rounded-lg transition-colors"
