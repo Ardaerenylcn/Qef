@@ -8,9 +8,9 @@ import {
   UtensilsCrossed,
   Eye,
   TrendingUp,
-  ExternalLink,
 } from "lucide-react";
 import SuperAdminLogout from "@/components/SuperAdminLogout";
+import SuperAdminCafeCard from "@/components/SuperAdminCafeCard";
 
 export default async function SuperAdminPage() {
   const supabase = await createClient();
@@ -142,68 +142,13 @@ export default async function SuperAdminPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(allCafes ?? []).map((cafe: any) => {
-              const productCount = cafe.products?.[0]?.count ?? 0;
-              const views = viewsPerCafe[cafe.id] ?? 0;
-              const primaryColor = cafe.theme?.primaryColor ?? "#f97316";
-              const logoUrl = cafe.theme?.logoUrl;
-              const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
-
-              return (
-                <div key={cafe.id}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-
-                  {/* Renkli üst şerit */}
-                  <div className="h-1.5" style={{ backgroundColor: primaryColor }} />
-
-                  <div className="p-4 space-y-3">
-                    {/* İsim + link */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {logoUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={logoUrl} alt="logo"
-                            className="w-9 h-9 rounded-xl object-cover shrink-0 border border-gray-100" />
-                        ) : (
-                          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                            style={{ backgroundColor: `${primaryColor}22` }}>
-                            <UtensilsCrossed className="w-4 h-4" style={{ color: primaryColor }} />
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="font-semibold text-gray-900 text-sm truncate">{cafe.name}</p>
-                          <p className="text-xs text-gray-400 truncate">
-                            {isUuid ? "slug yok" : `/menu/${cafe.slug}`}
-                          </p>
-                        </div>
-                      </div>
-                      {!isUuid && (
-                        <a href={`/menu/${cafe.slug}`} target="_blank"
-                          className="text-gray-300 hover:text-orange-400 transition-colors shrink-0 mt-0.5">
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
-                    </div>
-
-                    {/* İstatistikler */}
-                    <div className="flex items-center gap-3 pt-1 border-t border-gray-50">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <UtensilsCrossed className="w-3.5 h-3.5 text-gray-300" />
-                        <span><span className="font-semibold text-gray-700">{productCount}</span> ürün</span>
-                      </div>
-                      <div className="w-px h-3 bg-gray-100" />
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <Eye className="w-3.5 h-3.5 text-gray-300" />
-                        <span><span className="font-semibold text-gray-700">{views.toLocaleString("tr-TR")}</span> görüntülenme</span>
-                      </div>
-                      <div className="ml-auto text-xs text-gray-300">
-                        {new Date(cafe.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {(allCafes ?? []).map((cafe: any) => (
+              <SuperAdminCafeCard
+                key={cafe.id}
+                cafe={cafe}
+                views={viewsPerCafe[cafe.id] ?? 0}
+              />
+            ))}
           </div>
         </div>
 
