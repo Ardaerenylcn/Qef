@@ -1,6 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+async function generateSessionToken(password: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode("qefmenu-sa-session-v1")
+  );
+  return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -47,9 +63,10 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // 2. Şifre cookie'si
+    // 2. Session token cookie'si (şifre değil HMAC token)
     const saVerified = request.cookies.get("sa_verified")?.value;
-    if (saVerified !== process.env.SUPER_ADMIN_PASSWORD) {
+    const expectedToken = await generateSessionToken(process.env.SUPER_ADMIN_PASSWORD!);
+    if (!saVerified || saVerified !== expectedToken) {
       const url = request.nextUrl.clone();
       url.pathname = "/superadmin/login";
       return NextResponse.redirect(url);
