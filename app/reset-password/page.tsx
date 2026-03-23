@@ -17,7 +17,11 @@ export default function ResetPasswordPage() {
   const supabase = createClient();
 
   useEffect(() => {
-    // Supabase hash'ten session oluşturur; PASSWORD_RECOVERY eventi bekliyoruz
+    // Callback'ten gelen session varsa direkt hazır say
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setReady(true);
+    });
+    // Hash akışı için PASSWORD_RECOVERY eventini de dinle
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") setReady(true);
     });
