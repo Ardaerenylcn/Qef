@@ -3,7 +3,7 @@ import Script from "next/script";
 import NavigationProgress from "@/components/NavigationProgress";
 import "./globals.css";
 
-const BASE_URL = "https://qef-sepia.vercel.app";
+const BASE_URL = "https://qefmenu.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

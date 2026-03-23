@@ -13,7 +13,7 @@ import ParallaxCover from "@/components/ParallaxCover";
 import OpenStatusBadge from "@/components/OpenStatusBadge";
 import AdUnit from "@/components/AdUnit";
 
-const BASE_URL = "https://qef-sepia.vercel.app";
+const BASE_URL = "https://qefmenu.com";
 
 interface Props {
   params: Promise<{ slug: string }>;

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/superadmin", "/api/"],
       },
     ],
-    sitemap: "https://qef-sepia.vercel.app/sitemap.xml",
+    sitemap: "https://qefmenu.com/sitemap.xml",
   };
 }

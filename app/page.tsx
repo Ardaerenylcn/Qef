@@ -8,7 +8,7 @@ import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 export const metadata: Metadata = {
   title: "Qef — Kafen için ücretsiz dijital QR menü",
   description: "Saniyeler içinde kafen için dijital QR menü oluştur. Müşterilerine linki ver veya QR kodu tarat, anında menü görünsün. Ücretsiz, kurulum gerektirmez.",
-  alternates: { canonical: "https://qef-sepia.vercel.app" },
+  alternates: { canonical: "https://qefmenu.com" },
 };
 
 const jsonLd = {
@@ -17,7 +17,7 @@ const jsonLd = {
   name: "Qef",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  url: "https://qef-sepia.vercel.app",
+  url: "https://qefmenu.com",
   description: "Kafe ve restoranlar için ücretsiz dijital QR menü oluşturma platformu.",
   offers: { "@type": "Offer", price: "0", priceCurrency: "TRY" },
   inLanguage: "tr",
@@ -387,8 +387,15 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="text-center text-xs text-gray-300 pb-10 space-y-1">
+      <footer className="text-center text-xs text-gray-300 pb-10 pt-4 space-y-2 border-t border-gray-100">
         <p className="font-medium">© 2025 Qef — Tüm hakları saklıdır</p>
+        <p className="space-x-3">
+          <Link href="/privacy" className="hover:text-orange-400 transition-colors">Gizlilik Politikası</Link>
+          <span>·</span>
+          <Link href="/terms" className="hover:text-orange-400 transition-colors">Kullanım Koşulları</Link>
+          <span>·</span>
+          <a href="mailto:destek@qefmenu.com" className="hover:text-orange-400 transition-colors">İletişim</a>
+        </p>
       </footer>
 
     </main>
