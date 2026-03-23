@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createServerClient } from "@supabase/ssr";
 
 async function verifySuperAdmin() {
   const supabase = await createClient();
@@ -42,14 +41,15 @@ export async function impersonateUserAction(userId: string, userEmail: string) {
   const { data, error } = await admin.auth.admin.generateLink({
     type: "magiclink",
     email: userEmail,
-    options: { redirectTo: "https://qefmenu.com/admin" },
+    options: { redirectTo: "https://qefmenu.com/auth/callback?next=/admin" },
   });
 
-  if (error || !data?.properties?.action_link) {
-    return { error: "Giriş linki oluşturulamadı" };
-  }
+  if (error) return { error: `Hata: ${error.message}` };
 
-  return { link: data.properties.action_link };
+  const link = (data as any)?.properties?.action_link ?? (data as any)?.action_link;
+  if (!link) return { error: "Link oluşturulamadı" };
+
+  return { link };
 }
 
 export async function updateSlugAction(cafeId: string, newSlug: string) {
