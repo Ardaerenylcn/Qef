@@ -41,7 +41,7 @@ export async function impersonateUserAction(userId: string, userEmail: string) {
   const { data, error } = await admin.auth.admin.generateLink({
     type: "magiclink",
     email: userEmail,
-    options: { redirectTo: "https://qefmenu.com/admin" },
+    options: { redirectTo: "https://qefmenu.com/auth/magic" },
   });
 
   if (error) return { error: `Hata: ${error.message}` };
