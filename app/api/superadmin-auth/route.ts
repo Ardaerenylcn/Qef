@@ -1,4 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase admin client — sadece server-side bu route'da kullanılıyor
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+const MAX_ATTEMPTS = 5;
+const WINDOW_MINUTES = 15;
 
 async function generateSessionToken(password: string): Promise<string> {
   const key = await crypto.subtle.importKey(
@@ -13,13 +23,49 @@ async function generateSessionToken(password: string): Promise<string> {
     key,
     new TextEncoder().encode("qefmenu-sa-session-v1")
   );
-  return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function checkRateLimit(ip: string): Promise<boolean> {
+  const windowStart = new Date(Date.now() - WINDOW_MINUTES * 60 * 1000).toISOString();
+
+  const { count } = await supabase
+    .from("sa_login_attempts")
+    .select("*", { count: "exact", head: true })
+    .eq("ip", ip)
+    .gte("created_at", windowStart);
+
+  return (count ?? 0) < MAX_ATTEMPTS;
+}
+
+async function recordAttempt(ip: string) {
+  await supabase.from("sa_login_attempts").insert({ ip });
+
+  // 1 günden eski kayıtları temizle
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  await supabase.from("sa_login_attempts").delete().lt("created_at", oneDayAgo);
 }
 
 export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+
+  const allowed = await checkRateLimit(ip);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Çok fazla hatalı giriş. 15 dakika bekleyin." },
+      { status: 429 }
+    );
+  }
+
   const { password } = await request.json();
 
   if (!password || password !== process.env.SUPER_ADMIN_PASSWORD) {
+    await recordAttempt(ip);
+    // Brute force'u yavaşlat
+    await new Promise((r) => setTimeout(r, 1000));
     return NextResponse.json({ error: "Hatalı şifre." }, { status: 401 });
   }
 
