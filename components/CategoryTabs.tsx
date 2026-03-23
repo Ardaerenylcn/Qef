@@ -40,13 +40,20 @@ export default function CategoryTabs({ categories, primaryColor, bgColor = "#fff
     setActive(cat);
   }
 
-  // Aktif tab görünür olsun
+  // Aktif tab görünür olsun — sadece tab bar'ı yatay scroll et, sayfaya dokunma
   useEffect(() => {
     const container = tabsRef.current;
     if (!container) return;
     const activeBtn = container.querySelector(`[data-cat="${active}"]`) as HTMLElement | null;
     if (activeBtn) {
-      activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const scrollLeft =
+        container.scrollLeft +
+        btnRect.left -
+        containerRect.left -
+        (containerRect.width - btnRect.width) / 2;
+      container.scrollTo({ left: scrollLeft, behavior: "smooth" });
     }
   }, [active]);
 
