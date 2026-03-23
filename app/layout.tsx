@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import NavigationProgress from "@/components/NavigationProgress";
 import "./globals.css";
 
 const BASE_URL = "https://qef-sepia.vercel.app";
@@ -47,6 +48,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className="bg-gray-50 text-gray-900 antialiased">
+        <NavigationProgress />
         {children}
         <Script
           async
