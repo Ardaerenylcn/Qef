@@ -111,9 +111,9 @@ export default function HomePage() {
               alt="Qef Maskotu"
               width={380}
               height={380}
-              className="relative drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              className="relative hover:scale-105 transition-transform duration-500"
               priority
-              style={{ width: 380, height: 380 }}
+              style={{ width: 380, height: 380, mixBlendMode: "multiply" }}
             />
           </div>
         </div>
