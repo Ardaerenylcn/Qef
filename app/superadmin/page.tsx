@@ -22,52 +22,41 @@ export default async function SuperAdminPage() {
 
   const admin = createAdminClient();
 
-  // Tüm istatistikleri paralel çek
   const [
     { count: userCount },
     { count: cafeCount },
     { count: productCount },
     { count: viewCount },
-    { data: recentCafes },
-    { data: topCafes },
+    { data: allCafes },
+    { data: allViews },
+    { data: recentViews },
   ] = await Promise.all([
     admin.from("cafes").select("*", { count: "exact", head: true }),
     admin.from("cafes").select("*", { count: "exact", head: true }),
     admin.from("products").select("*", { count: "exact", head: true }),
     admin.from("menu_views").select("*", { count: "exact", head: true }),
-    // Son 10 kafe (en yeni)
+    // Tüm kafeler — ürün sayısıyla birlikte
     admin
       .from("cafes")
-      .select("id, name, slug, created_at, user_id")
-      .order("created_at", { ascending: false })
-      .limit(10),
-    // En çok görüntülenen 10 kafe
+      .select("id, name, slug, created_at, theme, products(count)")
+      .order("created_at", { ascending: false }),
+    // Tüm zamanların görüntülenmeleri (cafe_id bazlı saymak için)
+    admin.from("menu_views").select("cafe_id"),
+    // Son 7 günlük günlük görüntülenme
     admin
       .from("menu_views")
-      .select("cafe_id, cafes(name, slug)")
-      .gte("viewed_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()),
+      .select("viewed_at")
+      .gte("viewed_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .order("viewed_at", { ascending: true }),
   ]);
 
-  // Top kafeleri say
-  const viewsByCafe: Record<string, { name: string; slug: string; count: number }> = {};
-  (topCafes ?? []).forEach((v: any) => {
-    const id = v.cafe_id;
-    if (!viewsByCafe[id]) {
-      viewsByCafe[id] = { name: v.cafes?.name ?? "-", slug: v.cafes?.slug ?? "", count: 0 };
-    }
-    viewsByCafe[id].count++;
+  // Cafe bazında toplam görüntülenme sayısı
+  const viewsPerCafe: Record<string, number> = {};
+  (allViews ?? []).forEach((v: any) => {
+    viewsPerCafe[v.cafe_id] = (viewsPerCafe[v.cafe_id] ?? 0) + 1;
   });
-  const sortedTopCafes = Object.values(viewsByCafe)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
 
-  // Son 7 günlük günlük görüntülenme
-  const { data: recentViews } = await admin
-    .from("menu_views")
-    .select("viewed_at")
-    .gte("viewed_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-    .order("viewed_at", { ascending: true });
-
+  // Son 7 gün grafik
   const viewsByDay: Record<string, number> = {};
   (recentViews ?? []).forEach((v) => {
     const day = new Date(v.viewed_at).toLocaleDateString("tr-TR", { weekday: "short", day: "numeric" });
@@ -83,7 +72,7 @@ export default async function SuperAdminPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
 
         {/* Başlık */}
         <div className="flex items-center justify-between">
@@ -115,89 +104,106 @@ export default async function SuperAdminPage() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Son 7 Gün Görüntülenme */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-purple-400" />
-              <h2 className="font-semibold text-gray-700">Son 7 Gün</h2>
-            </div>
-            {Object.keys(viewsByDay).length === 0 ? (
-              <p className="text-sm text-gray-300 py-4 text-center">Henüz veri yok</p>
-            ) : (
-              <div className="space-y-2">
-                {Object.entries(viewsByDay).map(([day, count]) => {
-                  const max = Math.max(...Object.values(viewsByDay));
-                  const pct = Math.round((count / max) * 100);
-                  return (
-                    <div key={day} className="flex items-center gap-3">
-                      <span className="text-xs text-gray-400 w-16 shrink-0">{day}</span>
-                      <div className="flex-1 bg-gray-100 rounded-full h-2">
-                        <div
-                          className="bg-purple-400 h-2 rounded-full transition-all"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                      <span className="text-xs font-medium text-gray-600 w-6 text-right">{count}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+        {/* Son 7 Gün Görüntülenme */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-purple-400" />
+            <h2 className="font-semibold text-gray-700">Son 7 Gün Görüntülenme</h2>
           </div>
-
-          {/* Son 30 Gün En Çok Görüntülenen */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-            <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-orange-400" />
-              <h2 className="font-semibold text-gray-700">Son 30 Gün — En Çok Görüntülenen</h2>
-            </div>
-            {sortedTopCafes.length === 0 ? (
-              <p className="text-sm text-gray-300 py-4 text-center">Henüz veri yok</p>
-            ) : (
-              <div className="space-y-2">
-                {sortedTopCafes.map((cafe, i) => (
-                  <div key={cafe.slug} className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-gray-300 w-4">{i + 1}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{cafe.name}</p>
-                      <p className="text-xs text-gray-400">/menu/{cafe.slug}</p>
+          {Object.keys(viewsByDay).length === 0 ? (
+            <p className="text-sm text-gray-300 py-4 text-center">Henüz veri yok</p>
+          ) : (
+            <div className="space-y-2">
+              {Object.entries(viewsByDay).map(([day, count]) => {
+                const max = Math.max(...Object.values(viewsByDay));
+                const pct = Math.round((count / max) * 100);
+                return (
+                  <div key={day} className="flex items-center gap-3">
+                    <span className="text-xs text-gray-400 w-16 shrink-0">{day}</span>
+                    <div className="flex-1 bg-gray-100 rounded-full h-2">
+                      <div className="bg-purple-400 h-2 rounded-full" style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="text-sm font-semibold text-orange-500">{cafe.count}</span>
+                    <span className="text-xs font-medium text-gray-600 w-6 text-right">{count}</span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Tüm Kafeler */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
             <Coffee className="w-4 h-4 text-orange-400" />
-            <h2 className="font-semibold text-gray-700">Son Kayıt Olan Kafeler</h2>
+            <h2 className="font-semibold text-gray-700">Tüm Kafeler</h2>
+            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+              {(allCafes ?? []).length}
+            </span>
           </div>
-          <div className="divide-y divide-gray-50">
-            {(recentCafes ?? []).map((cafe: any) => (
-              <div key={cafe.id} className="px-5 py-3 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="font-medium text-gray-800 text-sm truncate">{cafe.name}</p>
-                  <p className="text-xs text-gray-400">/menu/{cafe.slug}</p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {(allCafes ?? []).map((cafe: any) => {
+              const productCount = cafe.products?.[0]?.count ?? 0;
+              const views = viewsPerCafe[cafe.id] ?? 0;
+              const primaryColor = cafe.theme?.primaryColor ?? "#f97316";
+              const logoUrl = cafe.theme?.logoUrl;
+              const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
+
+              return (
+                <div key={cafe.id}
+                  className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+
+                  {/* Renkli üst şerit */}
+                  <div className="h-1.5" style={{ backgroundColor: primaryColor }} />
+
+                  <div className="p-4 space-y-3">
+                    {/* İsim + link */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {logoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={logoUrl} alt="logo"
+                            className="w-9 h-9 rounded-xl object-cover shrink-0 border border-gray-100" />
+                        ) : (
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                            style={{ backgroundColor: `${primaryColor}22` }}>
+                            <UtensilsCrossed className="w-4 h-4" style={{ color: primaryColor }} />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-semibold text-gray-900 text-sm truncate">{cafe.name}</p>
+                          <p className="text-xs text-gray-400 truncate">
+                            {isUuid ? "slug yok" : `/menu/${cafe.slug}`}
+                          </p>
+                        </div>
+                      </div>
+                      {!isUuid && (
+                        <a href={`/menu/${cafe.slug}`} target="_blank"
+                          className="text-gray-300 hover:text-orange-400 transition-colors shrink-0 mt-0.5">
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      )}
+                    </div>
+
+                    {/* İstatistikler */}
+                    <div className="flex items-center gap-3 pt-1 border-t border-gray-50">
+                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                        <UtensilsCrossed className="w-3.5 h-3.5 text-gray-300" />
+                        <span><span className="font-semibold text-gray-700">{productCount}</span> ürün</span>
+                      </div>
+                      <div className="w-px h-3 bg-gray-100" />
+                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                        <Eye className="w-3.5 h-3.5 text-gray-300" />
+                        <span><span className="font-semibold text-gray-700">{views.toLocaleString("tr-TR")}</span> görüntülenme</span>
+                      </div>
+                      <div className="ml-auto text-xs text-gray-300">
+                        {new Date(cafe.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs text-gray-400">
-                    {new Date(cafe.created_at).toLocaleDateString("tr-TR")}
-                  </span>
-                  <a
-                    href={`/menu/${cafe.slug}`}
-                    target="_blank"
-                    className="text-gray-300 hover:text-orange-400 transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
