@@ -49,6 +49,12 @@ async function recordAttempt(ip: string) {
 }
 
 export async function POST(request: NextRequest) {
+  // Body size limit (~1KB is plenty for a password)
+  const contentLength = parseInt(request.headers.get("content-length") ?? "0", 10);
+  if (contentLength > 1024) {
+    return NextResponse.json({ error: "İstek çok büyük." }, { status: 413 });
+  }
+
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
@@ -83,7 +89,14 @@ export async function POST(request: NextRequest) {
   return response;
 }
 
-export async function DELETE() {
+export async function DELETE(request: NextRequest) {
+  // CSRF: only allow same-origin requests
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (origin && host && !origin.endsWith(host)) {
+    return NextResponse.json({ error: "Yetkisiz" }, { status: 403 });
+  }
+
   const response = NextResponse.json({ ok: true });
   response.cookies.delete("sa_verified");
   return response;

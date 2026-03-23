@@ -37,7 +37,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         },
       });
       if (error) {
-        setError(error.message);
+        setError("Kayıt olunamadı. E-posta zaten kullanımda olabilir.");
       } else {
         setSuccess("Hesabın oluşturuldu! E-postanı doğrula, ardından giriş yap.");
       }
@@ -111,7 +111,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
             />
             {mode === "login" && (

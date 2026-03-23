@@ -79,7 +79,7 @@ export default function ThemeEditor() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Bir hata oluştu.");
+      setError("Tema kaydedilemedi. Lütfen tekrar deneyin.");
     } finally {
       setSaving(false);
     }

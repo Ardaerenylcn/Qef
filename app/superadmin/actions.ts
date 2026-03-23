@@ -1,7 +1,5 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -35,6 +33,8 @@ export async function sendMessageAction(userId: string, title: string, body: str
 }
 
 export async function impersonateUserAction(userId: string, userEmail: string) {
+  const supabase = await createClient();
+  const { data: { user: adminUser } } = await supabase.auth.getUser();
   await verifySuperAdmin();
   const admin = createAdminClient();
 
@@ -49,14 +49,29 @@ export async function impersonateUserAction(userId: string, userEmail: string) {
   const link = (data as any)?.properties?.action_link ?? (data as any)?.action_link;
   if (!link) return { error: "Link oluşturulamadı" };
 
+  // Audit log (best-effort, non-blocking)
+  void admin.from("superadmin_audit_log").insert({
+    action: "impersonate",
+    actor_id: adminUser?.id ?? "unknown",
+    target_user_id: userId,
+    target_email: userEmail,
+  });
+
   return { link };
 }
+
+const RESERVED_SLUGS = new Set([
+  "api", "admin", "auth", "superadmin", "login", "register",
+  "forgot-password", "reset-password", "blog", "privacy", "terms",
+  "sitemap", "robots", "favicon", "og-image", "ads",
+]);
 
 export async function updateSlugAction(cafeId: string, newSlug: string) {
   const admin = await verifySuperAdmin();
 
   const slug = newSlug.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
   if (!slug) return { error: "Geçersiz slug" };
+  if (RESERVED_SLUGS.has(slug)) return { error: "Bu slug kullanılamaz (rezerve edilmiş)" };
 
   const { error } = await admin
     .from("cafes")

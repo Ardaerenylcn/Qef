@@ -51,7 +51,8 @@ export default function EditProductModal({ product, cafeId, onClose, onSave }: P
 
     let image_url = product.image_url;
     if (imageFile) {
-      const ext = imageFile.name.split(".").pop();
+      const mimeToExt: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" };
+      const ext = mimeToExt[imageFile.type] ?? "jpg";
       const path = `${cafeId}/${product.id}.${ext}`;
       await supabase.storage.from("product-images").upload(path, imageFile, { upsert: true });
       const { data: urlData } = supabase.storage.from("product-images").getPublicUrl(path);
@@ -76,7 +77,7 @@ export default function EditProductModal({ product, cafeId, onClose, onSave }: P
       .select()
       .single();
 
-    if (err) { setError(err.message); setSaving(false); return; }
+    if (err) { setError("Ürün güncellenemedi. Lütfen tekrar deneyin."); setSaving(false); return; }
     if (data) onSave(data);
     onClose();
   }

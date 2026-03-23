@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
-import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink } from "lucide-react";
+import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
@@ -126,7 +126,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
       className="min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/<\/script>/gi, "<\\/script>") }}
       />
 
       {/* Sticky header */}
@@ -242,9 +242,78 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
           format="auto"
           className="overflow-hidden rounded-xl"
         />
-
-        <p className="text-center text-xs opacity-20 pt-2">Qef ile oluşturuldu</p>
       </div>
+
+      {/* Publisher content — editorial section for AdSense compliance */}
+      <section className="bg-gray-50 border-t border-gray-100 mt-8">
+        <div className="max-w-md mx-auto px-4 py-10 space-y-8">
+
+          {/* QR Menü Hakkında */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <QrCode className="w-5 h-5 text-orange-400 shrink-0" />
+              <h2 className="font-semibold text-gray-700 text-sm">Dijital QR Menü Nedir?</h2>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Dijital QR menü, kafe ve restoranların kağıt menü yerine kullandığı modern bir çözümdür.
+              Müşteriler masadaki QR kodu telefonlarıyla okutarak menüye anında ulaşır; fiyat güncellemeleri,
+              yeni ürün eklemeleri ve kategori düzenlemeleri gerçek zamanlı yansır. Kağıt baskı maliyeti,
+              güncelleme derdi ve hijyen sorunu ortadan kalkar.
+            </p>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              QR menüler özellikle sezon değişikliklerinde büyük kolaylık sağlar: tek tıkla ürün ekleyebilir,
+              fiyat güncelleyebilir veya stokta olmayan ürünleri gizleyebilirsiniz. Müşterileriniz her zaman
+              en güncel menüyü görür.
+            </p>
+          </div>
+
+          {/* Blog linkleri */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-gray-700 text-sm">Dijital Menü Hakkında Daha Fazla Bilgi</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="/blog/qr-menu-nedir"
+                  className="text-xs text-orange-500 hover:underline flex items-center gap-1.5">
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                  QR Menü Nedir? Kafeler İçin Kapsamlı Rehber
+                </a>
+              </li>
+              <li>
+                <a href="/blog/ucretsiz-dijital-menu-nasil-olusturulur"
+                  className="text-xs text-orange-500 hover:underline flex items-center gap-1.5">
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                  Ücretsiz Dijital Menü Nasıl Oluşturulur?
+                </a>
+              </li>
+              <li>
+                <a href="/blog/kagit-menuden-dijital-menuye-gecmenin-5-faydasi"
+                  className="text-xs text-orange-500 hover:underline flex items-center gap-1.5">
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                  Kağıt Menüden Dijital Menüye Geçmenin 5 Faydası
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* CTA */}
+          <div className="bg-orange-50 rounded-2xl p-4 space-y-3 text-center">
+            <p className="text-sm font-semibold text-gray-800">Kafen için ücretsiz QR menü oluştur</p>
+            <p className="text-xs text-gray-500">
+              Dakikalar içinde hazır, kurulum gerektirmez. Sınırsız ürün, özelleştirilebilir tema.
+            </p>
+            <a href="/register"
+              className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+              Ücretsiz Başla
+            </a>
+          </div>
+
+          <p className="text-center text-xs text-gray-300">
+            Bu menü <a href="/" className="hover:text-orange-400 transition-colors">Qef</a> ile oluşturuldu ·{" "}
+            <a href="/privacy" className="hover:text-orange-400 transition-colors">Gizlilik</a> ·{" "}
+            <a href="/terms" className="hover:text-orange-400 transition-colors">Kullanım Koşulları</a>
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

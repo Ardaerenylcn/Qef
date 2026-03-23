@@ -159,6 +159,9 @@ export default function MenuEditor() {
     const newSlug = cafeSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
     if (!newSlug) { setSlugError("Geçerli bir URL gir."); return; }
 
+    const RESERVED = new Set(["api", "admin", "auth", "superadmin", "login", "register", "forgot-password", "reset-password", "blog", "privacy", "terms", "sitemap", "robots", "favicon", "ads"]);
+    if (RESERVED.has(newSlug)) { setSlugError("Bu URL kullanılamaz."); return; }
+
     if (newSlug !== cafe.slug) {
       const { data: existing } = await supabase
         .from("cafes").select("id").eq("slug", newSlug).single();
@@ -207,7 +210,8 @@ export default function MenuEditor() {
 
     let image_url = "";
     if (imageFile) {
-      const ext = imageFile.name.split(".").pop();
+      const mimeToExt: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" };
+      const ext = mimeToExt[imageFile.type] ?? "jpg";
       const path = `${cafe.id}/${crypto.randomUUID()}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("product-images").upload(path, imageFile);
@@ -225,7 +229,7 @@ export default function MenuEditor() {
       .insert({ cafe_id: cafe.id, name: name.trim(), name_en: nameEn.trim(), price: parsedPrice, category: cat, description: description.trim(), description_en: descriptionEn.trim(), image_url, position, tags: productTags })
       .select().single();
 
-    if (err) { setError(err.message); }
+    if (err) { setError("Ürün eklenemedi. Lütfen tekrar deneyin."); }
     else if (data) {
       const newProducts = [...products, data];
       setProducts(newProducts);
