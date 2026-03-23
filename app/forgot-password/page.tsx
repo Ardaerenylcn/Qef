@@ -49,6 +49,7 @@ export default function ForgotPasswordPage() {
               <span className="font-medium text-gray-700">{email}</span> adresine şifre sıfırlama
               bağlantısı gönderdik. Spam klasörünü de kontrol et.
             </p>
+            <p className="text-xs text-gray-300">Bu adres kayıtlı değilse mail gelmeyecektir.</p>
             <Link href="/login" className="inline-flex items-center gap-1 text-sm text-orange-500 hover:underline">
               <ArrowLeft className="w-3.5 h-3.5" />
               Girişe dön
