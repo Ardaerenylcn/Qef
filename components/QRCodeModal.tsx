@@ -15,7 +15,7 @@ export default function QRCodeModal({ slug, cafeName, onClose }: Props) {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
-    const menuUrl = `${window.location.origin}/menu/${slug}`;
+    const menuUrl = `${window.location.origin}/menu/${slug}?utm_source=qr&utm_medium=print`;
     setUrl(menuUrl);
 
     if (canvasRef.current) {

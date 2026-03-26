@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import NavigationProgress from "@/components/NavigationProgress";
 import "./globals.css";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </body>
+      <GoogleAnalytics gaId="G-4X7CYB398D" />
     </html>
   );
 }
