@@ -57,8 +57,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <GoogleAnalytics gaId="G-4X7CYB398D" />
       </body>
-      <GoogleAnalytics gaId="G-4X7CYB398D" />
     </html>
   );
 }
