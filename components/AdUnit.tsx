@@ -13,8 +13,8 @@ const PUBLISHER_ID = "ca-pub-9433411352609938";
 export default function AdUnit({ slot, format = "auto", className = "" }: Props) {
   useEffect(() => {
     try {
-      // @ts-expect-error adsbygoogle global olarak yüklenir
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
     } catch {}
   }, []);
 
