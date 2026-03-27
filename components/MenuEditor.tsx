@@ -23,6 +23,7 @@ import { DEFAULT_HOURS } from "@/types/menu";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 import OpeningHoursEditor from "./OpeningHoursEditor";
+import OnboardingChecklist from "./OnboardingChecklist";
 
 interface Cafe {
   id: string;
@@ -37,7 +38,11 @@ interface Cafe {
   maps_url: string;
 }
 
-export default function MenuEditor() {
+interface MenuEditorProps {
+  onSwitchTab?: (tab: "menu" | "theme" | "qr") => void;
+}
+
+export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [cafe, setCafe] = useState<Cafe | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -343,8 +348,18 @@ export default function MenuEditor() {
   return (
     <>
     <div className="space-y-6">
+      {/* Onboarding */}
+      {cafe && (
+        <OnboardingChecklist
+          cafe={cafe}
+          categories={categories}
+          products={products}
+          onSwitchTab={onSwitchTab ?? (() => {})}
+        />
+      )}
+
       {/* Kafe Bilgileri */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
+      <div id="cafe-info-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
         <h2 className="font-semibold text-gray-700">Kafe bilgileri</h2>
         <input type="text" placeholder="Kafe adı" value={cafeName}
           onChange={(e) => handleCafeNameChange(e.target.value)}
@@ -435,7 +450,7 @@ export default function MenuEditor() {
       </div>
 
       {/* Kategori Yönetimi */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div id="categories-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
         <h2 className="font-semibold text-gray-700">Kategoriler</h2>
         {categories.length > 0 ? (
           <div className="flex flex-wrap gap-2">
@@ -471,7 +486,7 @@ export default function MenuEditor() {
       </div>
 
       {/* Ürün Ekleme Formu */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
         <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
         <div className="space-y-3">
           <input type="text" placeholder="Ürün adı (ör. Türk Kahvesi)" value={name}

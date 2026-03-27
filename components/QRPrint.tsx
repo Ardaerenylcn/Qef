@@ -50,6 +50,7 @@ export default function QRPrint() {
   }
 
   function handlePrint() {
+    localStorage.setItem("qr_printed", "true");
     const win = window.open("", "_blank");
     if (!win) return;
     const html = `

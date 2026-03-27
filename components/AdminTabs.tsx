@@ -36,7 +36,7 @@ export default function AdminTabs() {
         ))}
       </div>
 
-      {tab === "menu" && <MenuEditor />}
+      {tab === "menu" && <MenuEditor onSwitchTab={setTab} />}
       {tab === "theme" && <ThemeEditor />}
       {tab === "qr" && <QRPrint />}
     </div>
