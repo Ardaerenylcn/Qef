@@ -70,6 +70,8 @@ export default function MenuEditor() {
   const [error, setError] = useState("");
   const [adding, setAdding] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [newCatName, setNewCatName] = useState("");
+  const [catError, setCatError] = useState("");
 
   const router = useRouter();
   const supabase = createClient();
@@ -299,6 +301,29 @@ export default function MenuEditor() {
     if (e.key === "Enter") handleAdd();
   }
 
+  async function handleAddCategory() {
+    const trimmed = newCatName.trim();
+    if (!trimmed || !cafe) return;
+    if (categories.includes(trimmed)) { setCatError("Bu kategori zaten var."); return; }
+    setCatError("");
+    const newCats = [...categories, trimmed];
+    setCategories(newCats);
+    setNewCatName("");
+    await supabase.from("cafes").update({ category_order: newCats }).eq("id", cafe.id);
+    setCafe({ ...cafe, category_order: newCats });
+  }
+
+  async function handleDeleteCategory(catName: string) {
+    if (!cafe) return;
+    const hasProducts = products.some((p) => (p.category || "Genel") === catName);
+    if (hasProducts) { setCatError(`"${catName}" kategorisinde ürün var. Önce ürünleri sil veya taşı.`); return; }
+    setCatError("");
+    const newCats = categories.filter((c) => c !== catName);
+    setCategories(newCats);
+    await supabase.from("cafes").update({ category_order: newCats }).eq("id", cafe.id);
+    setCafe({ ...cafe, category_order: newCats });
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-gray-300 gap-2">
@@ -409,6 +434,42 @@ export default function MenuEditor() {
         </button>
       </div>
 
+      {/* Kategori Yönetimi */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+        <h2 className="font-semibold text-gray-700">Kategoriler</h2>
+        {categories.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <span key={cat} className="flex items-center gap-1.5 bg-orange-50 text-orange-600 text-sm font-medium px-3 py-1.5 rounded-lg">
+                {cat}
+                <button onClick={() => handleDeleteCategory(cat)}
+                  className="text-orange-300 hover:text-red-400 transition-colors">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-300">Henüz kategori eklenmedi.</p>
+        )}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Yeni kategori (ör. Kahveler)"
+            value={newCatName}
+            onChange={(e) => { setNewCatName(e.target.value); setCatError(""); }}
+            onKeyDown={(e) => e.key === "Enter" && handleAddCategory()}
+            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+          />
+          <button onClick={handleAddCategory} disabled={!newCatName.trim()}
+            className="flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-40 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+            <PlusCircle className="w-4 h-4" />
+            Ekle
+          </button>
+        </div>
+        {catError && <p className="text-sm text-red-400">{catError}</p>}
+      </div>
+
       {/* Ürün Ekleme Formu */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
         <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
@@ -442,9 +503,12 @@ export default function MenuEditor() {
               onChange={(e) => setPrice(e.target.value)} onKeyDown={handleKeyDown}
               min={0} step={0.5}
               className="w-1/2 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <input type="text" placeholder="Kategori" value={category}
-              onChange={(e) => setCategory(e.target.value)} onKeyDown={handleKeyDown}
-              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <select value={category} onChange={(e) => setCategory(e.target.value)}
+              disabled={categories.length === 0}
+              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white disabled:text-gray-300">
+              <option value="">{categories.length === 0 ? "Önce kategori ekle" : "Kategori seç"}</option>
+              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
           </div>
 
           {/* Etiketler */}
@@ -523,6 +587,7 @@ export default function MenuEditor() {
       <EditProductModal
         product={editingProduct}
         cafeId={cafe.id}
+        categories={categories}
         onClose={() => setEditingProduct(null)}
         onSave={handleProductSaved}
       />

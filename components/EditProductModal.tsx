@@ -12,11 +12,12 @@ import { compressImage } from "@/lib/compressImage";
 interface Props {
   product: Product;
   cafeId: string;
+  categories: string[];
   onClose: () => void;
   onSave: (updated: Product) => void;
 }
 
-export default function EditProductModal({ product, cafeId, onClose, onSave }: Props) {
+export default function EditProductModal({ product, cafeId, categories, onClose, onSave }: Props) {
   const [name, setName] = useState(product.name);
   const [nameEn, setNameEn] = useState(product.name_en ?? "");
   const [price, setPrice] = useState(String(product.price));
@@ -109,9 +110,15 @@ export default function EditProductModal({ product, cafeId, onClose, onSave }: P
               onChange={(e) => setPrice(e.target.value)}
               min={0} step={0.5}
               className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <input type="text" placeholder="Kategori" value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <select value={category} onChange={(e) => setCategory(e.target.value)}
+              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+              <option value="">Kategori seç</option>
+              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+              {/* Mevcut kategori listede yoksa göster */}
+              {category && !categories.includes(category) && (
+                <option value={category}>{category}</option>
+              )}
+            </select>
           </div>
 
           {/* Etiketler */}
