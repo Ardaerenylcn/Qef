@@ -19,27 +19,21 @@ interface Props {
   categories: string[];
   products: { id: string }[];
   onSwitchTab: (tab: "menu" | "theme" | "qr") => void;
+  onClose: () => void;
 }
 
-export default function OnboardingChecklist({ cafe, categories, products, onSwitchTab }: Props) {
-  const [dismissed, setDismissed] = useState(false);
+export default function OnboardingChecklist({ cafe, categories, products, onSwitchTab, onClose }: Props) {
   const [qrPrinted, setQrPrinted] = useState(false);
   const [waving, setWaving] = useState(true);
   const [prevCompleted, setPrevCompleted] = useState(0);
   const mascotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setDismissed(localStorage.getItem("onboarding_dismissed") === "true");
     setQrPrinted(localStorage.getItem("qr_printed") === "true");
     // İlk açılışta wave
     const t = setTimeout(() => setWaving(false), 1300);
     return () => clearTimeout(t);
   }, []);
-
-  function dismiss() {
-    localStorage.setItem("onboarding_dismissed", "true");
-    setDismissed(true);
-  }
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -123,8 +117,6 @@ export default function OnboardingChecklist({ cafe, categories, products, onSwit
     }
   }, [completedCount]);
 
-  if (dismissed) return null;
-
   return (
     <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
       {/* Üst bölüm — maskot + başlık */}
@@ -186,7 +178,7 @@ export default function OnboardingChecklist({ cafe, categories, products, onSwit
 
         {/* Kapat butonu */}
         <button
-          onClick={dismiss}
+          onClick={onClose}
           title="Kapat"
           className="absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors"
         >

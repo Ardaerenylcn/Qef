@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlusCircle, UtensilsCrossed, Save, Loader2, Link2, ImagePlus, X, ChevronDown, MapPin, ExternalLink } from "lucide-react";
+import { PlusCircle, UtensilsCrossed, Save, Loader2, Link2, ImagePlus, X, ChevronDown, MapPin, ExternalLink, HelpCircle } from "lucide-react";
 import Image from "next/image";
 import {
   DndContext,
@@ -77,6 +77,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newCatName, setNewCatName] = useState("");
   const [catError, setCatError] = useState("");
+  const [showChecklist, setShowChecklist] = useState(true);
 
   const router = useRouter();
   const supabase = createClient();
@@ -348,13 +349,25 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   return (
     <>
     <div className="space-y-6">
+      {/* Onboarding toggle butonu */}
+      {cafe && !showChecklist && (
+        <button
+          onClick={() => setShowChecklist(true)}
+          className="flex items-center gap-2 text-sm text-orange-500 hover:text-orange-600 font-medium bg-orange-50 hover:bg-orange-100 border border-orange-100 px-4 py-2.5 rounded-xl transition-colors w-full justify-center"
+        >
+          <HelpCircle className="w-4 h-4" />
+          Kurulum rehberini aç
+        </button>
+      )}
+
       {/* Onboarding */}
-      {cafe && (
+      {cafe && showChecklist && (
         <OnboardingChecklist
           cafe={cafe}
           categories={categories}
           products={products}
           onSwitchTab={onSwitchTab ?? (() => {})}
+          onClose={() => setShowChecklist(false)}
         />
       )}
 
