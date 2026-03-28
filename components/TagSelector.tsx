@@ -25,13 +25,14 @@ export default function TagSelector({ selected, onChange }: Props) {
             key={tag.label}
             type="button"
             onClick={() => toggle(tag.label)}
-            className="px-2.5 py-1 rounded-full text-xs font-semibold border transition-all"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border transition-all"
             style={
               active
                 ? { backgroundColor: tag.bg, color: tag.color, borderColor: tag.color }
                 : { backgroundColor: "#f9fafb", color: "#9ca3af", borderColor: "#e5e7eb" }
             }
           >
+            <span>{tag.icon}</span>
             {tag.label}
           </button>
         );

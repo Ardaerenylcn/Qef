@@ -128,9 +128,10 @@ export default function MenuProductList({
                 return (
                   <span
                     key={tag}
-                    className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                    className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
                     style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}
                   >
+                    {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                     {isEn ? (def?.labelEn ?? tag) : tag}
                   </span>
                 );
@@ -190,9 +191,10 @@ export default function MenuProductList({
                 return (
                   <span
                     key={tag}
-                    className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                    className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
                     style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}
                   >
+                    {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                     {isEn ? (def?.labelEn ?? tag) : tag}
                   </span>
                 );
