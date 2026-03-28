@@ -22,7 +22,7 @@ export default function CategoryTabs({ categories, primaryColor, bgColor = "#fff
         ([entry]) => {
           if (entry.isIntersecting) setActive(cat);
         },
-        { rootMargin: "-40% 0px -55% 0px" }
+        { rootMargin: "-10% 0px -75% 0px" }
       );
       obs.observe(el);
       observers.push(obs);
@@ -35,9 +35,8 @@ export default function CategoryTabs({ categories, primaryColor, bgColor = "#fff
     const el = document.getElementById(`cat-${cat}`);
     if (!el) return;
     const tabBarHeight = tabsRef.current?.getBoundingClientRect().height ?? 44;
-    const offset = 48 + tabBarHeight + 8; // fixed header (48px) + tab bar + küçük boşluk
-    const top = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: "smooth" });
+    el.style.scrollMarginTop = `${48 + tabBarHeight + 8}px`;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
     setActive(cat);
   }
 
