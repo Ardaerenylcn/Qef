@@ -4,78 +4,85 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AR Test — Qef</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer@v3.3.0/dist/model-viewer.min.js"></script>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0f0f0f; color: #fff; font-family: system-ui, sans-serif; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-    h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; text-align: center; }
-    p  { font-size: 14px; color: #888; text-align: center; margin-bottom: 28px; line-height: 1.6; }
-    model-viewer {
-      width: 100%;
-      max-width: 400px;
-      height: 400px;
-      background: #1a1a1a;
-      border-radius: 24px;
-      --progress-bar-color: #f97316;
-    }
-    .hint {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #555;
-      text-align: center;
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 16px;
     }
     .badge {
-      display: inline-block;
       background: #f97316;
       color: white;
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 99px;
-      margin-bottom: 16px;
     }
+    h1 { font-size: 22px; font-weight: 800; text-align: center; }
+    p  { font-size: 14px; color: #888; text-align: center; line-height: 1.6; max-width: 320px; }
+
+    model-viewer {
+      width: 100%;
+      max-width: 380px;
+      height: 380px;
+      border-radius: 24px;
+      background: #1c1c1c;
+      --progress-bar-color: #f97316;
+    }
+
+    #ar-btn {
+      display: block;
+      width: 100%;
+      max-width: 380px;
+      padding: 14px;
+      background: #f97316;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(249,115,22,0.4);
+    }
+
+    .hint { font-size: 12px; color: #444; text-align: center; }
   </style>
 </head>
 <body>
 
   <span class="badge">AR Test</span>
   <h1>Ürünü masanda gör</h1>
-  <p>Modeli döndürebilir, yakınlaştırabilirsin.<br/>AR'ı denemek için <strong>telefonda</strong> aç.</p>
+  <p>Modeli döndür, yakınlaştır. AR için <strong>telefonda</strong> aç ve alttaki butona bas.</p>
 
   <model-viewer
-    src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb"
-    ios-src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.usdz"
-    alt="AR Test Modeli"
-    ar
-    ar-modes="scene-viewer quick-look"
+    id="viewer"
+    src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+    ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+    alt="AR Test"
     camera-controls
     auto-rotate
+    ar
+    ar-modes="scene-viewer quick-look webxr"
     shadow-intensity="1"
-    ar-button-label="Masanda Gör 🪄"
-  >
-    <button slot="ar-button" style="
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #f97316;
-      color: white;
-      border: none;
-      border-radius: 99px;
-      padding: 12px 28px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      box-shadow: 0 4px 20px rgba(249,115,22,0.4);
-    ">
-      📷 Masanda Gör
-    </button>
-  </model-viewer>
+    style="--poster-color: #1c1c1c;"
+  ></model-viewer>
+
+  <button id="ar-btn" onclick="document.getElementById('viewer').activateAR()">
+    📷 Masanda Gör (AR)
+  </button>
 
   <p class="hint">
-    iOS → Safari'de aç · Android → Chrome'da aç<br/>
-    "Masanda Gör" butonuna bas, kamerayı düz bir yüzeye tut
+    iPhone → Safari · Android → Chrome<br/>
+    Butona bas → kamerayı masaya tut → yüzeye dokun
   </p>
 
 </body>
