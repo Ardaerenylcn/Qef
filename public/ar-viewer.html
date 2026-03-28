@@ -92,13 +92,39 @@
     document.title = name + ' · AR';
 
     const mv = document.getElementById('mv');
+    const arBtn = document.getElementById('ar-btn');
     mv.setAttribute('src', src);
+
+    // Model yüklenince AR hazır mı kontrol et
+    mv.addEventListener('load', function() {
+      document.getElementById('subtitle').textContent = '3D Model · Döndürerek incele';
+      // iOS için USDZ dönüşümü biraz zaman alabilir
+      setTimeout(function() {
+        if (!mv.canActivateAR) {
+          document.getElementById('hint').textContent = 'AR bu cihaz/tarayıcıda desteklenmiyor · iPhone → Safari, Android → Chrome';
+          arBtn.style.opacity = '0.4';
+        }
+      }, 2000);
+    });
+
+    mv.addEventListener('error', function() {
+      document.getElementById('subtitle').textContent = 'Model yüklenemedi';
+    });
+
+    // AR oturumu açıldığında/kapandığında
+    mv.addEventListener('ar-status', function(e) {
+      console.log('AR status:', e.detail.status);
+    });
 
     function activateAR() {
       if (mv.canActivateAR) {
         mv.activateAR();
       } else {
-        document.getElementById('hint').textContent = 'Bu cihaz/tarayıcı AR desteklemiyor.';
+        document.getElementById('hint').textContent = 'AR hazırlanıyor, birkaç saniye bekle ve tekrar dene...';
+        // 2 saniye sonra tekrar dene
+        setTimeout(function() {
+          if (mv.canActivateAR) mv.activateAR();
+        }, 2000);
       }
     }
   </script>

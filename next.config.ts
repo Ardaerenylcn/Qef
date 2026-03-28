@@ -18,7 +18,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https://eaenhftwhurxevfwpkbz.supabase.co https://*.googlesyndication.com https://*.googleadservices.com https://*.doubleclick.net https://*.google.com https://modelviewer.dev",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.googlesyndication.com https://*.googleadservices.com https://*.doubleclick.net https://ep1.adtrafficquality.google https://modelviewer.dev https://raw.githubusercontent.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.googlesyndication.com https://*.googleadservices.com https://*.doubleclick.net https://ep1.adtrafficquality.google https://modelviewer.dev https://raw.githubusercontent.com https://ajax.googleapis.com https://unpkg.com",
       "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
       "worker-src blob: 'self'",
     ].join("; "),
