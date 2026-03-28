@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Check, LayoutList, LayoutGrid } from "lucide-react";
-import { PRODUCT_TAGS } from "@/types/menu";
+import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 
 const COLORS = [
   { label: "Turuncu", value: "#f97316" },
@@ -20,9 +20,9 @@ const FONTS = [
 ];
 
 const PRODUCTS = [
-  { name: "Türk Kahvesi", name_en: "Turkish Coffee", price: 35, description: "Geleneksel tarif, köpüklü", tags: ["Popüler"], image: "/demo/turk-kahvesi.png" },
-  { name: "Sütlü Latte",  name_en: "Latte",          price: 55, description: "Buharda ısıtılmış süt ile", tags: [],          image: "/demo/latte.png" },
-  { name: "Cheesecake",   name_en: "Cheesecake",      price: 80, description: "Ev yapımı, mevsim meyveli", tags: ["Yeni"],   image: "/demo/cheescake.png" },
+  { name: "Türk Kahvesi", price: 35, description: "Geleneksel tarif, köpüklü",   tags: ["Popüler"],      ingredients: ["espresso", "milk"],                    image: "/demo/turk-kahvesi.png" },
+  { name: "Sütlü Latte",  price: 55, description: "Buharda ısıtılmış süt ile",   tags: [],               ingredients: ["espresso", "milk", "cream"],            image: "/demo/latte.png" },
+  { name: "Cheesecake",   price: 80, description: "Ev yapımı, mevsim meyveli",   tags: ["Şefin Seçimi"], ingredients: ["flour", "egg", "butter", "cream"],      image: "/demo/cheescake.png" },
 ];
 
 export default function DemoCustomizer() {
@@ -144,11 +144,20 @@ export default function DemoCustomizer() {
                             {p.tags.map((tag) => {
                               const def = PRODUCT_TAGS.find((t) => t.label === tag);
                               return (
-                                <span key={tag} className="text-[8px] font-bold px-1 py-0.5 rounded-full"
+                                <span key={tag} className="inline-flex items-center gap-0.5 text-[8px] font-bold px-1 py-0.5 rounded-full"
                                   style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}>
+                                  {def?.icon && <span className="text-[9px] leading-none">{def.icon}</span>}
                                   {tag}
                                 </span>
                               );
+                            })}
+                          </div>
+                        )}
+                        {p.ingredients.length > 0 && (
+                          <div className="flex gap-0.5 mt-0.5">
+                            {p.ingredients.slice(0, 4).map((id) => {
+                              const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+                              return ing ? <span key={id} className="text-[10px] leading-none" title={ing.label}>{ing.icon}</span> : null;
                             })}
                           </div>
                         )}

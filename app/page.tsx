@@ -194,8 +194,8 @@ export default function HomePage() {
               {
                 icon: Star,
                 color: "bg-orange-50 text-orange-500",
-                title: "Ürün etiketleri",
-                desc: "Yeni, Popüler, Vejetaryen gibi renkli etiketlerle ürünleri öne çıkarın.",
+                title: "Etiket & İçerik İkonları",
+                desc: "✨ Yeni, 🔥 Popüler gibi emoji etiketler ve 57+ içerik ikonu ile ürünlerinizi detaylandırın.",
               },
               {
                 icon: QrCode,
