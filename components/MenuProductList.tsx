@@ -140,17 +140,23 @@ export default function MenuProductList({
             </div>
           )}
           {product.ingredients && product.ingredients.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1">
-              {product.ingredients.map((id) => {
-                const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
-                if (!ing) return null;
-                return (
-                  <span key={id} title={isEn ? ing.labelEn : ing.label}
-                    className="text-sm leading-none" aria-label={isEn ? ing.labelEn : ing.label}>
-                    {ing.icon}
-                  </span>
-                );
-              })}
+            <div className="mt-2 pt-2" style={{ borderTop: `1px dashed ${primaryColor}30` }}>
+              <p className="text-[9px] font-semibold uppercase tracking-widest opacity-40 mb-1.5">
+                {isEn ? "Ingredients" : "İçerik"}
+              </p>
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+                {product.ingredients.map((id) => {
+                  const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+                  if (!ing) return null;
+                  return (
+                    <span key={id}
+                      className="flex-shrink-0 inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
+                      <span className="text-sm leading-none">{ing.icon}</span>
+                      {isEn ? ing.labelEn : ing.label}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
@@ -217,17 +223,23 @@ export default function MenuProductList({
             </div>
           )}
           {product.ingredients && product.ingredients.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1">
-              {product.ingredients.map((id) => {
-                const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
-                if (!ing) return null;
-                return (
-                  <span key={id} title={isEn ? ing.labelEn : ing.label}
-                    className="text-sm leading-none" aria-label={isEn ? ing.labelEn : ing.label}>
-                    {ing.icon}
-                  </span>
-                );
-              })}
+            <div className="mt-2 pt-2" style={{ borderTop: `1px dashed ${primaryColor}30` }}>
+              <p className="text-[9px] font-semibold uppercase tracking-widest opacity-40 mb-1.5">
+                {isEn ? "Ingredients" : "İçerik"}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {product.ingredients.map((id) => {
+                  const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+                  if (!ing) return null;
+                  return (
+                    <span key={id}
+                      className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
+                      <span className="text-sm leading-none">{ing.icon}</span>
+                      {isEn ? ing.labelEn : ing.label}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           )}
           <p className="font-bold text-sm pt-1" style={{ color: primaryColor }}>
