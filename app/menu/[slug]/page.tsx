@@ -81,7 +81,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   const { data: products } = await supabase
     .from("products")
-    .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, in_stock")
+    .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock")
     .eq("cafe_id", cafe.id)
     .order("position", { ascending: true });
 

@@ -16,6 +16,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { SortableCategoryBlock } from "./SortableCategoryBlock";
 import EditProductModal from "./EditProductModal";
 import TagSelector from "./TagSelector";
+import IngredientSelector from "./IngredientSelector";
 import BulkPriceUpdate from "./BulkPriceUpdate";
 import { createClient } from "@/lib/supabase/client";
 import type { Product, OpeningHour } from "@/types/menu";
@@ -69,6 +70,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [description, setDescription] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
   const [productTags, setProductTags] = useState<string[]>([]);
+  const [productIngredients, setProductIngredients] = useState<string[]>([]);
   const [showProductEn, setShowProductEn] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -234,7 +236,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
 
     const { data, error: err } = await supabase
       .from("products")
-      .insert({ cafe_id: cafe.id, name: name.trim(), name_en: nameEn.trim(), price: parsedPrice, category: cat, description: description.trim(), description_en: descriptionEn.trim(), image_url, position, tags: productTags })
+      .insert({ cafe_id: cafe.id, name: name.trim(), name_en: nameEn.trim(), price: parsedPrice, category: cat, description: description.trim(), description_en: descriptionEn.trim(), image_url, position, tags: productTags, ingredients: productIngredients })
       .select().single();
 
     if (err) { setError("Ürün eklenemedi. Lütfen tekrar deneyin."); }
@@ -245,7 +247,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       setCategories(newCats);
       setName(""); setNameEn(""); setPrice(""); setCategory("");
       setDescription(""); setDescriptionEn("");
-      setProductTags([]);
+      setProductTags([]); setProductIngredients([]);
       clearImage(); setError("");
     }
     setAdding(false);
@@ -544,6 +546,13 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
             <p className="text-xs text-gray-400 font-medium">Etiketler</p>
             <TagSelector selected={productTags} onChange={setProductTags} />
           </div>
+
+          {/* İçerik */}
+          <div className="space-y-1.5">
+            <p className="text-xs text-gray-400 font-medium">İçerik</p>
+            <IngredientSelector selected={productIngredients} onChange={setProductIngredients} />
+          </div>
+
           {imagePreview ? (
             <div className="relative w-24 h-24">
               <Image src={imagePreview} alt="Önizleme" width={96} height={96}

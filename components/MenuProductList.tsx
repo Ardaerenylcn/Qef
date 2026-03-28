@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Search, UtensilsCrossed } from "lucide-react";
-import { PRODUCT_TAGS } from "@/types/menu";
+import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import ImageZoomModal from "./ImageZoomModal";
 
 interface Product {
@@ -15,6 +15,7 @@ interface Product {
   description_en: string | null;
   image_url: string | null;
   tags: string[] | null;
+  ingredients: string[] | null;
   in_stock: boolean | null;
 }
 
@@ -138,6 +139,20 @@ export default function MenuProductList({
               })}
             </div>
           )}
+          {product.ingredients && product.ingredients.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {product.ingredients.map((id) => {
+                const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+                if (!ing) return null;
+                return (
+                  <span key={id} title={isEn ? ing.labelEn : ing.label}
+                    className="text-sm leading-none" aria-label={isEn ? ing.labelEn : ing.label}>
+                    {ing.icon}
+                  </span>
+                );
+              })}
+            </div>
+          )}
         </div>
         <span className="font-semibold ml-2 shrink-0" style={{ color: primaryColor }}>
           {Number(product.price).toFixed(2)} ₺
@@ -196,6 +211,20 @@ export default function MenuProductList({
                   >
                     {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                     {isEn ? (def?.labelEn ?? tag) : tag}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+          {product.ingredients && product.ingredients.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {product.ingredients.map((id) => {
+                const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+                if (!ing) return null;
+                return (
+                  <span key={id} title={isEn ? ing.labelEn : ing.label}
+                    className="text-sm leading-none" aria-label={isEn ? ing.labelEn : ing.label}>
+                    {ing.icon}
                   </span>
                 );
               })}

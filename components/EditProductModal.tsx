@@ -6,6 +6,7 @@ import { X, Save, Loader2, ImagePlus, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/types/menu";
 import TagSelector from "./TagSelector";
+import IngredientSelector from "./IngredientSelector";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 
@@ -25,6 +26,7 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
   const [description, setDescription] = useState(product.description ?? "");
   const [descriptionEn, setDescriptionEn] = useState(product.description_en ?? "");
   const [tags, setTags] = useState<string[]>(product.tags ?? []);
+  const [ingredients, setIngredients] = useState<string[]>(product.ingredients ?? []);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(product.image_url ?? "");
   const [showEn, setShowEn] = useState(!!(product.name_en || product.description_en));
@@ -69,6 +71,7 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
       description_en: descriptionEn.trim(),
       image_url,
       tags,
+      ingredients,
     };
 
     const { data, error: err } = await supabase
@@ -125,6 +128,12 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
           <div className="space-y-1.5">
             <p className="text-xs text-gray-400 font-medium">Etiketler</p>
             <TagSelector selected={tags} onChange={setTags} />
+          </div>
+
+          {/* İçerik */}
+          <div className="space-y-1.5">
+            <p className="text-xs text-gray-400 font-medium">İçerik</p>
+            <IngredientSelector selected={ingredients} onChange={setIngredients} />
           </div>
 
           {/* İngilizce */}

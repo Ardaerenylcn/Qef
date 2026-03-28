@@ -1,7 +1,7 @@
 import { Trash2, ImageOff, Pencil } from "lucide-react";
 import Image from "next/image";
 import type { Product } from "@/types/menu";
-import { PRODUCT_TAGS } from "@/types/menu";
+import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 
 interface ProductCardProps {
   product: Product;
@@ -43,9 +43,24 @@ export default function ProductCard({ product, onDelete, onEdit, onToggleStock }
             {product.tags.map((tag) => {
               const def = PRODUCT_TAGS.find((t) => t.label === tag);
               return (
-                <span key={tag} className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                <span key={tag} className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
                   style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}>
+                  {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                   {tag}
+                </span>
+              );
+            })}
+          </div>
+        )}
+        {product.ingredients?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {product.ingredients.map((id) => {
+              const ing = PRODUCT_INGREDIENTS.find((i) => i.id === id);
+              if (!ing) return null;
+              return (
+                <span key={id} title={ing.label}
+                  className="text-base leading-none" aria-label={ing.label}>
+                  {ing.icon}
                 </span>
               );
             })}
