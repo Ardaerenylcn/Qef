@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, UtensilsCrossed } from "lucide-react";
+import { Search, UtensilsCrossed, Box } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import ImageZoomModal from "./ImageZoomModal";
+import ARViewerModal from "./ARViewerModal";
 
 interface Product {
   id: string;
@@ -17,6 +18,7 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
+  model_url: string | null;
 }
 
 interface Props {
@@ -38,6 +40,7 @@ export default function MenuProductList({
 }: Props) {
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [arProduct, setArProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -160,9 +163,21 @@ export default function MenuProductList({
             </div>
           )}
         </div>
-        <span className="font-semibold ml-2 shrink-0" style={{ color: primaryColor }}>
-          {Number(product.price).toFixed(2)} ₺
-        </span>
+        <div className="flex flex-col items-end gap-1.5 shrink-0 ml-2">
+          <span className="font-semibold" style={{ color: primaryColor }}>
+            {Number(product.price).toFixed(2)} ₺
+          </span>
+          {product.model_url && (
+            <button
+              onClick={() => setArProduct(product)}
+              className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
+              style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
+            >
+              <Box className="w-3 h-3" />
+              AR
+            </button>
+          )}
+        </div>
       </div>
     );
   }
@@ -242,9 +257,21 @@ export default function MenuProductList({
               </div>
             </div>
           )}
-          <p className="font-bold text-sm pt-1" style={{ color: primaryColor }}>
-            {Number(product.price).toFixed(2)} ₺
-          </p>
+          <div className="flex items-center justify-between pt-1">
+            <p className="font-bold text-sm" style={{ color: primaryColor }}>
+              {Number(product.price).toFixed(2)} ₺
+            </p>
+            {product.model_url && (
+              <button
+                onClick={() => setArProduct(product)}
+                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
+                style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
+              >
+                <Box className="w-3 h-3" />
+                AR
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -262,6 +289,14 @@ export default function MenuProductList({
 
   return (
     <div className="space-y-6">
+      {arProduct?.model_url && (
+        <ARViewerModal
+          modelUrl={arProduct.model_url}
+          productName={isEn && arProduct.name_en ? arProduct.name_en : arProduct.name}
+          primaryColor={primaryColor}
+          onClose={() => setArProduct(null)}
+        />
+      )}
       {/* Arama */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30" />
