@@ -34,8 +34,9 @@ export default function CategoryTabs({ categories, primaryColor, bgColor = "#fff
   function scrollTo(cat: string) {
     const el = document.getElementById(`cat-${cat}`);
     if (!el) return;
-    const offset = 104; // sticky header (48px) + tab bar (~44px) + boşluk
-    const top = el.getBoundingClientRect().top + window.scrollY - offset - 12;
+    const tabBarHeight = tabsRef.current?.getBoundingClientRect().height ?? 44;
+    const offset = 48 + tabBarHeight + 8; // fixed header (48px) + tab bar + küçük boşluk
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: "smooth" });
     setActive(cat);
   }
