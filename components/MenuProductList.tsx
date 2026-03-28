@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Search, UtensilsCrossed, Box } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import ImageZoomModal from "./ImageZoomModal";
-import ARViewerModal from "./ARViewerModal";
 
 interface Product {
   id: string;
@@ -40,7 +39,12 @@ export default function MenuProductList({
 }: Props) {
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
-  const [arProduct, setArProduct] = useState<Product | null>(null);
+
+  function openAR(product: Product) {
+    const name = encodeURIComponent(isEn && product.name_en ? product.name_en : product.name);
+    const url = `/ar?src=${encodeURIComponent(product.model_url!)}&name=${name}&color=${encodeURIComponent(primaryColor)}`;
+    window.open(url, "_blank");
+  }
 
   useEffect(() => {
     setMounted(true);
@@ -169,7 +173,7 @@ export default function MenuProductList({
           </span>
           {product.model_url && (
             <button
-              onClick={() => setArProduct(product)}
+              onClick={() => openAR(product)}
               className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
               style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
             >
@@ -263,7 +267,7 @@ export default function MenuProductList({
             </p>
             {product.model_url && (
               <button
-                onClick={() => setArProduct(product)}
+                onClick={() => openAR(product)}
                 className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
                 style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
               >
@@ -289,14 +293,6 @@ export default function MenuProductList({
 
   return (
     <div className="space-y-6">
-      {arProduct?.model_url && (
-        <ARViewerModal
-          modelUrl={arProduct.model_url}
-          productName={isEn && arProduct.name_en ? arProduct.name_en : arProduct.name}
-          primaryColor={primaryColor}
-          onClose={() => setArProduct(null)}
-        />
-      )}
       {/* Arama */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30" />
