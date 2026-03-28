@@ -42,7 +42,7 @@ export default function MenuProductList({
 
   function openAR(product: Product) {
     const name = encodeURIComponent(isEn && product.name_en ? product.name_en : product.name);
-    const url = `/ar?src=${encodeURIComponent(product.model_url!)}&name=${name}&color=${encodeURIComponent(primaryColor)}`;
+    const url = `/ar-viewer.html?src=${encodeURIComponent(product.model_url!)}&name=${name}&color=${encodeURIComponent(primaryColor)}`;
     window.open(url, "_blank");
   }
 
