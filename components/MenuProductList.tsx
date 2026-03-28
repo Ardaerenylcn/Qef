@@ -18,7 +18,7 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
-  model_url: string | null;
+  model_url?: string | null;
 }
 
 interface Props {

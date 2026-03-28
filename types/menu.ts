@@ -11,6 +11,7 @@ export interface Product {
   tags: string[];
   ingredients: string[];
   in_stock: boolean;
+  model_url?: string | null;
 }
 
 export const PRODUCT_TAGS: { label: string; labelEn: string; icon: string; color: string; bg: string }[] = [
