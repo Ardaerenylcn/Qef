@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import SuperAdminLogout from "@/components/SuperAdminLogout";
 import SuperAdminCafeCard from "@/components/SuperAdminCafeCard";
+import SuperAdminUnverifiedCard from "@/components/SuperAdminUnverifiedCard";
 
 export default async function SuperAdminPage() {
   const supabase = await createClient();
@@ -57,6 +58,12 @@ export default async function SuperAdminPage() {
       phone: (u.user_metadata?.phone as string) ?? "",
     };
   });
+
+  // Mail doğrulaması yapmayanlar
+  const cafeUserIds = new Set((allCafes ?? []).map((c: any) => c.user_id));
+  const unverifiedUsers = (authUsers ?? [])
+    .filter((u) => !u.email_confirmed_at)
+    .map((u) => ({ id: u.id, email: u.email ?? "", created_at: u.created_at }));
 
   // Cafe bazında toplam görüntülenme sayısı
   const viewsPerCafe: Record<string, number> = {};
@@ -138,6 +145,24 @@ export default async function SuperAdminPage() {
             </div>
           )}
         </div>
+
+        {/* Doğrulama Bekleyenler */}
+        {unverifiedUsers.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-400">✉️</span>
+              <h2 className="font-semibold text-gray-700">Mail Doğrulaması Yapmayanlar</h2>
+              <span className="text-xs text-yellow-600 bg-yellow-50 border border-yellow-100 px-2 py-0.5 rounded-full font-medium">
+                {unverifiedUsers.length}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {unverifiedUsers.map((u) => (
+                <SuperAdminUnverifiedCard key={u.id} user={u} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Tüm Kafeler */}
         <div className="space-y-3">

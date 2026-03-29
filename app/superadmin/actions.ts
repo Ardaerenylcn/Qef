@@ -66,6 +66,11 @@ const RESERVED_SLUGS = new Set([
   "sitemap", "robots", "favicon", "og-image", "ads",
 ]);
 
+export async function deleteUnverifiedUserAction(userId: string) {
+  const admin = await verifySuperAdmin();
+  await admin.auth.admin.deleteUser(userId);
+}
+
 export async function updateSlugAction(cafeId: string, newSlug: string) {
   const admin = await verifySuperAdmin();
 
