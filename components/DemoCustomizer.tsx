@@ -159,14 +159,13 @@ export default function DemoCustomizer() {
                                 <p className="text-[10px] font-semibold text-gray-800 truncate">{p.name}</p>
                                 <p className="text-[8px] text-gray-400 truncate">{p.description}</p>
                                 {p.tags.length > 0 && (
-                                  <div className="flex gap-0.5 mt-0.5">
+                                  <div className="flex gap-0.5 mt-0.5 items-center">
                                     {p.tags.map((tag) => {
                                       const def = PRODUCT_TAGS.find((t) => t.label === tag);
                                       return (
-                                        <span key={tag} className="inline-flex items-center gap-0.5 text-[7px] font-bold px-1 py-0.5 rounded-full"
-                                          style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}>
-                                          {def?.icon && <span className="leading-none">{def.icon}</span>}
-                                          {tag}
+                                        <span key={tag} className="inline-flex items-center text-[9px] w-4 h-4 justify-center rounded-full"
+                                          style={{ backgroundColor: def?.bg ?? "#f3f4f6" }}>
+                                          {def?.icon ?? "·"}
                                         </span>
                                       );
                                     })}
