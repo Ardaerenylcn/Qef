@@ -325,10 +325,10 @@ export default function HomePage() {
       </section>
 
       {/* AR SECTION */}
-      <section className="py-24 px-6 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 overflow-hidden relative">
+      <section className="py-24 px-6 bg-gradient-to-br from-slate-900 via-[#0f1c3a] to-slate-900 overflow-hidden relative">
 
         {/* Arka plan dekorasyon */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-blue-500/8 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
 
@@ -351,7 +351,7 @@ export default function HomePage() {
 
               {/* Badge + Başlık */}
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold px-4 py-2 rounded-full">
+                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-xs font-bold px-4 py-2 rounded-full">
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
                   Türkiye&apos;de Bir İlk
                 </div>
@@ -361,7 +361,7 @@ export default function HomePage() {
                     masada görecek
                   </span>
                 </h2>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-blue-100/70 leading-relaxed">
                   Artırılmış gerçeklik ile müşterileriniz menüdeki ürünü sipariş vermeden önce
                   kendi masalarında 3 boyutlu olarak görebilir.
                   Uygulama indirmeye gerek yok — sadece kamerayı tut.
@@ -375,11 +375,11 @@ export default function HomePage() {
                   { step: "02", icon: "📷", title: "Kamerayı aç", desc: "\"Masada Gör\" butonuna basar, kamera açılır." },
                   { step: "03", icon: "✨", title: "Masada görür", desc: "Ürün masanın üzerinde gerçekmiş gibi belirir." },
                 ].map(({ step, icon, title, desc }) => (
-                  <div key={step} className="flex items-start gap-4 bg-gray-800/40 border border-gray-700/50 rounded-2xl px-5 py-4">
+                  <div key={step} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
                     <span className="text-2xl shrink-0">{icon}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-semibold text-sm">{title}</p>
-                      <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{desc}</p>
+                      <p className="text-blue-100/50 text-xs mt-0.5 leading-relaxed">{desc}</p>
                     </div>
                     <span className="text-[10px] font-bold text-white/15 tracking-widest shrink-0 self-center">{step}</span>
                   </div>
@@ -391,26 +391,20 @@ export default function HomePage() {
                 {[
                   { icon: "📱", text: "Uygulama indirmeye gerek yok" },
                   { icon: "🌍", text: "iOS Safari ve Android Chrome" },
-                  { icon: "🤖", text: "AI ile otomatik 3D model", badge: "Yakında" },
+                  { icon: "🤖", text: "Yapay zeka ile 3D model üretilir" },
                   { icon: "⚡", text: "Saniyeler içinde devreye girer" },
-                ].map(({ icon, text, badge }) => (
+                ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2.5">
                     <span className="text-lg shrink-0">{icon}</span>
-                    <p className="text-gray-300 text-sm">{text}</p>
-                    {badge && (
-                      <span className="inline-flex items-center gap-1 bg-orange-500/15 text-orange-400 text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                        <span className="w-1 h-1 rounded-full bg-orange-400 animate-pulse" />
-                        {badge}
-                      </span>
-                    )}
+                    <p className="text-blue-100/80 text-sm">{text}</p>
                   </div>
                 ))}
               </div>
 
               {/* CTA */}
               <a href="/register"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-7 py-3.5 rounded-2xl transition-all text-sm shadow-lg shadow-orange-500/20">
-                Erken Erişim Kazan →
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-7 py-3.5 rounded-2xl transition-all text-sm shadow-lg shadow-orange-500/30">
+                Hemen Başla →
               </a>
 
             </div>
