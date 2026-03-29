@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Trash2, Mail, Clock } from "lucide-react";
+import { Trash2, Mail, Clock, Phone } from "lucide-react";
 import { deleteUnverifiedUserAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
@@ -10,6 +10,7 @@ interface Props {
     id: string;
     email: string;
     created_at: string;
+    phone?: string;
   };
 }
 
@@ -37,6 +38,12 @@ export default function SuperAdminUnverifiedCard({ user }: Props) {
         </div>
         <div className="min-w-0">
           <p className="text-sm font-medium text-gray-800 truncate">{user.email}</p>
+          {user.phone && (
+            <div className="flex items-center gap-1 mt-0.5">
+              <Phone className="w-3 h-3 text-gray-300" />
+              <p className="text-xs text-gray-500">{user.phone}</p>
+            </div>
+          )}
           <div className="flex items-center gap-1 mt-0.5">
             <Clock className="w-3 h-3 text-gray-300" />
             <p className="text-xs text-gray-400">{createdAt}</p>

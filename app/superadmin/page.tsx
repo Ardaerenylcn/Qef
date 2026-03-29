@@ -8,6 +8,8 @@ import {
   UtensilsCrossed,
   Eye,
   TrendingUp,
+  MailCheck,
+  Phone,
 } from "lucide-react";
 import SuperAdminLogout from "@/components/SuperAdminLogout";
 import SuperAdminCafeCard from "@/components/SuperAdminCafeCard";
@@ -60,10 +62,27 @@ export default async function SuperAdminPage() {
   });
 
   // Mail doğrulaması yapmayanlar
-  const cafeUserIds = new Set((allCafes ?? []).map((c: any) => c.user_id));
   const unverifiedUsers = (authUsers ?? [])
     .filter((u) => !u.email_confirmed_at)
-    .map((u) => ({ id: u.id, email: u.email ?? "", created_at: u.created_at }));
+    .map((u) => ({
+      id: u.id,
+      email: u.email ?? "",
+      created_at: u.created_at,
+      phone: (u.user_metadata?.phone as string) ?? (u.phone ?? ""),
+    }));
+
+  // Son gönderilen doğrulama mailleri (en yeni 50, doğrulansın ya da doğrulanmasın)
+  const recentConfirmations = (authUsers ?? [])
+    .filter((u) => u.confirmation_sent_at)
+    .sort((a, b) => new Date(b.confirmation_sent_at!).getTime() - new Date(a.confirmation_sent_at!).getTime())
+    .slice(0, 50)
+    .map((u) => ({
+      id: u.id,
+      email: u.email ?? "",
+      phone: (u.user_metadata?.phone as string) ?? (u.phone ?? ""),
+      confirmation_sent_at: u.confirmation_sent_at!,
+      confirmed: !!u.email_confirmed_at,
+    }));
 
   // Cafe bazında toplam görüntülenme sayısı
   const viewsPerCafe: Record<string, number> = {};
@@ -144,6 +163,50 @@ export default async function SuperAdminPage() {
               })}
             </div>
           )}
+        </div>
+
+        {/* Son Gönderilen Doğrulama Mailleri */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <MailCheck className="w-4 h-4 text-blue-400" />
+            <h2 className="font-semibold text-gray-700">Son Gönderilen Doğrulama Mailleri</h2>
+            <span className="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full font-medium">
+              {recentConfirmations.length}
+            </span>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            {recentConfirmations.length === 0 ? (
+              <p className="text-sm text-gray-300 py-6 text-center">Henüz veri yok</p>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {recentConfirmations.map((u) => {
+                  const sentAt = new Date(u.confirmation_sent_at).toLocaleDateString("tr-TR", {
+                    day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+                  });
+                  return (
+                    <div key={u.id} className="flex items-center gap-3 px-4 py-3">
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${u.confirmed ? "bg-green-400" : "bg-yellow-400"}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-800 truncate">{u.email}</p>
+                        {u.phone && (
+                          <div className="flex items-center gap-1 mt-0.5">
+                            <Phone className="w-3 h-3 text-gray-300" />
+                            <p className="text-xs text-gray-500">{u.phone}</p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${u.confirmed ? "bg-green-50 text-green-600" : "bg-yellow-50 text-yellow-600"}`}>
+                          {u.confirmed ? "Doğrulandı" : "Bekliyor"}
+                        </span>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{sentAt}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Doğrulama Bekleyenler */}
