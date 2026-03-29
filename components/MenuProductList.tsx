@@ -95,7 +95,7 @@ export default function MenuProductList({
   function renderListProduct(product: Product) {
     const inStock = product.in_stock !== false;
     return (
-      <div key={product.id} className={`flex items-start gap-4 ${!inStock ? "opacity-50" : ""}`}>
+      <div key={product.id} className={`flex items-center gap-4 ${!inStock ? "opacity-50" : ""}`}>
         {product.image_url ? (
           <ImageZoomModal
             src={product.image_url}
