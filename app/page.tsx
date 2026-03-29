@@ -325,85 +325,89 @@ export default function HomePage() {
       </section>
 
       {/* AR SECTION */}
-      <section className="py-24 px-6 bg-gradient-to-br from-slate-900 via-[#0f1c3a] to-slate-900 overflow-hidden relative">
+      <section className="py-24 px-6 bg-[#080e20] overflow-hidden relative">
 
-        {/* Arka plan dekorasyon */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-blue-500/8 rounded-full blur-3xl pointer-events-none" />
+        {/* Arka plan glow'ları */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-orange-500/8 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
 
-          {/* İki kolon: sol görsel, sağ içerik */}
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+          {/* İki kolon */}
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
 
             {/* Sol — Görsel */}
-            <div className="w-full lg:w-1/2 flex-shrink-0">
+            <div className="w-full lg:w-[52%] flex-shrink-0 relative">
+              {/* Glow halkası arkada */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 to-orange-500/10 blur-2xl scale-105 pointer-events-none" />
               <Image
                 src="/AR.png"
                 alt="Artırılmış gerçeklik ile ürünü masada gör"
                 width={800}
                 height={600}
-                className="w-full rounded-3xl object-cover"
+                className="relative w-full rounded-3xl object-cover ring-1 ring-white/10 shadow-2xl shadow-blue-900/40"
               />
             </div>
 
             {/* Sağ — İçerik */}
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-7">
 
               {/* Badge + Başlık */}
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-xs font-bold px-4 py-2 rounded-full">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
                   Türkiye&apos;de Bir İlk
                 </div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-                  Müşterileriniz ürünleri<br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-300">
-                    masada görecek
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Ürünleri sipariş<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-300 to-yellow-300">
+                    vermeden dene
                   </span>
                 </h2>
-                <p className="text-blue-100/70 leading-relaxed">
-                  Artırılmış gerçeklik ile müşterileriniz menüdeki ürünü sipariş vermeden önce
-                  kendi masalarında 3 boyutlu olarak görebilir.
-                  Uygulama indirmeye gerek yok — sadece kamerayı tut.
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Müşterileriniz menüdeki ürüne tıklar, telefon kamerasını masaya tutar —
+                  yemek masanın üzerinde 3 boyutlu olarak belirir. Uygulama yok, link yok, sadece kamera.
                 </p>
               </div>
 
               {/* 3 adım */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {[
-                  { step: "01", icon: "👆", title: "Ürüne dokun", desc: "Müşteri menüde ilgisini çeken ürüne tıklar." },
-                  { step: "02", icon: "📷", title: "Kamerayı aç", desc: "\"Masada Gör\" butonuna basar, kamera açılır." },
-                  { step: "03", icon: "✨", title: "Masada görür", desc: "Ürün masanın üzerinde gerçekmiş gibi belirir." },
-                ].map(({ step, icon, title, desc }) => (
-                  <div key={step} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
-                    <span className="text-2xl shrink-0">{icon}</span>
+                  { step: 1, color: "bg-orange-500", title: "Ürüne dokun", desc: "Menüde ilgisini çeken ürüne tıklar." },
+                  { step: 2, color: "bg-blue-500", title: "Kamerayı açar", desc: "\"Masada Gör\" butonuna basar, kamera açılır." },
+                  { step: 3, color: "bg-purple-500", title: "Masada görür", desc: "Ürün masanın üzerinde gerçekmiş gibi belirir." },
+                ].map(({ step, color, title, desc }) => (
+                  <div key={step} className="flex items-center gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className={`w-7 h-7 rounded-full ${color} flex items-center justify-center shrink-0 text-white text-xs font-extrabold shadow-lg`}>
+                      {step}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-semibold text-sm">{title}</p>
-                      <p className="text-blue-100/50 text-xs mt-0.5 leading-relaxed">{desc}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-white/15 tracking-widest shrink-0 self-center">{step}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Özellikler */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { icon: "📱", text: "Uygulama indirmeye gerek yok" },
-                  { icon: "🌍", text: "iOS Safari ve Android Chrome" },
-                  { icon: "🤖", text: "Yapay zeka ile 3D model üretilir" },
-                  { icon: "⚡", text: "Saniyeler içinde devreye girer" },
-                ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-2.5">
-                    <span className="text-lg shrink-0">{icon}</span>
-                    <p className="text-blue-100/80 text-sm">{text}</p>
-                  </div>
+              {/* AI vurgu kartı */}
+              <div className="flex items-start gap-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/5 border border-orange-500/25 rounded-2xl px-5 py-4">
+                <div className="w-9 h-9 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0 text-lg">🤖</div>
+                <div>
+                  <p className="text-white font-bold text-sm">Yapay zeka ile 3D model üretilir</p>
+                  <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">Ürünün fotoğrafını yükle, yapay zeka otomatik olarak 3 boyutlu modeli oluştursun.</p>
+                </div>
+              </div>
+
+              {/* Küçük özellikler */}
+              <div className="flex flex-wrap gap-3">
+                {["📱 Uygulama gerekmez", "🌍 iOS & Android", "⚡ Anında aktif"].map((item) => (
+                  <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
                 ))}
               </div>
 
               {/* CTA */}
               <a href="/register"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-7 py-3.5 rounded-2xl transition-all text-sm shadow-lg shadow-orange-500/30">
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5">
                 Hemen Başla →
               </a>
 
