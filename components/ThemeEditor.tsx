@@ -85,7 +85,9 @@ export default function ThemeEditor() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err: unknown) {
-      setError("Tema kaydedilemedi. Lütfen tekrar deneyin.");
+      const msg = err instanceof Error ? err.message : JSON.stringify(err);
+      console.error("Tema kayıt hatası:", msg);
+      setError(`Hata: ${msg}`);
     } finally {
       setSaving(false);
     }
