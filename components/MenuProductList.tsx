@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Search, UtensilsCrossed, Box } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
-import ImageZoomModal from "./ImageZoomModal";
 import OpenmojiIcon from "./OpenmojiIcon";
+import ProductDetailModal from "./ProductDetailModal";
 
 interface Product {
   id: string;
@@ -40,6 +41,7 @@ export default function MenuProductList({
 }: Props) {
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   function openAR(product: Product) {
     const name = encodeURIComponent(isEn && product.name_en ? product.name_en : product.name);
@@ -96,12 +98,18 @@ export default function MenuProductList({
   function renderListProduct(product: Product) {
     const inStock = product.in_stock !== false;
     return (
-      <div key={product.id} className={`flex items-center gap-4 ${!inStock ? "opacity-50" : ""}`}>
+      <div
+        key={product.id}
+        className={`flex items-center gap-4 cursor-pointer ${!inStock ? "opacity-50" : ""}`}
+        onClick={() => setSelectedProduct(product)}
+      >
         {product.image_url ? (
-          <ImageZoomModal
+          <Image
             src={product.image_url}
             alt={product.name}
-            thumbClass={getListImageClass()}
+            width={200}
+            height={200}
+            className={getListImageClass()}
           />
         ) : (
           <div
@@ -173,7 +181,7 @@ export default function MenuProductList({
           </span>
           {product.model_url && (
             <button
-              onClick={() => openAR(product)}
+              onClick={(e) => { e.stopPropagation(); openAR(product); }}
               className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
               style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
             >
@@ -189,13 +197,18 @@ export default function MenuProductList({
   function renderCardProduct(product: Product) {
     const inStock = product.in_stock !== false;
     return (
-      <div key={product.id} className={`rounded-2xl border border-gray-100 overflow-hidden shadow-sm bg-white ${!inStock ? "opacity-50" : ""}`}>
+      <div
+        key={product.id}
+        className={`rounded-2xl border border-gray-100 overflow-hidden shadow-sm bg-white cursor-pointer active:scale-[0.98] transition-transform ${!inStock ? "opacity-50" : ""}`}
+        onClick={() => setSelectedProduct(product)}
+      >
         {product.image_url ? (
-          <ImageZoomModal
+          <Image
             src={product.image_url}
             alt={product.name}
-            thumbClass={getCardImageClass()}
-            buttonClass="w-full block focus:outline-none"
+            width={400}
+            height={400}
+            className={getCardImageClass()}
           />
         ) : (
           <div
@@ -292,6 +305,15 @@ export default function MenuProductList({
 
   return (
     <div className="space-y-6">
+      {selectedProduct && (
+        <ProductDetailModal
+          product={selectedProduct}
+          primaryColor={primaryColor}
+          isEn={isEn}
+          onClose={() => setSelectedProduct(null)}
+          onOpenAR={() => { openAR(selectedProduct); setSelectedProduct(null); }}
+        />
+      )}
       {/* Arama */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30" />
