@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Search, UtensilsCrossed, Box } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import ImageZoomModal from "./ImageZoomModal";
+import OpenmojiIcon from "./OpenmojiIcon";
 
 interface Product {
   id: string;
@@ -139,7 +140,6 @@ export default function MenuProductList({
                     className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
                     style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}
                   >
-                    {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                     {isEn ? (def?.labelEn ?? tag) : tag}
                   </span>
                 );
@@ -158,7 +158,7 @@ export default function MenuProductList({
                   return (
                     <span key={id}
                       className="flex-shrink-0 inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
-                      <span className="text-sm leading-none">{ing.icon}</span>
+                      <OpenmojiIcon emoji={ing.icon} size={16} />
                       {isEn ? ing.labelEn : ing.label}
                     </span>
                   );
@@ -234,7 +234,6 @@ export default function MenuProductList({
                     className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
                     style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}
                   >
-                    {def?.icon && <span className="text-[11px] leading-none">{def.icon}</span>}
                     {isEn ? (def?.labelEn ?? tag) : tag}
                   </span>
                 );
@@ -253,7 +252,7 @@ export default function MenuProductList({
                   return (
                     <span key={id}
                       className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
-                      <span className="text-sm leading-none">{ing.icon}</span>
+                      <OpenmojiIcon emoji={ing.icon} size={16} />
                       {isEn ? ing.labelEn : ing.label}
                     </span>
                   );

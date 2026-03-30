@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { PRODUCT_INGREDIENTS, INGREDIENT_GROUPS } from "@/types/menu";
+import OpenmojiIcon from "./OpenmojiIcon";
 
 interface Props {
   selected: string[];
@@ -35,7 +36,7 @@ export default function IngredientSelector({ selected, onChange }: Props) {
                 onClick={() => toggle(id)}
                 className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600 border border-orange-200 hover:bg-red-50 hover:text-red-400 hover:border-red-200 transition-colors"
               >
-                <span>{ing.icon}</span>
+                <OpenmojiIcon emoji={ing.icon} size={14} />
                 {ing.label}
                 <span className="ml-0.5 text-orange-300">×</span>
               </button>
@@ -84,7 +85,7 @@ export default function IngredientSelector({ selected, onChange }: Props) {
                             : "bg-white border-gray-200 text-gray-500 hover:border-orange-200 hover:bg-orange-50"
                         }`}
                       >
-                        <span className="text-xl leading-none">{ing.icon}</span>
+                        <OpenmojiIcon emoji={ing.icon} size={28} />
                         <span className="text-[10px] text-center leading-tight">{ing.label}</span>
                       </button>
                     );

@@ -32,7 +32,6 @@ export default function TagSelector({ selected, onChange }: Props) {
                 : { backgroundColor: "#f9fafb", color: "#9ca3af", borderColor: "#e5e7eb" }
             }
           >
-            <span>{tag.icon}</span>
             {tag.label}
           </button>
         );
