@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Save, Loader2, ImagePlus, X, Wifi, Instagram } from "lucide-react";
+import { Save, Loader2, ImagePlus, X, Wifi, Instagram, Link, Megaphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import { validateImage } from "@/lib/validateImage";
@@ -20,6 +20,8 @@ export default function ThemeEditor() {
   const [logoPreview, setLogoPreview] = useState("");
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState("");
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState("");
 
   const supabase = createClient();
 
@@ -71,6 +73,10 @@ export default function ThemeEditor() {
         newTheme.coverUrl = await uploadAsset(coverFile, `${cafeId}/cover`);
         setCoverFile(null);
       }
+      if (bannerFile) {
+        newTheme.bannerUrl = await uploadAsset(bannerFile, `${cafeId}/banner`);
+        setBannerFile(null);
+      }
 
       const { error: dbErr } = await supabase.from("cafes").update({ theme: newTheme }).eq("id", cafeId);
       if (dbErr) throw dbErr;
@@ -87,7 +93,7 @@ export default function ThemeEditor() {
 
   async function handleFileChange(
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "logo" | "cover"
+    type: "logo" | "cover" | "banner"
   ) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -96,7 +102,8 @@ export default function ThemeEditor() {
     const compressed = await compressImage(file, "asset");
     const preview = URL.createObjectURL(compressed);
     if (type === "logo") { setLogoFile(compressed); setLogoPreview(preview); }
-    else { setCoverFile(compressed); setCoverPreview(preview); }
+    else if (type === "cover") { setCoverFile(compressed); setCoverPreview(preview); }
+    else { setBannerFile(compressed); setBannerPreview(preview); }
   }
 
   if (loading) {
@@ -109,6 +116,7 @@ export default function ThemeEditor() {
 
   const logoSrc = logoPreview || theme.logoUrl;
   const coverSrc = coverPreview || theme.coverUrl;
+  const bannerSrc = bannerPreview || theme.bannerUrl;
 
   return (
     <div className="space-y-5">
@@ -213,6 +221,57 @@ export default function ThemeEditor() {
             </label>
           )}
           <p className="text-xs text-gray-400">Menü sayfasının en üstünde banner olarak görünür.</p>
+        </div>
+      </div>
+
+      {/* Duyuru Görseli */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Megaphone className="w-4 h-4 text-gray-400" />
+            <h2 className="font-semibold text-gray-700">Duyuru</h2>
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <span className="text-xs text-gray-400">{theme.bannerActive ? "Aktif" : "Pasif"}</span>
+            <div
+              onClick={() => update("bannerActive", !theme.bannerActive)}
+              className={`w-10 h-5 rounded-full transition-colors relative ${theme.bannerActive ? "bg-orange-500" : "bg-gray-200"}`}
+            >
+              <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${theme.bannerActive ? "translate-x-5" : "translate-x-0.5"}`} />
+            </div>
+          </label>
+        </div>
+
+        <div className="space-y-3">
+          {bannerSrc ? (
+            <div className="relative w-full h-40">
+              <Image src={bannerSrc} alt="Duyuru" fill className="rounded-xl object-cover border border-gray-200" />
+              <button
+                onClick={() => { setBannerFile(null); setBannerPreview(""); update("bannerUrl", ""); }}
+                className="absolute top-2 right-2 bg-white border border-gray-200 rounded-full p-1 text-gray-400 hover:text-red-400"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-orange-300 transition-colors">
+              <ImagePlus className="w-6 h-6 text-gray-300" />
+              <span className="text-sm text-gray-300 mt-1">Duyuru görseli yükle</span>
+              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "banner")} />
+            </label>
+          )}
+
+          <div className="relative">
+            <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+            <input
+              type="url"
+              placeholder="Tıklanınca açılacak link (opsiyonel)"
+              value={theme.bannerLink}
+              onChange={(e) => update("bannerLink", e.target.value)}
+              className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+            />
+          </div>
+          <p className="text-xs text-gray-400">Müşteri menüyü açtığında ekranda gösterilir, kapatabilir.</p>
         </div>
       </div>
 

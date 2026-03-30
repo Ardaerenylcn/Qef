@@ -12,6 +12,7 @@ import StickyMenuHeader from "@/components/StickyMenuHeader";
 import ParallaxCover from "@/components/ParallaxCover";
 import OpenStatusBadge from "@/components/OpenStatusBadge";
 import AdUnit from "@/components/AdUnit";
+import BannerModal from "@/components/BannerModal";
 
 const BASE_URL = "https://qefmenu.com";
 
@@ -128,6 +129,11 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/<\/script>/gi, "<\\/script>") }}
       />
+
+      {/* Duyuru banner modal */}
+      {theme.bannerActive && theme.bannerUrl && (
+        <BannerModal bannerUrl={theme.bannerUrl} bannerLink={theme.bannerLink ?? ""} cafeSlug={slug} />
+      )}
 
       {/* Sticky header */}
       <StickyMenuHeader

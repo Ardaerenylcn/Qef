@@ -9,6 +9,9 @@ export interface CafeTheme {
   wifi: string;
   productLayout: "list" | "card";
   imageRatio: "square" | "wide" | "round";
+  bannerUrl: string;
+  bannerActive: boolean;
+  bannerLink: string;
 }
 
 export const DEFAULT_THEME: CafeTheme = {
@@ -22,6 +25,9 @@ export const DEFAULT_THEME: CafeTheme = {
   wifi: "",
   productLayout: "list",
   imageRatio: "square",
+  bannerUrl: "",
+  bannerActive: false,
+  bannerLink: "",
 };
 
 export const FONTS: Record<CafeTheme["font"], { label: string; css: string }> = {
