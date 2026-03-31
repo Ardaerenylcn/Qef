@@ -14,14 +14,17 @@ export default function BannerModal({ bannerUrl, bannerLink, cafeSlug }: Props) 
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const key = `banner_dismissed_${cafeSlug}`;
+    // Key'e URL hash'i ekliyoruz — yeni görsel yüklenince eski kapatma sıfırlanır
+    const urlHash = bannerUrl.split("?")[0].slice(-12);
+    const key = `banner_dismissed_${cafeSlug}_${urlHash}`;
     if (!localStorage.getItem(key)) {
       setVisible(true);
     }
-  }, [cafeSlug]);
+  }, [cafeSlug, bannerUrl]);
 
   function dismiss() {
-    localStorage.setItem(`banner_dismissed_${cafeSlug}`, "1");
+    const urlHash = bannerUrl.split("?")[0].slice(-12);
+    localStorage.setItem(`banner_dismissed_${cafeSlug}_${urlHash}`, "1");
     setVisible(false);
   }
 

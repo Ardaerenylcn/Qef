@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { X, Box, UtensilsCrossed } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
@@ -28,21 +29,32 @@ interface Props {
 }
 
 export default function ProductDetailModal({ product, primaryColor, isEn, onClose, onOpenAR }: Props) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true));
+  }, []);
+
+  function handleClose() {
+    setVisible(false);
+    setTimeout(onClose, 300);
+  }
+
   const inStock = product.in_stock !== false;
   const name = isEn && product.name_en ? product.name_en : product.name;
   const description = isEn && product.description_en ? product.description_en : product.description;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center"
-      onClick={onClose}
+      className={`fixed inset-0 z-50 flex items-end justify-center transition-opacity duration-300 ${visible ? "opacity-100" : "opacity-0"}`}
+      onClick={handleClose}
     >
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       {/* Bottom sheet */}
       <div
-        className="relative w-full max-w-md bg-white rounded-t-3xl overflow-hidden max-h-[90vh] flex flex-col"
+        className={`relative w-full max-w-md bg-white rounded-t-3xl overflow-hidden max-h-[90vh] flex flex-col transition-transform duration-300 ${visible ? "translate-y-0" : "translate-y-full"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Görsel */}
@@ -70,7 +82,7 @@ export default function ProductDetailModal({ product, primaryColor, isEn, onClos
 
         {/* Kapat butonu */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition-colors"
         >
           <X className="w-5 h-5" />

@@ -12,6 +12,7 @@ import CollapsibleSection from "./CollapsibleSection";
 export default function ThemeEditor() {
   const [cafeId, setCafeId] = useState<string | null>(null);
   const [theme, setTheme] = useState<CafeTheme>(DEFAULT_THEME);
+  const [savedTheme, setSavedTheme] = useState<CafeTheme>(DEFAULT_THEME);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -39,7 +40,9 @@ export default function ThemeEditor() {
 
       if (cafe) {
         setCafeId(cafe.id);
-        setTheme({ ...DEFAULT_THEME, ...(cafe.theme ?? {}) });
+        const loaded = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
+        setTheme(loaded);
+        setSavedTheme(loaded);
       }
       setLoading(false);
     }
@@ -83,6 +86,7 @@ export default function ThemeEditor() {
       if (dbErr) throw dbErr;
 
       setTheme(newTheme);
+      setSavedTheme(newTheme);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err: unknown) {
@@ -313,6 +317,13 @@ export default function ThemeEditor() {
           {error}
         </div>
       )}
+
+      {/* Kaydedilmemiş uyarı */}
+      {!saved && !saving && JSON.stringify(theme) !== JSON.stringify(savedTheme) || logoFile || coverFile || bannerFile ? (
+        <p className="text-center text-xs text-orange-400 font-medium animate-pulse">
+          ● Kaydedilmemiş değişiklikler var
+        </p>
+      ) : null}
 
       {/* Kaydet */}
       <button onClick={handleSave} disabled={saving}
