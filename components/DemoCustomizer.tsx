@@ -150,10 +150,8 @@ export default function DemoCustomizer() {
                                 <Image src={p.image} alt={p.name} width={32} height={32}
                                   className="w-8 h-8 rounded-lg object-cover shrink-0" />
                               ) : (
-                                <div className="w-8 h-8 rounded-lg shrink-0 flex items-center justify-center"
-                                  style={{ backgroundColor: `${color}18` }}>
-                                  <span className="text-sm">🍽️</span>
-                                </div>
+                                <div className="w-8 h-8 rounded-lg shrink-0"
+                                  style={{ backgroundColor: `${color}18` }} />
                               )}
                               <div className="flex-1 min-w-0">
                                 <p className="text-[10px] font-semibold text-gray-800 truncate">{p.name}</p>
@@ -163,9 +161,9 @@ export default function DemoCustomizer() {
                                     {p.tags.map((tag) => {
                                       const def = PRODUCT_TAGS.find((t) => t.label === tag);
                                       return (
-                                        <span key={tag} className="inline-flex items-center text-[9px] w-4 h-4 justify-center rounded-full"
-                                          style={{ backgroundColor: def?.bg ?? "#f3f4f6" }}>
-                                          {def?.icon ?? "·"}
+                                        <span key={tag} className="inline-flex items-center text-[9px] px-1.5 py-0.5 rounded-full font-semibold"
+                                          style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}>
+                                          {tag}
                                         </span>
                                       );
                                     })}
@@ -188,10 +186,8 @@ export default function DemoCustomizer() {
                                 <Image src={p.image} alt={p.name} width={120} height={64}
                                   className="w-full h-14 object-cover" />
                               ) : (
-                                <div className="w-full h-14 flex items-center justify-center"
-                                  style={{ backgroundColor: `${color}18` }}>
-                                  <span className="text-xl">🍽️</span>
-                                </div>
+                                <div className="w-full h-14"
+                                  style={{ backgroundColor: `${color}18` }} />
                               )}
                               <div className="p-1.5">
                                 <p className="text-[9px] font-semibold text-gray-800 truncate">{p.name}</p>
@@ -202,7 +198,7 @@ export default function DemoCustomizer() {
                                       return (
                                         <span key={tag} className="inline-flex items-center gap-0.5 text-[7px] font-bold px-1 py-0.5 rounded-full"
                                           style={{ backgroundColor: def?.bg ?? "#f3f4f6", color: def?.color ?? "#6b7280" }}>
-                                          {def?.icon}{tag}
+                                          {tag}
                                         </span>
                                       );
                                     })}

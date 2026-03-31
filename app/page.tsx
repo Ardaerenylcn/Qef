@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe } from "lucide-react";
+import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, Cpu, X as XIcon } from "lucide-react";
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 
@@ -195,7 +195,7 @@ export default function HomePage() {
                 icon: Star,
                 color: "bg-orange-50 text-orange-500",
                 title: "Etiket & İçerik İkonları",
-                desc: "✨ Yeni, 🔥 Popüler gibi emoji etiketler ve 57+ içerik ikonu ile ürünlerinizi detaylandırın.",
+                desc: "Yeni, Popüler, Şefin Seçimi gibi etiketler ve 57+ içerik ikonu ile ürünlerinizi detaylandırın.",
               },
               {
                 icon: QrCode,
@@ -291,30 +291,35 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Banner & Logo */}
+            {/* Duyuru Görseli */}
             <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
               <div className="inline-flex p-3 rounded-2xl bg-purple-500/10">
-                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                <Megaphone className="w-5 h-5 text-purple-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white mb-1">Banner & Logo</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">Kafenizin kapak fotoğrafını ve logosunu yükleyin. Müşteriler menüyü açtığında sizi hemen tanısın.</p>
+                <h3 className="font-bold text-white mb-1">Duyuru Görseli</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Kampanya, yeni ürün veya özel gün için görsel yükleyin. Müşteriler menüyü açtığında ekrana çıksın, kapatabilsinler.</p>
               </div>
-              {/* Mini banner mockup */}
-              <div className="rounded-xl overflow-hidden border border-gray-700">
-                <div className="relative h-16 bg-gradient-to-r from-orange-900/50 to-orange-800/30 flex items-center justify-center">
-                  <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "url('/demo/cafe-cover.png')", backgroundSize: "cover", backgroundPosition: "center" }} />
-                  <span className="relative text-xs font-bold text-white drop-shadow">Arôme Café</span>
+              {/* Duyuru popup mockup */}
+              <div className="relative rounded-xl overflow-hidden border border-gray-700 bg-gray-800" style={{ height: 120 }}>
+                {/* Arkaplan — karartılmış menü */}
+                <div className="absolute inset-0 flex flex-col gap-1.5 px-3 py-2 opacity-30">
+                  {[80, 60, 90, 50].map((w, i) => (
+                    <div key={i} className="h-2 rounded bg-gray-600" style={{ width: `${w}%` }} />
+                  ))}
                 </div>
-                <div className="bg-gray-800 px-3 py-2 flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-orange-500/20 border border-orange-500/30 flex items-center justify-center">
-                    <div className="w-4 h-4 rounded bg-orange-400/50" />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="h-1.5 w-16 bg-gray-600 rounded" />
-                    <div className="h-1 w-10 bg-gray-700 rounded" />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+                {/* Popup kart */}
+                <div className="absolute inset-0 flex items-center justify-center px-4">
+                  <div className="w-full max-w-[160px] rounded-xl overflow-hidden shadow-2xl">
+                    <div className="relative bg-gradient-to-br from-orange-500 to-orange-400 h-14 flex items-center justify-center">
+                      <p className="text-white text-[10px] font-bold tracking-wide">Fıstıklı Latte</p>
+                      <p className="absolute bottom-1.5 text-orange-100 text-[8px]">Yeni — Şimdi Menüde</p>
+                      <div className="absolute top-1.5 right-1.5 bg-black/30 rounded-full p-0.5">
+                        <XIcon className="w-2.5 h-2.5 text-white" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -391,7 +396,9 @@ export default function HomePage() {
 
               {/* AI vurgu kartı */}
               <div className="flex items-start gap-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/5 border border-orange-500/25 rounded-2xl px-5 py-4">
-                <div className="w-9 h-9 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0 text-lg">🤖</div>
+                <div className="w-9 h-9 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0">
+                  <Cpu className="w-5 h-5 text-orange-400" />
+                </div>
                 <div>
                   <p className="text-white font-bold text-sm">Yapay zeka ile 3D model üretilir</p>
                   <p className="text-slate-400 text-xs mt-0.5 leading-relaxed">Ürünün fotoğrafını yükle, yapay zeka otomatik olarak 3 boyutlu modeli oluştursun.</p>
@@ -400,7 +407,7 @@ export default function HomePage() {
 
               {/* Küçük özellikler */}
               <div className="flex flex-wrap gap-3">
-                {["📱 Uygulama gerekmez", "🌍 iOS & Android", "⚡ Anında aktif"].map((item) => (
+                {["Uygulama gerekmez", "iOS & Android", "Anında aktif"].map((item) => (
                   <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
                 ))}
               </div>
