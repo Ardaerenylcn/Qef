@@ -362,7 +362,13 @@ export default function MenuProductList({
                 <div className="flex-1 h-px" style={{ backgroundColor: `${primaryColor}33` }} />
               </div>
               <div className={listContainerClass}>
-                {(grouped[cat] ?? []).map(renderProduct)}
+                {[...(grouped[cat] ?? [])].sort((a, b) => {
+                  const aStock = a.in_stock !== false;
+                  const bStock = b.in_stock !== false;
+                  if (aStock && !bStock) return -1;
+                  if (!aStock && bStock) return 1;
+                  return 0;
+                }).map(renderProduct)}
               </div>
             </section>
           ))}

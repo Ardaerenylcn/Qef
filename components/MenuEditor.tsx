@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlusCircle, UtensilsCrossed, Save, Loader2, Link2, ImagePlus, X, ChevronDown, MapPin, ExternalLink, HelpCircle } from "lucide-react";
+import { PlusCircle, UtensilsCrossed, Save, Loader2, Link2, ImagePlus, X, ChevronDown, MapPin, ExternalLink, HelpCircle, Search } from "lucide-react";
 import Image from "next/image";
 import {
   DndContext,
@@ -82,6 +82,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [newCatName, setNewCatName] = useState("");
   const [catError, setCatError] = useState("");
   const [showChecklist, setShowChecklist] = useState(true);
+  const [productSearch, setProductSearch] = useState("");
 
   const router = useRouter();
   const supabase = createClient();
@@ -343,12 +344,25 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
     );
   }
 
-  const grouped = products.reduce<Record<string, Product[]>>((acc, p) => {
+  const searchQ = productSearch.trim().toLowerCase();
+  const filteredProducts = searchQ
+    ? products.filter((p) =>
+        p.name.toLowerCase().includes(searchQ) ||
+        (p.name_en ?? "").toLowerCase().includes(searchQ) ||
+        (p.category ?? "").toLowerCase().includes(searchQ)
+      )
+    : products;
+
+  const grouped = filteredProducts.reduce<Record<string, Product[]>>((acc, p) => {
     const key = p.category || "Genel";
     if (!acc[key]) acc[key] = [];
     acc[key].push(p);
     return acc;
   }, {});
+
+  const visibleCategories = searchQ
+    ? categories.filter((c) => grouped[c]?.length > 0)
+    : categories;
 
   return (
     <>
@@ -619,23 +633,41 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
             <p className="text-sm">Henüz ürün eklenmedi.</p>
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCategoryDragEnd}>
-            <SortableContext items={categories} strategy={verticalListSortingStrategy}>
-              <div className="space-y-6">
-                {categories.map((cat) => (
-                  <SortableCategoryBlock
-                    key={cat}
-                    category={cat}
-                    products={grouped[cat] ?? []}
-                    onDeleteProduct={handleDelete}
-                    onEditProduct={setEditingProduct}
-                    onProductReorder={handleProductReorder}
-                    onToggleStock={handleToggleStock}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          <>
+            {/* Ürün arama */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+              <input
+                type="search"
+                placeholder="Ürün ara..."
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
+
+            {visibleCategories.length === 0 ? (
+              <p className="text-sm text-gray-300 text-center py-8">Eşleşen ürün bulunamadı.</p>
+            ) : (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCategoryDragEnd}>
+                <SortableContext items={visibleCategories} strategy={verticalListSortingStrategy}>
+                  <div className="space-y-6">
+                    {visibleCategories.map((cat) => (
+                      <SortableCategoryBlock
+                        key={cat}
+                        category={cat}
+                        products={grouped[cat] ?? []}
+                        onDeleteProduct={handleDelete}
+                        onEditProduct={setEditingProduct}
+                        onProductReorder={handleProductReorder}
+                        onToggleStock={handleToggleStock}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            )}
+          </>
         )}
       </div>
     </div>

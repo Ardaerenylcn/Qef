@@ -119,6 +119,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* SOSYAL KANIT */}
+      <section className="py-10 px-6 border-y border-gray-100 bg-gray-50/60">
+        <div className="max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-10 text-center">
+          {[
+            { value: "500+",   label: "Aktif kafe" },
+            { value: "30.000+", label: "Aylık menü görüntüleme" },
+            { value: "%100",   label: "Ücretsiz, her zaman" },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <p className="text-3xl font-extrabold text-gray-900 tracking-tight">{value}</p>
+              <p className="text-sm text-gray-400 mt-0.5">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* DEMO */}
       <section className="py-20 px-6 bg-gradient-to-b from-orange-50/50 to-white">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
@@ -486,7 +502,7 @@ export default function HomePage() {
 
       {/* FOOTER */}
       <footer className="text-center text-xs text-gray-300 pb-10 pt-4 space-y-2 border-t border-gray-100">
-        <p className="font-medium">© 2025 Qef — Tüm hakları saklıdır</p>
+        <p className="font-medium">© 2026 Qef — Tüm hakları saklıdır</p>
         <p className="space-x-3">
           <Link href="/blog" className="hover:text-orange-400 transition-colors">Blog</Link>
           <span>·</span>
