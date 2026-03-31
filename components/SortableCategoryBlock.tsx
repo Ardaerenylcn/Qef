@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -37,6 +38,21 @@ export function SortableCategoryBlock({
 
   const sensors = useSensors(useSensor(PointerSensor));
 
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (products.length < 2) return;
+    if (localStorage.getItem("dnd_hint_shown")) return;
+    const t = setTimeout(() => {
+      setShowHint(true);
+      setTimeout(() => {
+        setShowHint(false);
+        localStorage.setItem("dnd_hint_shown", "1");
+      }, 3000);
+    }, 800);
+    return () => clearTimeout(t);
+  }, []);
+
   function handleProductDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -71,6 +87,14 @@ export function SortableCategoryBlock({
         <p className="text-xs font-semibold uppercase tracking-widest text-orange-400">
           {category}
         </p>
+      </div>
+
+      {/* Drag hint */}
+      <div className={`overflow-hidden transition-all duration-500 ${showHint ? "max-h-10 opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="flex items-center gap-1.5 text-[11px] text-orange-400 font-medium bg-orange-50 rounded-lg px-3 py-1.5 mb-1">
+          <GripVertical className="w-3.5 h-3.5 animate-bounce" />
+          Ürünleri yeniden sıralamak için sürükle
+        </div>
       </div>
 
       {/* Ürünler */}

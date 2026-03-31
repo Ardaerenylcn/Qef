@@ -20,7 +20,7 @@ export default function OpenmojiIcon({ emoji, size = 18, className }: Props) {
       height={size}
       alt={emoji}
       className={className}
-      style={{ display: "inline-block", flexShrink: 0 }}
+      style={{ display: "inline-block", flexShrink: 0, width: size, height: size, minWidth: size, minHeight: size }}
     />
   );
 }

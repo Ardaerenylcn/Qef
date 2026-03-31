@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
+import CollapsibleSection from "./CollapsibleSection";
 
 export default function ThemeEditor() {
   const [cafeId, setCafeId] = useState<string | null>(null);
@@ -121,11 +122,9 @@ export default function ThemeEditor() {
   const bannerSrc = bannerPreview || theme.bannerUrl;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
 
-      {/* Renkler */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Renkler</h2>
+      <CollapsibleSection storageKey="theme_renkler" title="Renkler">
         <div className="grid grid-cols-3 gap-4">
           {[
             { label: "Ana Renk", key: "primaryColor" as const },
@@ -146,11 +145,9 @@ export default function ThemeEditor() {
             </div>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Font */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Yazı Tipi</h2>
+      <CollapsibleSection storageKey="theme_font" title="Yazı Tipi" defaultOpen={false}>
         <div className="grid grid-cols-3 gap-3">
           {(Object.entries(FONTS) as [CafeTheme["font"], { label: string; css: string }][]).map(
             ([key, { label, css }]) => (
@@ -170,11 +167,9 @@ export default function ThemeEditor() {
             )
           )}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Logo */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Logo</h2>
+      <CollapsibleSection storageKey="theme_logo" title="Logo" defaultOpen={false}>
         <div className="flex items-center gap-4">
           {logoSrc ? (
             <div className="relative w-20 h-20">
@@ -197,11 +192,9 @@ export default function ThemeEditor() {
           )}
           <p className="text-xs text-gray-400">Menü sayfasının üstünde gösterilir. PNG veya SVG önerilir.</p>
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Kapak Görseli */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Kapak Görseli</h2>
+      <CollapsibleSection storageKey="theme_kapak" title="Kapak Görseli" defaultOpen={false}>
         <div className="space-y-3">
           {coverSrc ? (
             <div className="relative w-full h-32">
@@ -224,26 +217,21 @@ export default function ThemeEditor() {
           )}
           <p className="text-xs text-gray-400">Menü sayfasının en üstünde banner olarak görünür.</p>
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Duyuru Görseli */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Megaphone className="w-4 h-4 text-gray-400" />
-            <h2 className="font-semibold text-gray-700">Duyuru</h2>
+      <CollapsibleSection storageKey="theme_duyuru" title="Duyuru" defaultOpen={false}>
+        <div className="flex items-center justify-between -mt-1 mb-1">
+          <div className="flex items-center gap-2 text-gray-400">
+            <Megaphone className="w-4 h-4" />
+            <span className="text-xs">{theme.bannerActive ? "Aktif" : "Pasif"}</span>
           </div>
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <span className="text-xs text-gray-400">{theme.bannerActive ? "Aktif" : "Pasif"}</span>
-            <div
-              onClick={() => update("bannerActive", !theme.bannerActive)}
-              className={`w-10 h-5 rounded-full transition-colors relative ${theme.bannerActive ? "bg-orange-500" : "bg-gray-200"}`}
-            >
-              <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${theme.bannerActive ? "translate-x-5" : "translate-x-0.5"}`} />
-            </div>
-          </label>
+          <div
+            onClick={() => update("bannerActive", !theme.bannerActive)}
+            className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer ${theme.bannerActive ? "bg-orange-500" : "bg-gray-200"}`}
+          >
+            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${theme.bannerActive ? "translate-x-5" : "translate-x-0.5"}`} />
+          </div>
         </div>
-
         <div className="space-y-3">
           {bannerSrc ? (
             <div className="relative w-full h-40">
@@ -262,81 +250,62 @@ export default function ThemeEditor() {
               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "banner")} />
             </label>
           )}
-
           <div className="relative">
             <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
-            <input
-              type="url"
-              placeholder="Tıklanınca açılacak link (opsiyonel)"
-              value={theme.bannerLink}
-              onChange={(e) => update("bannerLink", e.target.value)}
-              className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
-            />
+            <input type="url" placeholder="Tıklanınca açılacak link (opsiyonel)"
+              value={theme.bannerLink} onChange={(e) => update("bannerLink", e.target.value)}
+              className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
           <p className="text-xs text-gray-400">Müşteri menüyü açtığında ekranda gösterilir, kapatabilir.</p>
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Ürün Düzeni */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Ürün Düzeni</h2>
+      <CollapsibleSection storageKey="theme_urun_duzeni" title="Ürün Düzeni" defaultOpen={false}>
         <div className="grid grid-cols-2 gap-3">
           {(["list", "card"] as const).map((layout) => (
-            <button
-              key={layout}
-              onClick={() => update("productLayout", layout)}
+            <button key={layout} onClick={() => update("productLayout", layout)}
               className={`py-3 px-4 rounded-xl border-2 text-sm transition-all ${
                 theme.productLayout === layout
                   ? "border-orange-400 bg-orange-50 text-orange-600"
                   : "border-gray-100 text-gray-500 hover:border-gray-200"
-              }`}
-            >
+              }`}>
               {layout === "list" ? "Liste" : "Kart"}
             </button>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Görsel Oranı */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Görsel Oranı</h2>
+      <CollapsibleSection storageKey="theme_gorsel_orani" title="Görsel Oranı" defaultOpen={false}>
         <div className="grid grid-cols-3 gap-3">
           {(["square", "wide", "round"] as const).map((ratio) => (
-            <button
-              key={ratio}
-              onClick={() => update("imageRatio", ratio)}
+            <button key={ratio} onClick={() => update("imageRatio", ratio)}
               className={`py-3 px-4 rounded-xl border-2 text-sm transition-all ${
                 theme.imageRatio === ratio
                   ? "border-orange-400 bg-orange-50 text-orange-600"
                   : "border-gray-100 text-gray-500 hover:border-gray-200"
-              }`}
-            >
+              }`}>
               {ratio === "square" ? "Kare" : ratio === "wide" ? "Geniş" : "Yuvarlak"}
             </button>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
-      {/* Ekstra Bilgiler */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Ekstra Bilgiler</h2>
+      <CollapsibleSection storageKey="theme_ekstra" title="Ekstra Bilgiler" defaultOpen={false}>
         <div className="space-y-3">
           <div className="relative">
             <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
             <input type="text" placeholder="Instagram kullanıcı adı (ör. kafem)"
-              value={theme.instagram}
-              onChange={(e) => update("instagram", e.target.value)}
+              value={theme.instagram} onChange={(e) => update("instagram", e.target.value)}
               className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
           <div className="relative">
             <Wifi className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
             <input type="text" placeholder="WiFi şifresi"
-              value={theme.wifi}
-              onChange={(e) => update("wifi", e.target.value)}
+              value={theme.wifi} onChange={(e) => update("wifi", e.target.value)}
               className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* Hata */}
       {error && (
