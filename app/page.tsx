@@ -301,24 +301,21 @@ export default function HomePage() {
                 <p className="text-sm text-gray-400 leading-relaxed">Kampanya, yeni ürün veya özel gün için görsel yükleyin. Müşteriler menüyü açtığında ekrana çıksın, kapatabilsinler.</p>
               </div>
               {/* Duyuru popup mockup */}
-              <div className="relative rounded-xl overflow-hidden border border-gray-700 bg-gray-800" style={{ height: 120 }}>
+              <div className="relative rounded-xl overflow-hidden border border-gray-700 bg-gray-800" style={{ height: 160 }}>
                 {/* Arkaplan — karartılmış menü */}
-                <div className="absolute inset-0 flex flex-col gap-1.5 px-3 py-2 opacity-30">
-                  {[80, 60, 90, 50].map((w, i) => (
+                <div className="absolute inset-0 flex flex-col gap-1.5 px-3 py-2 opacity-20">
+                  {[80, 60, 90, 50, 70, 40].map((w, i) => (
                     <div key={i} className="h-2 rounded bg-gray-600" style={{ width: `${w}%` }} />
                   ))}
                 </div>
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+                <div className="absolute inset-0 bg-black/65 backdrop-blur-[2px]" />
                 {/* Popup kart */}
                 <div className="absolute inset-0 flex items-center justify-center px-4">
-                  <div className="w-full max-w-[160px] rounded-xl overflow-hidden shadow-2xl">
-                    <div className="relative bg-gradient-to-br from-orange-500 to-orange-400 h-14 flex items-center justify-center">
-                      <p className="text-white text-[10px] font-bold tracking-wide">Fıstıklı Latte</p>
-                      <p className="absolute bottom-1.5 text-orange-100 text-[8px]">Yeni — Şimdi Menüde</p>
-                      <div className="absolute top-1.5 right-1.5 bg-black/30 rounded-full p-0.5">
-                        <XIcon className="w-2.5 h-2.5 text-white" />
-                      </div>
+                  <div className="relative w-[90px] rounded-xl overflow-hidden shadow-2xl">
+                    <Image src="/banner.png" alt="Duyuru örnek" width={180} height={220} className="w-full object-cover" />
+                    <div className="absolute top-1.5 right-1.5 bg-black/50 rounded-full p-0.5">
+                      <XIcon className="w-2.5 h-2.5 text-white" />
                     </div>
                   </div>
                 </div>
