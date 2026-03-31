@@ -87,7 +87,7 @@ export default async function AdminPage() {
       </div>
 
       <div className="max-w-lg mx-auto">
-        <AdminTabs stats={stats} />
+        <AdminTabs email={user.email ?? ""} stats={stats} />
       </div>
     </main>
   );

@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { UtensilsCrossed, Palette, QrCode, BarChart2 } from "lucide-react";
+import { UtensilsCrossed, Palette, QrCode, BarChart2, Settings } from "lucide-react";
 import MenuEditor from "./MenuEditor";
 import ThemeEditor from "./ThemeEditor";
 import QRPrint from "./QRPrint";
 import AdminStats from "./AdminStats";
+import AccountSettings from "./AccountSettings";
 
-type Tab = "menu" | "theme" | "qr" | "stats";
+type Tab = "menu" | "theme" | "qr" | "stats" | "settings";
 
 interface Props {
+  email: string;
   stats: {
     todayCount: number;
     weekCount: number;
@@ -20,14 +22,15 @@ interface Props {
   };
 }
 
-export default function AdminTabs({ stats }: Props) {
+export default function AdminTabs({ email, stats }: Props) {
   const [tab, setTab] = useState<Tab>("menu");
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: "menu",  label: "Menü",        icon: <UtensilsCrossed className="w-4 h-4" /> },
-    { key: "theme", label: "Görünüm",     icon: <Palette className="w-4 h-4" /> },
-    { key: "qr",    label: "QR Kodlar",   icon: <QrCode className="w-4 h-4" /> },
-    { key: "stats", label: "İstatistik",  icon: <BarChart2 className="w-4 h-4" /> },
+    { key: "menu",     label: "Menü",        icon: <UtensilsCrossed className="w-4 h-4" /> },
+    { key: "theme",    label: "Görünüm",     icon: <Palette className="w-4 h-4" /> },
+    { key: "qr",       label: "QR Kodlar",   icon: <QrCode className="w-4 h-4" /> },
+    { key: "stats",    label: "İstatistik",  icon: <BarChart2 className="w-4 h-4" /> },
+    { key: "settings", label: "Ayarlar",     icon: <Settings className="w-4 h-4" /> },
   ];
 
   return (
@@ -49,10 +52,11 @@ export default function AdminTabs({ stats }: Props) {
         ))}
       </div>
 
-      {tab === "menu" && <MenuEditor onSwitchTab={setTab} />}
-      {tab === "theme" && <ThemeEditor />}
-      {tab === "qr" && <QRPrint />}
-      {tab === "stats" && <AdminStats {...stats} />}
+      {tab === "menu"     && <MenuEditor onSwitchTab={setTab} />}
+      {tab === "theme"    && <ThemeEditor />}
+      {tab === "qr"       && <QRPrint />}
+      {tab === "stats"    && <AdminStats {...stats} />}
+      {tab === "settings" && <AccountSettings email={email} />}
     </div>
   );
 }
