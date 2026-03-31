@@ -313,7 +313,8 @@ export default function HomePage() {
                 {/* Popup kart */}
                 <div className="absolute inset-0 flex items-center justify-center px-4">
                   <div className="relative w-[90px] rounded-xl overflow-hidden shadow-2xl">
-                    <Image src="/banner.png" alt="Duyuru örnek" width={180} height={220} className="w-full object-cover" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/banner.png" alt="Duyuru örnek" className="w-full object-cover" />
                     <div className="absolute top-1.5 right-1.5 bg-black/50 rounded-full p-0.5">
                       <XIcon className="w-2.5 h-2.5 text-white" />
                     </div>
