@@ -57,6 +57,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [cafeSlug, setCafeSlug] = useState("");
   const [slugAutoMode, setSlugAutoMode] = useState(true);
   const [slugError, setSlugError] = useState("");
+  const [slugConfirmed, setSlugConfirmed] = useState(false);
   const [savingCafe, setSavingCafe] = useState(false);
   const [showCafeEn, setShowCafeEn] = useState(false);
   const [openingHours, setOpeningHours] = useState<OpeningHour[]>(DEFAULT_HOURS);
@@ -193,7 +194,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
         maps_url: mapsUrl.trim(),
       })
       .eq("id", cafe.id).select().single();
-    if (data) { setCafe(data); setCafeSlug(data.slug); router.refresh(); }
+    if (data) { setCafe(data); setCafeSlug(data.slug); setSlugConfirmed(false); router.refresh(); }
     setSavingCafe(false);
   }
 
@@ -404,11 +405,40 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
           <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-300">
             <span className="bg-gray-50 text-gray-400 text-xs px-3 py-2.5 border-r border-gray-200 shrink-0">/menu/</span>
             <input type="text" value={cafeSlug}
-              onChange={(e) => { setCafeSlug(e.target.value); setSlugAutoMode(false); }}
+              onChange={(e) => { setCafeSlug(e.target.value); setSlugAutoMode(false); setSlugConfirmed(false); }}
               placeholder="kafe-adiniz"
               className="flex-1 px-3 py-2 text-sm focus:outline-none" />
           </div>
           {slugError && <p className="text-xs text-red-400">{slugError}</p>}
+
+          {/* URL değişikliği uyarısı */}
+          {cafe?.slug && cafeSlug !== cafe.slug && !/^[0-9a-f-]{36}$/.test(cafe.slug) && (
+            <div className="rounded-xl border-2 border-red-200 bg-red-50 p-3 space-y-2.5">
+              <div className="flex items-start gap-2">
+                <span className="text-lg leading-none mt-0.5">⚠️</span>
+                <div>
+                  <p className="text-sm font-semibold text-red-600">URL değişiyor — dikkat!</p>
+                  <p className="text-xs text-red-500 mt-0.5 leading-relaxed">
+                    Masalara yapıştırdığın veya bastırdığın tüm QR kodlar bu URL'e bağlı.
+                    URL değişirse <strong>mevcut QR kodların çalışmayı durduracak</strong> ve
+                    yeniden basmanız gerekecek.
+                  </p>
+                </div>
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={slugConfirmed}
+                  onChange={(e) => setSlugConfirmed(e.target.checked)}
+                  className="w-4 h-4 rounded accent-red-500 cursor-pointer"
+                />
+                <span className="text-xs text-red-600 font-medium">
+                  Anladım, basılı QR kodlarımın artık çalışmayacağını onaylıyorum
+                </span>
+              </label>
+            </div>
+          )}
+
           {cafeSlug && !slugError && (
             <div className="flex flex-col gap-0.5">
               <p className="text-xs text-gray-400">Müşterileriniz bu link üzerinden menüye erişebilecek:</p>
@@ -457,8 +487,10 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
           </div>
         )}
 
-        <button onClick={handleSaveCafe} disabled={savingCafe}
-          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+        <button
+          onClick={handleSaveCafe}
+          disabled={savingCafe || (!!cafe?.slug && cafeSlug !== cafe.slug && !/^[0-9a-f-]{36}$/.test(cafe.slug) && !slugConfirmed)}
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
           {savingCafe ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Kaydet
         </button>
