@@ -81,10 +81,34 @@ export default async function AdminPage() {
         messages={messages ?? []}
       />
 
-      <div className="max-w-lg mx-auto mb-4">
+      <div className="max-w-lg mx-auto mb-4 space-y-2">
         <p className="text-xs text-gray-400">
           Giriş yapıldı: <span className="font-medium text-gray-500">{user.email}</span>
         </p>
+        {(() => {
+          const isPro = cafe?.plan === "pro" && cafe?.pro_ends_at && new Date(cafe.pro_ends_at) > new Date();
+          if (isPro) return null;
+          const trialEnds = cafe?.trial_ends_at ? new Date(cafe.trial_ends_at) : null;
+          if (!trialEnds) return null;
+          const daysLeft = Math.ceil((trialEnds.getTime() - Date.now()) / 86400000);
+          if (daysLeft <= 0) return null;
+          const urgent = daysLeft <= 5;
+          return (
+            <div className={`flex items-center gap-2.5 rounded-xl px-4 py-2.5 border ${urgent ? "bg-red-50 border-red-100" : "bg-orange-50 border-orange-100"}`}>
+              <div className={`text-2xl font-extrabold tabular-nums ${urgent ? "text-red-500" : "text-orange-500"}`}>
+                {daysLeft}
+              </div>
+              <div>
+                <p className={`text-xs font-bold ${urgent ? "text-red-500" : "text-orange-500"}`}>
+                  {urgent ? "Deneme süreniz bitiyor!" : "Ücretsiz deneme"}
+                </p>
+                <p className={`text-xs ${urgent ? "text-red-400" : "text-orange-400"}`}>
+                  {daysLeft} gün kaldı · {trialEnds.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}&apos;de sona eriyor
+                </p>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       <div className="max-w-lg mx-auto">
