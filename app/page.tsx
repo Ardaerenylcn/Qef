@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, Cpu, X as XIcon } from "lucide-react";
+import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, Cpu, X as XIcon, Crown } from "lucide-react";
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 
 export const metadata: Metadata = {
-  title: "Qef — Kafen için ücretsiz dijital QR menü",
-  description: "Saniyeler içinde kafen için dijital QR menü oluştur. Müşterilerine linki ver veya QR kodu tarat, anında menü görünsün. Ücretsiz, kurulum gerektirmez.",
+  title: "Qef — Kafeniz için dijital QR menü",
+  description: "Kafeniniz için saniyeler içinde dijital QR menü oluşturun. 30 gün ücretsiz deneyin, ardından 4.999₺/yıl. Uygulama yok, kurulum yok.",
   alternates: { canonical: "https://qefmenu.com" },
 };
 
@@ -18,8 +18,8 @@ const jsonLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://qefmenu.com",
-  description: "Kafe ve restoranlar için ücretsiz dijital QR menü oluşturma platformu.",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "TRY" },
+  description: "Kafe ve restoranlar için dijital QR menü platformu. 30 gün ücretsiz deneme, ardından 4.999₺/yıl.",
+  offers: { "@type": "Offer", price: "4999", priceCurrency: "TRY" },
   inLanguage: "tr",
 };
 
@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="flex-1 space-y-7 text-center md:text-left relative z-10">
           <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-100 text-orange-500 text-xs font-bold px-4 py-2 rounded-full shadow-sm">
             <Star className="w-3.5 h-3.5 fill-orange-400 text-orange-400" />
-            %100 Ücretsiz
+            30 Gün Ücretsiz Deneyin
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
@@ -79,7 +79,7 @@ export default function HomePage() {
               href="/register"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-200 hover:shadow-orange-300 hover:-translate-y-0.5"
             >
-              Ücretsiz Başla
+              30 Gün Ücretsiz Dene
               <ChevronRight className="w-4 h-4" />
             </Link>
             <Link
@@ -92,7 +92,7 @@ export default function HomePage() {
 
           {/* Güven rozetleri */}
           <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
-            {["Sınırsız ürün", "İki dil desteği", "Özel QR kodu"].map((item) => (
+            {["Kredi kartı gerekmez", "30 gün ücretsiz", "4.999₺/yıl"].map((item) => (
               <div key={item} className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
                 <Check className="w-3.5 h-3.5 text-green-400" />
                 {item}
@@ -444,7 +444,7 @@ export default function HomePage() {
           <div className="hidden md:block absolute top-6 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-orange-200 to-orange-200" />
 
           {[
-            { step: "1", title: "Hesap oluştur", desc: "E-posta adresinle saniyeler içinde ücretsiz kayıt ol.", color: "from-orange-500 to-orange-400" },
+            { step: "1", title: "Hesap oluştur", desc: "E-posta adresinle saniyeler içinde kayıt ol. 30 gün ücretsiz dene.", color: "from-orange-500 to-orange-400" },
             { step: "2", title: "Menünü hazırla", desc: "Ürünlerini, kategorilerini, fiyatlarını ve görsellerini ekle.", color: "from-orange-400 to-yellow-400" },
             { step: "3", title: "QR'ı masaya koy", desc: "Kodu yazdır, masaya koy. Müşterilerin taramasını bekle!", color: "from-yellow-400 to-yellow-500" },
           ].map(({ step, title, desc, color }) => (
@@ -459,6 +459,64 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FİYATLANDIRMA */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-lg mx-auto space-y-8">
+          <div className="text-center space-y-3">
+            <p className="text-orange-500 font-bold text-sm uppercase tracking-widest">Fiyatlandırma</p>
+            <h2 className="text-3xl font-extrabold text-gray-900">Sade ve şeffaf</h2>
+            <p className="text-gray-400">Tek plan, tek fiyat. Gizli ücret yok.</p>
+          </div>
+
+          <div className="bg-white rounded-3xl border-2 border-orange-200 shadow-xl shadow-orange-100 overflow-hidden">
+            {/* Üst şerit */}
+            <div className="bg-gradient-to-r from-orange-500 to-orange-400 px-6 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white font-bold text-sm">
+                <Crown className="w-4 h-4" />
+                Pro Plan
+              </div>
+              <span className="text-orange-100 text-xs font-medium">Tüm özellikler dahil</span>
+            </div>
+
+            <div className="px-8 py-8 space-y-6">
+              {/* Fiyat */}
+              <div className="flex items-end gap-2">
+                <span className="text-5xl font-extrabold text-gray-900">4.999₺</span>
+                <span className="text-gray-400 mb-1.5">/yıl</span>
+              </div>
+              <p className="text-sm text-gray-400 -mt-4">Aylığa vurulunca ~416₺ · KDV dahil</p>
+
+              {/* Özellikler */}
+              <ul className="space-y-3">
+                {[
+                  "Sınırsız ürün ve kategori",
+                  "Özel tema — renkler, logo, kapak görseli",
+                  "Türkçe & İngilizce menü",
+                  "QR kod oluşturma ve indirme",
+                  "Duyuru banner sistemi",
+                  "Ziyaret istatistikleri",
+                  "AR görselleştirme (yakında)",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-green-500 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA */}
+              <Link
+                href="/register"
+                className="block w-full text-center bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-200 hover:-translate-y-0.5"
+              >
+                30 Gün Ücretsiz Dene →
+              </Link>
+              <p className="text-center text-xs text-gray-400">Kredi kartı gerekmez · Deneme sonunda 4.999₺/yıl</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA BANNER */}
       <section className="mx-6 mb-20 max-w-6xl md:mx-auto">
         <div className="relative bg-gradient-to-br from-orange-500 via-orange-500 to-orange-400 rounded-3xl px-8 py-12 overflow-hidden shadow-2xl shadow-orange-200">
@@ -468,17 +526,17 @@ export default function HomePage() {
 
           <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-white text-center md:text-left space-y-2">
-              <p className="text-3xl font-extrabold">Bugün başlayın.</p>
-              <p className="text-orange-100">Ücretsiz, sınırsız, hızlı.</p>
+              <p className="text-3xl font-extrabold">30 gün ücretsiz deneyin.</p>
+              <p className="text-orange-100">Kurulum yok, kredi kartı gerekmez.</p>
             </div>
             <div className="flex flex-col items-center gap-4">
               <Link
                 href="/register"
                 className="bg-white text-orange-500 hover:bg-orange-50 font-extrabold px-10 py-4 rounded-2xl transition-all text-base shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
               >
-                Ücretsiz Başla →
+                Hemen Başla →
               </Link>
-              <p className="text-orange-200 text-xs">Kurulum gerektirmez · Anında yayında</p>
+              <p className="text-orange-200 text-xs">Deneme sonunda 4.999₺/yıl · İptal kolay</p>
             </div>
           </div>
         </div>
