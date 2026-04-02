@@ -71,6 +71,28 @@ export async function deleteUnverifiedUserAction(userId: string) {
   await admin.auth.admin.deleteUser(userId);
 }
 
+export async function activatePlanAction(cafeId: string) {
+  const admin = await verifySuperAdmin();
+  const proEndsAt = new Date();
+  proEndsAt.setFullYear(proEndsAt.getFullYear() + 1);
+  const { error } = await admin
+    .from("cafes")
+    .update({ plan: "pro", pro_ends_at: proEndsAt.toISOString() })
+    .eq("id", cafeId);
+  if (error) return { error: "Aktivasyon başarısız" };
+  return { success: true };
+}
+
+export async function deactivatePlanAction(cafeId: string) {
+  const admin = await verifySuperAdmin();
+  const { error } = await admin
+    .from("cafes")
+    .update({ plan: "free", pro_ends_at: null })
+    .eq("id", cafeId);
+  if (error) return { error: "İşlem başarısız" };
+  return { success: true };
+}
+
 export async function updateSlugAction(cafeId: string, newSlug: string) {
   const admin = await verifySuperAdmin();
 

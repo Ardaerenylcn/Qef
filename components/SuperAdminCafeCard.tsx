@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn } from "lucide-react";
-import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction } from "@/app/superadmin/actions";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn, Crown } from "lucide-react";
+import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction, activatePlanAction, deactivatePlanAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -14,6 +14,9 @@ interface Props {
     user_id: string;
     theme?: { primaryColor?: string; logoUrl?: string };
     products?: { count: number }[];
+    plan?: string | null;
+    trial_ends_at?: string | null;
+    pro_ends_at?: string | null;
   };
   views: number;
   userInfo: { email: string; phone: string };
@@ -37,6 +40,26 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const logoUrl = cafe.theme?.logoUrl;
   const productCount = cafe.products?.[0]?.count ?? 0;
   const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
+
+  const isPro = cafe.plan === "pro" && cafe.pro_ends_at && new Date(cafe.pro_ends_at) > new Date();
+  const trialExpired = cafe.plan !== "pro" && cafe.trial_ends_at && new Date(cafe.trial_ends_at) < new Date();
+  const trialDaysLeft = cafe.trial_ends_at && !trialExpired
+    ? Math.ceil((new Date(cafe.trial_ends_at).getTime() - Date.now()) / 86400000)
+    : null;
+
+  function handleActivate() {
+    startTransition(async () => {
+      await activatePlanAction(cafe.id);
+      router.refresh();
+    });
+  }
+
+  function handleDeactivate() {
+    startTransition(async () => {
+      await deactivatePlanAction(cafe.id);
+      router.refresh();
+    });
+  }
 
   function handleImpersonate() {
     if (!userInfo.email) return;
@@ -256,6 +279,44 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
             </div>
           </div>
         )}
+
+        {/* Plan durumu + aktive et */}
+        <div className="flex items-center justify-between pt-1 border-t border-gray-50">
+          <div className="flex items-center gap-1.5">
+            {isPro ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-600 border border-yellow-200">
+                <Crown className="w-3 h-3" /> Pro
+                {cafe.pro_ends_at && (
+                  <span className="font-normal opacity-70">
+                    · {new Date(cafe.pro_ends_at).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" })}
+                  </span>
+                )}
+              </span>
+            ) : trialExpired ? (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-500 border border-red-200">
+                Deneme doldu
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500 border border-blue-200">
+                Deneme · {trialDaysLeft ?? "?"} gün
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5">
+            {isPro ? (
+              <button onClick={handleDeactivate} disabled={isPending}
+                className="text-[10px] text-gray-400 hover:text-red-400 transition-colors disabled:opacity-40">
+                İptal et
+              </button>
+            ) : (
+              <button onClick={handleActivate} disabled={isPending}
+                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white transition-colors disabled:opacity-40">
+                <Crown className="w-2.5 h-2.5" />
+                {isPending ? "..." : "Pro Yap"}
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Kayıt tarihi */}
         <p className="text-xs text-gray-300 text-right -mt-1">

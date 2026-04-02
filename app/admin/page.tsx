@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AdminHeader from "@/components/AdminHeader";
 import AdminTabs from "@/components/AdminTabs";
+import TrialExpiredScreen from "@/components/TrialExpiredScreen";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -13,7 +14,7 @@ export default async function AdminPage() {
   const admin = createAdminClient();
 
   const [{ data: cafe }, { data: existingMessages }] = await Promise.all([
-    supabase.from("cafes").select("id, slug, name").eq("user_id", user.id).single(),
+    supabase.from("cafes").select("id, slug, name, plan, trial_ends_at, pro_ends_at").eq("user_id", user.id).single(),
     supabase.from("messages").select("id").eq("user_id", user.id).limit(1),
   ]);
 
@@ -87,7 +88,14 @@ export default async function AdminPage() {
       </div>
 
       <div className="max-w-lg mx-auto">
-        <AdminTabs email={user.email ?? ""} stats={stats} />
+        {(() => {
+          const isPro = cafe?.plan === "pro" && cafe?.pro_ends_at && new Date(cafe.pro_ends_at) > new Date();
+          const trialExpired = !isPro && cafe?.trial_ends_at && new Date(cafe.trial_ends_at) < new Date();
+          if (trialExpired) {
+            return <TrialExpiredScreen cafeName={cafe?.name ?? "Kafem"} menuSlug={cafe?.slug ?? ""} />;
+          }
+          return <AdminTabs email={user.email ?? ""} stats={stats} />;
+        })()}
       </div>
     </main>
   );

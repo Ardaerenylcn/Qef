@@ -40,7 +40,7 @@ export default async function SuperAdminPage() {
     admin.from("menu_views").select("*", { count: "exact", head: true }),
     admin
       .from("cafes")
-      .select("id, name, slug, created_at, user_id, theme, products(count)")
+      .select("id, name, slug, created_at, user_id, theme, plan, trial_ends_at, pro_ends_at, products(count)")
       .order("created_at", { ascending: false }),
     admin.from("menu_views").select("cafe_id"),
     admin
