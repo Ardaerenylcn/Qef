@@ -26,6 +26,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["iyzipay"],
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/iyzipay/**"],
+  },
   images: {
     remotePatterns: [
       {

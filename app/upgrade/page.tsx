@@ -16,8 +16,7 @@ export default function UpgradePage() {
       let data: Record<string, unknown> = {};
       try { data = await res.json(); } catch { /* HTML error page */ }
       if (!res.ok || !data.checkoutFormContent) {
-        const debugStr = data.debug ? ` | DBG: ${JSON.stringify(data.debug)}` : "";
-        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? `HTTP ${res.status}`}${debugStr}`);
+        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? `HTTP ${res.status}`}`);
         setLoading(false);
         return;
       }
