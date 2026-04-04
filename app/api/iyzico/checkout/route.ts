@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createCheckoutForm } from "@/lib/iyzico";
+import { createCheckoutFormDebug } from "@/lib/iyzico";
 
 export async function POST() {
   try {
@@ -29,7 +29,7 @@ export async function POST() {
       amount: 4999,
     });
 
-    const result = await createCheckoutForm({
+    const { result, debug } = await createCheckoutFormDebug({
       locale: "tr",
       conversationId,
       price: "4999.00",
@@ -77,7 +77,7 @@ export async function POST() {
     if (result.status !== "success") {
       console.error("iyzico result:", JSON.stringify(result));
       return NextResponse.json(
-        { error: "iyzico failed", detail: result.errorMessage ?? JSON.stringify(result) },
+        { error: "iyzico failed", detail: result.errorMessage ?? JSON.stringify(result), debug },
         { status: 500 }
       );
     }

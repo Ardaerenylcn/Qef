@@ -32,9 +32,19 @@ function buildAuthHeader(body: any, randomString: string): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function post(path: string, body: any): Promise<any> {
+async function post(path: string, body: any): Promise<{ result: any; debug: Record<string, string> }> {
   const randomString = generateRandomString(8);
+  const pkiStr = toPkiString(body);
   const authorization = buildAuthHeader(body, randomString);
+  const decodedAuth = Buffer.from(authorization.replace("IYZWS ", ""), "base64").toString("utf-8");
+
+  const debug = {
+    apiKeySet: API_KEY ? `yes (${API_KEY.slice(0, 8)}...)` : "EMPTY",
+    secretKeySet: SECRET_KEY ? `yes (${SECRET_KEY.slice(0, 8)}...)` : "EMPTY",
+    randomString,
+    pkiStr: pkiStr.slice(0, 200),
+    decodedAuth: decodedAuth.slice(0, 200),
+  };
 
   const res = await fetch(`${BASE_URL}${path}`, {
     method: "POST",
@@ -47,13 +57,20 @@ async function post(path: string, body: any): Promise<any> {
     body: JSON.stringify(body),
   });
 
-  return res.json();
+  const result = await res.json();
+  return { result, debug };
 }
 
-export async function createCheckoutForm(request: Record<string, unknown>) {
+export async function createCheckoutFormDebug(request: Record<string, unknown>) {
   return post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
 }
 
+export async function createCheckoutForm(request: Record<string, unknown>) {
+  const { result } = await post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
+  return result;
+}
+
 export async function retrieveCheckoutForm(request: { locale: string; token: string }) {
-  return post("/payment/iyzipos/checkoutform/auth/ecom/detail", request);
+  const { result } = await post("/payment/iyzipos/checkoutform/auth/ecom/detail", request);
+  return result;
 }
