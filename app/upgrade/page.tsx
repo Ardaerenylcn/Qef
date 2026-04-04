@@ -15,7 +15,7 @@ export default function UpgradePage() {
       const res = await fetch("/api/iyzico/checkout", { method: "POST" });
       const data = await res.json();
       if (!res.ok || !data.checkoutFormContent) {
-        setError("Ödeme sayfası açılamadı. Lütfen tekrar dene.");
+        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? "Bilinmeyen hata"}`);
         setLoading(false);
         return;
       }

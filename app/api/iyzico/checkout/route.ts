@@ -75,8 +75,14 @@ export async function POST() {
 
   return new Promise<NextResponse>((resolve) => {
     iyzipay.checkoutFormInitialize.create(request, (err: unknown, result: Record<string, unknown>) => {
-      if (err || result.status !== "success") {
-        resolve(NextResponse.json({ error: "Ödeme formu oluşturulamadı" }, { status: 500 }));
+      if (err) {
+        console.error("iyzico err:", err);
+        resolve(NextResponse.json({ error: "iyzico err", detail: String(err) }, { status: 500 }));
+        return;
+      }
+      if (result.status !== "success") {
+        console.error("iyzico result:", JSON.stringify(result));
+        resolve(NextResponse.json({ error: "iyzico failed", detail: result.errorMessage ?? result }, { status: 500 }));
         return;
       }
       resolve(NextResponse.json({
