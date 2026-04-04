@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import iyzipay from "@/lib/iyzico";
+import { createIyzipay } from "@/lib/iyzico";
 
 export async function POST() {
   const supabase = await createClient();
@@ -17,6 +17,7 @@ export async function POST() {
 
   if (!cafe) return NextResponse.json({ error: "Kafe bulunamadı" }, { status: 404 });
 
+  const iyzipay = createIyzipay();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const conversationId = `${cafe.id}-${Date.now()}`;
 
@@ -31,8 +32,8 @@ export async function POST() {
   const request = {
     locale: "tr",
     conversationId,
-    price: "4999",
-    paidPrice: "4999",
+    price: "4999.00",
+    paidPrice: "4999.00",
     currency: "TRY",
     basketId: cafe.id,
     paymentGroup: "PRODUCT",
@@ -68,7 +69,7 @@ export async function POST() {
         name: "Qef Pro Plan — 1 Yıllık",
         category1: "Yazılım",
         itemType: "VIRTUAL",
-        price: "4999",
+        price: "4999.00",
       },
     ],
   };

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import iyzipay from "@/lib/iyzico";
+import { createIyzipay } from "@/lib/iyzico";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -9,6 +9,8 @@ export async function POST(req: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL("/admin?payment=error", req.url));
   }
+
+  const iyzipay = createIyzipay();
 
   return new Promise<Response>((resolve) => {
     iyzipay.checkoutForm.retrieve({ locale: "tr", token }, async (err: unknown, result: Record<string, unknown>) => {
