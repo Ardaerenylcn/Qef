@@ -33,7 +33,7 @@ function buildAuthHeaderV1(body: any, randomString: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildAuthHeaderV2(body: any, randomString: string): string {
-  const hashStr = SECRET_KEY + randomString + JSON.stringify(body);
+  const hashStr = randomString + JSON.stringify(body);
   const hash = crypto.createHmac("sha256", SECRET_KEY).update(Buffer.from(hashStr, "utf-8")).digest("base64");
   const params = `apiKey:${API_KEY}&randomKey:${randomString}&signature:${hash}`;
   return "IYZWSv2 " + Buffer.from(params, "utf-8").toString("base64");
