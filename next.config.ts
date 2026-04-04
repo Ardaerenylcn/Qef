@@ -27,6 +27,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["iyzipay"],
+  outputFileTracingIncludes: {
+    "/api/iyzico/checkout": ["./node_modules/iyzipay/lib/resources/**/*"],
+    "/api/iyzico/callback": ["./node_modules/iyzipay/lib/resources/**/*"],
+  },
   images: {
     remotePatterns: [
       {
