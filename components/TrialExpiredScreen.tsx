@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Lock, Crown, MessageCircle } from "lucide-react";
 
 interface Props {
@@ -48,15 +49,24 @@ export default function TrialExpiredScreen({ cafeName, menuSlug }: Props) {
         </ul>
       </div>
 
-      {/* WhatsApp butonu */}
+      {/* Satın al butonu */}
+      <Link
+        href="/upgrade"
+        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-10 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-200"
+      >
+        <Crown className="w-5 h-5" />
+        Pro&apos;ya Geç — 4.999₺/yıl
+      </Link>
+
+      {/* WhatsApp */}
       <a
-        href="https://wa.me/905XXXXXXXXX?text=Merhaba%2C%20Qef%20Pro%20plana%20ge%C3%A7mek%20istiyorum.%20Kafe%20ad%C4%B1m%3A%20"
+        href="https://wa.me/905XXXXXXXXX?text=Merhaba%2C%20Qef%20Pro%20plana%20ge%C3%A7mek%20istiyorum."
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-2xl transition-colors text-sm shadow-lg shadow-green-200"
+        className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-green-500 transition-colors"
       >
-        <MessageCircle className="w-5 h-5" />
-        WhatsApp ile iletişime geç
+        <MessageCircle className="w-4 h-4" />
+        Soru sormak için WhatsApp
       </a>
 
       {/* Menü linki */}

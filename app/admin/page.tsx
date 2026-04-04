@@ -5,7 +5,12 @@ import AdminHeader from "@/components/AdminHeader";
 import AdminTabs from "@/components/AdminTabs";
 import TrialExpiredScreen from "@/components/TrialExpiredScreen";
 
-export default async function AdminPage() {
+interface Props {
+  searchParams: Promise<{ payment?: string }>;
+}
+
+export default async function AdminPage({ searchParams }: Props) {
+  const { payment } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -80,6 +85,17 @@ export default async function AdminPage() {
         cafeName={cafe?.name ?? "Kafem"}
         messages={messages ?? []}
       />
+
+      {payment === "success" && (
+        <div className="max-w-lg mx-auto mb-4 bg-green-50 border border-green-100 rounded-xl px-4 py-3 text-sm text-green-600 font-medium text-center">
+          Ödeme başarılı! Pro planınız aktif edildi.
+        </div>
+      )}
+      {payment === "error" && (
+        <div className="max-w-lg mx-auto mb-4 bg-red-50 border border-red-100 rounded-xl px-4 py-3 text-sm text-red-500 font-medium text-center">
+          Ödeme tamamlanamadı. Lütfen tekrar deneyin.
+        </div>
+      )}
 
       <div className="max-w-lg mx-auto mb-4 space-y-2">
         <p className="text-xs text-gray-400">
