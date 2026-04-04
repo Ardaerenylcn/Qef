@@ -5,12 +5,8 @@ import { createCheckoutForm } from "@/lib/iyzico";
 
 function toAscii(str: string): string {
   return str
-    .replace(/[çÇ]/g, "c")
-    .replace(/[ğĞ]/g, "g")
-    .replace(/[ıİ]/g, "i")
-    .replace(/[öÖ]/g, "o")
-    .replace(/[şŞ]/g, "s")
-    .replace(/[üÜ]/g, "u")
+    .replace(/[çÇ]/g, "c").replace(/[ğĞ]/g, "g").replace(/[ıİ]/g, "i")
+    .replace(/[öÖ]/g, "o").replace(/[şŞ]/g, "s").replace(/[üÜ]/g, "u")
     .replace(/[^a-zA-Z0-9 _\-.,]/g, "");
 }
 
@@ -22,22 +18,16 @@ export async function POST() {
 
     const admin = createAdminClient();
     const { data: cafe } = await admin
-      .from("cafes")
-      .select("id, name")
-      .eq("user_id", user.id)
-      .single();
+      .from("cafes").select("id, name").eq("user_id", user.id).single();
 
     if (!cafe) return NextResponse.json({ error: "Kafe bulunamadı" }, { status: 404 });
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
     const conversationId = `${cafe.id}-${Date.now()}`;
-    const cafeName = toAscii(cafe.name ?? "Kafe Sahibi");
+    const cafeName = toAscii(cafe.name ?? "Kafe Sahibi") || "Kafe Sahibi";
 
     await admin.from("payments").insert({
-      cafe_id: cafe.id,
-      user_id: user.id,
-      status: "pending",
-      amount: 4999,
+      cafe_id: cafe.id, user_id: user.id, status: "pending", amount: 4999,
     });
 
     const result = await createCheckoutForm({
@@ -62,27 +52,15 @@ export async function POST() {
         city: "Istanbul",
         country: "Turkey",
       },
-      shippingAddress: {
-        contactName: cafeName,
-        city: "Istanbul",
-        country: "Turkey",
-        address: "Turkey",
-      },
-      billingAddress: {
-        contactName: cafeName,
-        city: "Istanbul",
-        country: "Turkey",
-        address: "Turkey",
-      },
-      basketItems: [
-        {
-          id: "qef-pro-1year",
-          name: "Qef Pro Plan 1 Year",
-          category1: "Software",
-          itemType: "VIRTUAL",
-          price: "4999.00",
-        },
-      ],
+      shippingAddress: { contactName: cafeName, city: "Istanbul", country: "Turkey", address: "Turkey" },
+      billingAddress: { contactName: cafeName, city: "Istanbul", country: "Turkey", address: "Turkey" },
+      basketItems: [{
+        id: "qef-pro-1year",
+        name: "Qef Pro Plan 1 Year",
+        category1: "Software",
+        itemType: "VIRTUAL",
+        price: "4999.00",
+      }],
     });
 
     if (result.status !== "success") {
