@@ -1,7 +1,18 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createIyzipay } from "@/lib/iyzico";
+import { createCheckoutForm } from "@/lib/iyzico";
+
+function toAscii(str: string): string {
+  return str
+    .replace(/[çÇ]/g, "c")
+    .replace(/[ğĞ]/g, "g")
+    .replace(/[ıİ]/g, "i")
+    .replace(/[öÖ]/g, "o")
+    .replace(/[şŞ]/g, "s")
+    .replace(/[üÜ]/g, "u")
+    .replace(/[^a-zA-Z0-9 _\-.,]/g, "");
+}
 
 export async function POST() {
   try {
@@ -18,9 +29,9 @@ export async function POST() {
 
     if (!cafe) return NextResponse.json({ error: "Kafe bulunamadı" }, { status: 404 });
 
-    const iyzipay = createIyzipay();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
     const conversationId = `${cafe.id}-${Date.now()}`;
+    const cafeName = toAscii(cafe.name ?? "Kafe Sahibi");
 
     await admin.from("payments").insert({
       cafe_id: cafe.id,
@@ -29,7 +40,7 @@ export async function POST() {
       amount: 4999,
     });
 
-    const request = {
+    const result = await createCheckoutForm({
       locale: "tr",
       conversationId,
       price: "4999.00",
@@ -41,56 +52,50 @@ export async function POST() {
       enabledInstallments: [1, 2, 3, 6, 9, 12],
       buyer: {
         id: user.id,
-        name: cafe.name ?? "Kafe Sahibi",
-        surname: "-",
+        name: cafeName,
+        surname: ".",
         gsmNumber: "+905000000000",
         email: user.email ?? "musteri@example.com",
         identityNumber: "74300864791",
-        registrationAddress: "Türkiye",
+        registrationAddress: "Turkey",
         ip: "85.34.78.112",
         city: "Istanbul",
         country: "Turkey",
       },
       shippingAddress: {
-        contactName: cafe.name ?? "Kafe Sahibi",
+        contactName: cafeName,
         city: "Istanbul",
         country: "Turkey",
-        address: "Türkiye",
+        address: "Turkey",
       },
       billingAddress: {
-        contactName: cafe.name ?? "Kafe Sahibi",
+        contactName: cafeName,
         city: "Istanbul",
         country: "Turkey",
-        address: "Türkiye",
+        address: "Turkey",
       },
       basketItems: [
         {
           id: "qef-pro-1year",
-          name: "Qef Pro Plan - 1 Yillik",
-          category1: "Yazilim",
+          name: "Qef Pro Plan 1 Year",
+          category1: "Software",
           itemType: "VIRTUAL",
           price: "4999.00",
         },
       ],
-    };
+    });
 
-    return new Promise<NextResponse>((resolve) => {
-      iyzipay.checkoutFormInitialize.create(request, (err: unknown, result: Record<string, unknown>) => {
-        if (err) {
-          console.error("iyzico err:", err);
-          resolve(NextResponse.json({ error: "iyzico err", detail: String(err) }, { status: 500 }));
-          return;
-        }
-        if (result.status !== "success") {
-          console.error("iyzico result:", JSON.stringify(result));
-          resolve(NextResponse.json({ error: "iyzico failed", detail: result.errorMessage ?? JSON.stringify(result) }, { status: 500 }));
-          return;
-        }
-        resolve(NextResponse.json({
-          checkoutFormContent: result.checkoutFormContent,
-          token: result.token,
-        }));
-      });
+    if (result.status !== "success") {
+      console.error("iyzico result:", JSON.stringify(result));
+      return NextResponse.json(
+        { error: "iyzico failed", detail: result.errorMessage ?? JSON.stringify(result) },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      checkoutFormContent: result.checkoutFormContent,
+      token: result.token,
     });
   } catch (e) {
     console.error("checkout error:", e);
