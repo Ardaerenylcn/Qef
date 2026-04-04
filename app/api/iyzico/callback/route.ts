@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin?payment=error", req.url));
   }
 
-  return new Promise<NextResponse>((resolve) => {
+  return new Promise<Response>((resolve) => {
     iyzipay.checkoutForm.retrieve({ locale: "tr", token }, async (err: unknown, result: Record<string, unknown>) => {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
