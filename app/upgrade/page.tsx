@@ -20,13 +20,10 @@ export default function UpgradePage() {
         setLoading(false);
         return;
       }
-      // iyzico form HTML'ini sayfaya enjekte et ve submit et
-      const div = document.createElement("div");
-      div.innerHTML = data.checkoutFormContent as string;
-      document.body.appendChild(div);
-      const form = div.querySelector("form");
-      if (form) form.submit();
-      else setError("Ödeme formu yüklenemedi.");
+      // iyzico form içeriğini sayfaya yaz (scriptlerin çalışması için)
+      document.open();
+      document.write(data.checkoutFormContent as string);
+      document.close();
     } catch (e) {
       setError(`Bir hata oluştu: ${String(e)}`);
       setLoading(false);
