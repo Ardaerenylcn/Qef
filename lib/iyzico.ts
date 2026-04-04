@@ -1,4 +1,5 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
+import https from "node:https";
 
 const BASE_URL = process.env.IYZICO_BASE_URL ?? "https://sandbox-api.iyzipay.com";
 const API_KEY = process.env.IYZICO_API_KEY ?? "";
@@ -26,17 +27,55 @@ function toPkiString(value: any): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildAuthHeaderV1(body: any, randomString: string): string {
   const hashStr = SECRET_KEY + randomString + toPkiString(body);
-  const hash = crypto.createHash("sha256").update(Buffer.from(hashStr, "utf-8")).digest("base64");
+  const hash = crypto.createHash("sha256").update(hashStr, "utf8").digest("base64");
   const params = `apiKey:${API_KEY}&randomKey:${randomString}&signature:${hash}`;
-  return "IYZWS " + Buffer.from(params, "utf-8").toString("base64");
+  return "IYZWS " + Buffer.from(params, "utf8").toString("base64");
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildAuthHeaderV2(body: any, randomString: string): string {
-  const hashStr = randomString + JSON.stringify(body);
-  const hash = crypto.createHmac("sha256", SECRET_KEY).update(Buffer.from(hashStr, "utf-8")).digest("base64");
+  const hashStr = SECRET_KEY + randomString + JSON.stringify(body);
+  const hash = crypto.createHmac("sha256", SECRET_KEY).update(hashStr).digest("base64");
   const params = `apiKey:${API_KEY}&randomKey:${randomString}&signature:${hash}`;
-  return "IYZWSv2 " + Buffer.from(params, "utf-8").toString("base64");
+  return "IYZWSv2 " + Buffer.from(params, "utf8").toString("base64");
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function httpsPost(path: string, body: any, authorization: string, randomString: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const parsedUrl = new URL(`${BASE_URL}${path}`);
+    const bodyStr = JSON.stringify(body);
+    const contentLength = Buffer.byteLength(bodyStr, "utf8");
+
+    const options: https.RequestOptions = {
+      hostname: parsedUrl.hostname,
+      port: parsedUrl.port || 443,
+      path: parsedUrl.pathname,
+      method: "POST",
+      headers: {
+        "Authorization": authorization,
+        "x-iyzi-rnd": randomString,
+        "x-iyzi-client-version": "iyzipay-node-2.1.49",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Content-Length": contentLength,
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.setEncoding("utf8");
+      res.on("data", (chunk) => { data += chunk; });
+      res.on("end", () => {
+        try { resolve(JSON.parse(data)); }
+        catch { reject(new Error(`Invalid JSON: ${data}`)); }
+      });
+    });
+
+    req.on("error", reject);
+    req.write(bodyStr);
+    req.end();
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,18 +95,7 @@ async function post(path: string, body: any, version: "v1" | "v2" = "v1"): Promi
     decodedAuth: decodedAuth.slice(0, 200),
   };
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization,
-      "x-iyzi-rnd": randomString,
-      "x-iyzi-client-version": "iyzipay-node-2.1.49",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const result = await res.json();
+  const result = await httpsPost(path, body, authorization, randomString);
   return { result, debug };
 }
 
