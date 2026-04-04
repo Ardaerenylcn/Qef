@@ -65,6 +65,10 @@ export async function createCheckoutFormDebug(request: Record<string, unknown>) 
   return post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
 }
 
+export async function testAuth() {
+  return post("/payment/test", { locale: "tr" });
+}
+
 export async function createCheckoutForm(request: Record<string, unknown>) {
   const { result } = await post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
   return result;
