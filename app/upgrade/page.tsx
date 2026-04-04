@@ -13,21 +13,22 @@ export default function UpgradePage() {
     setError("");
     try {
       const res = await fetch("/api/iyzico/checkout", { method: "POST" });
-      const data = await res.json();
+      let data: Record<string, unknown> = {};
+      try { data = await res.json(); } catch { /* HTML error page */ }
       if (!res.ok || !data.checkoutFormContent) {
-        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? "Bilinmeyen hata"}`);
+        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? `HTTP ${res.status}`}`);
         setLoading(false);
         return;
       }
       // iyzico form HTML'ini sayfaya enjekte et ve submit et
       const div = document.createElement("div");
-      div.innerHTML = data.checkoutFormContent;
+      div.innerHTML = data.checkoutFormContent as string;
       document.body.appendChild(div);
       const form = div.querySelector("form");
       if (form) form.submit();
       else setError("Ödeme formu yüklenemedi.");
-    } catch {
-      setError("Bir hata oluştu. Lütfen tekrar dene.");
+    } catch (e) {
+      setError(`Bir hata oluştu: ${String(e)}`);
       setLoading(false);
     }
   }

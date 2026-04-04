@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createIyzipay } from "@/lib/iyzico";
 
 export async function POST() {
+  try {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Yetkisiz" }, { status: 401 });
@@ -83,7 +84,7 @@ export async function POST() {
       }
       if (result.status !== "success") {
         console.error("iyzico result:", JSON.stringify(result));
-        resolve(NextResponse.json({ error: "iyzico failed", detail: result.errorMessage ?? result }, { status: 500 }));
+        resolve(NextResponse.json({ error: "iyzico failed", detail: result.errorMessage ?? JSON.stringify(result) }, { status: 500 }));
         return;
       }
       resolve(NextResponse.json({
@@ -92,4 +93,8 @@ export async function POST() {
       }));
     });
   });
+  } catch (e) {
+    console.error("checkout sync error:", e);
+    return NextResponse.json({ error: "Sunucu hatası", detail: String(e) }, { status: 500 });
+  }
 }
