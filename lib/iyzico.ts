@@ -24,7 +24,7 @@ function toPkiString(value: any): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildAuthHeader(body: any, randomString: string): string {
+function buildAuthHeaderV1(body: any, randomString: string): string {
   const hashStr = SECRET_KEY + randomString + toPkiString(body);
   const hash = crypto.createHash("sha256").update(Buffer.from(hashStr, "utf-8")).digest("base64");
   const params = `apiKey:${API_KEY}&randomKey:${randomString}&signature:${hash}`;
@@ -32,13 +32,23 @@ function buildAuthHeader(body: any, randomString: string): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function post(path: string, body: any): Promise<{ result: any; debug: Record<string, string> }> {
+function buildAuthHeaderV2(body: any, randomString: string): string {
+  const hashStr = SECRET_KEY + randomString + JSON.stringify(body);
+  const hash = crypto.createHmac("sha256", SECRET_KEY).update(Buffer.from(hashStr, "utf-8")).digest("base64");
+  const params = `apiKey:${API_KEY}&randomKey:${randomString}&signature:${hash}`;
+  return "IYZWSv2 " + Buffer.from(params, "utf-8").toString("base64");
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function post(path: string, body: any, version: "v1" | "v2" = "v1"): Promise<{ result: any; debug: Record<string, string> }> {
   const randomString = generateRandomString(8);
   const pkiStr = toPkiString(body);
-  const authorization = buildAuthHeader(body, randomString);
-  const decodedAuth = Buffer.from(authorization.replace("IYZWS ", ""), "base64").toString("utf-8");
+  const authorization = version === "v2" ? buildAuthHeaderV2(body, randomString) : buildAuthHeaderV1(body, randomString);
+  const prefix = version === "v2" ? "IYZWSv2 " : "IYZWS ";
+  const decodedAuth = Buffer.from(authorization.replace(prefix, ""), "base64").toString("utf-8");
 
   const debug = {
+    authVersion: version,
     apiKeySet: API_KEY ? `yes (${API_KEY.slice(0, 8)}...)` : "EMPTY",
     secretKeySet: SECRET_KEY ? `yes (${SECRET_KEY.slice(0, 8)}...)` : "EMPTY",
     randomString,
@@ -62,19 +72,19 @@ async function post(path: string, body: any): Promise<{ result: any; debug: Reco
 }
 
 export async function createCheckoutFormDebug(request: Record<string, unknown>) {
-  return post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
-}
-
-export async function testAuth() {
-  return post("/payment/test", { locale: "tr" });
+  return post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request, "v2");
 }
 
 export async function createCheckoutForm(request: Record<string, unknown>) {
-  const { result } = await post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request);
+  const { result } = await post("/payment/iyzipos/checkoutform/initialize/auth/ecom", request, "v2");
   return result;
 }
 
 export async function retrieveCheckoutForm(request: { locale: string; token: string }) {
-  const { result } = await post("/payment/iyzipos/checkoutform/auth/ecom/detail", request);
+  const { result } = await post("/payment/iyzipos/checkoutform/auth/ecom/detail", request, "v2");
   return result;
+}
+
+export async function testAuth() {
+  return post("/payment/test", { locale: "tr" }, "v1");
 }
