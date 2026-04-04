@@ -27,9 +27,9 @@ function toPkiString(value: any): string {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildAuthHeader(body: any, randomString: string): string {
   const hashStr = SECRET_KEY + randomString + toPkiString(body);
-  const hash = crypto.createHash("sha256").update(Buffer.from(hashStr, "UTF-8")).digest("base64");
+  const hash = crypto.createHash("sha256").update(Buffer.from(hashStr, "utf8")).digest("base64");
   const params = ["apiKey:" + API_KEY, "randomKey:" + randomString, "signature:" + hash];
-  return "IYZWS " + Buffer.from(params.join("&"), "UTF-8").toString("base64");
+  return "IYZWS " + Buffer.from(params.join("&"), "utf8").toString("base64");
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
