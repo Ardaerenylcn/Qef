@@ -54,11 +54,11 @@ export async function POST(request: Request) {
       buyer: {
         id: user.id,
         name: cafeName,
-        surname: ".",
+        surname: "Kullanici",
         gsmNumber: "+905000000000",
         email: user.email ?? "musteri@example.com",
         identityNumber: "74300864791",
-        registrationAddress: "Turkey",
+        registrationAddress: "Merkez Mah. 1. Cadde No:1",
         ip: "85.34.78.112",
         city: "Istanbul",
         country: "Turkey",
