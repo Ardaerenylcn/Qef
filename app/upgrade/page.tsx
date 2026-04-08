@@ -20,9 +20,10 @@ export default function UpgradePage() {
         setLoading(false);
         return;
       }
-      // iyzico form içeriğini sayfaya yaz (scriptlerin çalışması için)
+      // iyzico form içeriğini tam HTML yapısıyla sayfaya yaz
+      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ödeme</title></head><body>${data.checkoutFormContent as string}</body></html>`;
       document.open();
-      document.write(data.checkoutFormContent as string);
+      document.write(html);
       document.close();
     } catch (e) {
       setError(`Bir hata oluştu: ${String(e)}`);
