@@ -14,22 +14,11 @@ export async function POST(req: NextRequest) {
   try {
     const result = await retrieveCheckoutForm({ locale: "tr", token });
 
-    if (result.status !== "success" || result.paymentStatus !== "SUCCESS") {
-      console.error("iyzico callback result:", JSON.stringify(result));
-      // GEÇİCİ DEBUG: raw sonucu ekranda göster
-      return new Response(
-        `<pre style="font-family:monospace;padding:20px">${JSON.stringify(result, null, 2)}</pre>`,
-        { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } }
-      );
-    }
-
-    const admin = createAdminClient();
-    const conversationId = result.conversationId as string;
-    const cafeId = conversationId?.split("-").slice(0, 5).join("-");
-
-    if (!cafeId) {
-      return NextResponse.redirect(new URL("/admin?payment=error", siteUrl));
-    }
+    // GEÇİCİ DEBUG: HER DURUMDA raw sonucu göster
+    return new Response(
+      `<pre style="font-family:monospace;padding:20px">${JSON.stringify(result, null, 2)}</pre>`,
+      { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } }
+    );
 
     const { data: cafe } = await admin
       .from("cafes")
