@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase admin client — sadece server-side bu route'da kullanılıyor
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 const MAX_ATTEMPTS = 5;
 const WINDOW_MINUTES = 15;
@@ -31,7 +32,7 @@ async function generateSessionToken(password: string): Promise<string> {
 async function checkRateLimit(ip: string): Promise<boolean> {
   const windowStart = new Date(Date.now() - WINDOW_MINUTES * 60 * 1000).toISOString();
 
-  const { count } = await supabase
+  const { count } = await getSupabase()
     .from("sa_login_attempts")
     .select("*", { count: "exact", head: true })
     .eq("ip", ip)
@@ -41,6 +42,7 @@ async function checkRateLimit(ip: string): Promise<boolean> {
 }
 
 async function recordAttempt(ip: string) {
+  const supabase = getSupabase();
   await supabase.from("sa_login_attempts").insert({ ip });
 
   // 1 günden eski kayıtları temizle
