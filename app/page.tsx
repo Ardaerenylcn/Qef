@@ -83,10 +83,10 @@ export default function HomePage() {
               <ChevronRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/login"
-              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-600 font-semibold px-8 py-4 rounded-2xl transition-all text-sm border border-gray-200 hover:border-gray-300 shadow-sm"
+              href="/upgrade"
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-8 py-4 rounded-2xl transition-all text-sm border border-gray-200 hover:border-gray-300 shadow-sm"
             >
-              Zaten hesabım var
+              Direkt Satın Al — 4.999₺
             </Link>
           </div>
 

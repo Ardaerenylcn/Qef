@@ -17,8 +17,7 @@ export default function UpgradePage() {
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        setError("Lütfen önce giriş yapın.");
-        setLoading(false);
+        window.location.href = "/register?next=/upgrade";
         return;
       }
 

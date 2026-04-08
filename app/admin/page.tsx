@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AdminHeader from "@/components/AdminHeader";
@@ -114,7 +115,7 @@ export default async function AdminPage({ searchParams }: Props) {
               <div className={`text-2xl font-extrabold tabular-nums ${urgent ? "text-red-500" : "text-orange-500"}`}>
                 {daysLeft}
               </div>
-              <div>
+              <div className="flex-1">
                 <p className={`text-xs font-bold ${urgent ? "text-red-500" : "text-orange-500"}`}>
                   {urgent ? "Deneme süreniz bitiyor!" : "Ücretsiz deneme"}
                 </p>
@@ -122,6 +123,12 @@ export default async function AdminPage({ searchParams }: Props) {
                   {daysLeft} gün kaldı · {trialEnds.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}&apos;de sona eriyor
                 </p>
               </div>
+              <Link
+                href="/upgrade"
+                className={`shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg transition-colors ${urgent ? "bg-red-500 hover:bg-red-600 text-white" : "bg-orange-500 hover:bg-orange-600 text-white"}`}
+              >
+                Pro Ol
+              </Link>
             </div>
           );
         })()}
