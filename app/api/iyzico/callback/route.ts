@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   if (!token) {
-    return NextResponse.redirect(new URL("/admin?payment=error", siteUrl));
+    return NextResponse.redirect(new URL("/admin?payment=error&detail=no_token", siteUrl));
   }
 
   try {
@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin?payment=success", siteUrl));
   } catch (e) {
     console.error("callback error:", e);
-    return NextResponse.redirect(new URL("/admin?payment=error", siteUrl));
+    const errMsg = encodeURIComponent(String(e).slice(0, 100));
+    return NextResponse.redirect(new URL(`/admin?payment=error&detail=exception_${errMsg}`, siteUrl));
   }
 }
