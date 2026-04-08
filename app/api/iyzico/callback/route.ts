@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
 
     if (result.status !== "success" || result.paymentStatus !== "SUCCESS") {
       console.error("iyzico callback result:", JSON.stringify(result));
-      return NextResponse.redirect(new URL("/admin?payment=error", siteUrl));
+      const errMsg = encodeURIComponent(result.errorMessage ?? result.errorCode ?? result.paymentStatus ?? "unknown");
+      return NextResponse.redirect(new URL(`/admin?payment=error&detail=${errMsg}`, siteUrl));
     }
 
     const admin = createAdminClient();
