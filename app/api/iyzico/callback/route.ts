@@ -15,9 +15,8 @@ export async function POST(req: NextRequest) {
     const result = await retrieveCheckoutForm({ locale: "tr", token });
 
     if (result.status !== "success" || result.paymentStatus !== "SUCCESS") {
-      console.error("iyzico callback result:", JSON.stringify(result));
-      const errMsg = encodeURIComponent(result.errorMessage ?? result.errorCode ?? result.paymentStatus ?? "unknown");
-      return NextResponse.redirect(new URL(`/admin?payment=error&detail=${errMsg}`, siteUrl));
+      // GEÇİCİ DEBUG: raw iyzico cevabını göster
+      return NextResponse.json({ debug_result: result }, { status: 200 });
     }
 
     const admin = createAdminClient();
