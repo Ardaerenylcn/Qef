@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Crown, Loader2, Check, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 export default function UpgradePage() {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,19 @@ export default function UpgradePage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/iyzico/checkout", { method: "POST" });
+      // Session'ı client-side'dan yenile, token'ı header'a ekle
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setError("Lütfen önce giriş yapın.");
+        setLoading(false);
+        return;
+      }
+
+      const res = await fetch("/api/iyzico/checkout", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
       let data: Record<string, unknown> = {};
       try { data = await res.json(); } catch { /* HTML error page */ }
       if (!res.ok || !data.checkoutFormContent) {

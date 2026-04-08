@@ -10,10 +10,21 @@ function toAscii(str: string): string {
     .replace(/[^a-zA-Z0-9 _\-.,]/g, "");
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    let { data: { user } } = await supabase.auth.getUser();
+
+    // Cookie ile session gelmezse Authorization header'ından dene
+    if (!user) {
+      const authHeader = request.headers.get("Authorization");
+      const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+      if (token) {
+        const { data } = await supabase.auth.getUser(token);
+        user = data.user;
+      }
+    }
+
     if (!user) return NextResponse.json({ error: "Yetkisiz" }, { status: 401 });
 
     const admin = createAdminClient();
