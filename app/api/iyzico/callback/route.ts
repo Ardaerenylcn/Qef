@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { retrieveCheckoutForm } from "@/lib/iyzico";
+import { sendPaymentReceipt } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     const { data: cafe } = await admin
       .from("cafes")
-      .select("plan, pro_ends_at")
+      .select("plan, pro_ends_at, name, user_id")
       .eq("id", cafeId)
       .single();
 
@@ -49,6 +50,15 @@ export async function POST(req: NextRequest) {
       iyzico_payment_id: String(result.paymentId ?? ""),
       status: "success",
     }).eq("cafe_id", cafeId).eq("status", "pending");
+
+    // Receipt emaili gönder (hata olsa bile ödeme başarılı sayılır)
+    try {
+      const { data: userData } = await admin.auth.admin.getUserById(cafe?.user_id ?? "");
+      const email = userData?.user?.email;
+      if (email) {
+        await sendPaymentReceipt(email, cafe?.name ?? "Kafeniz", String(result.paymentId ?? ""), base);
+      }
+    } catch { /* email hatası ödemeyi etkilemesin */ }
 
     return NextResponse.redirect(new URL("/admin?payment=success", siteUrl));
   } catch (e) {
