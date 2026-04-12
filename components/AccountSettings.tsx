@@ -1,17 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Loader2, Eye, EyeOff, LogOut } from "lucide-react";
+import { Save, Loader2, Eye, EyeOff, LogOut, Bot } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 interface Props {
   email: string;
+  cafeId: string;
+  chatbotEnabled: boolean;
 }
 
-export default function AccountSettings({ email }: Props) {
+export default function AccountSettings({ email, cafeId, chatbotEnabled: initialChatbotEnabled }: Props) {
   const supabase = createClient();
   const router = useRouter();
+
+  const [chatbotEnabled, setChatbotEnabled] = useState(initialChatbotEnabled);
+  const [chatbotSaving, setChatbotSaving] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -72,6 +77,14 @@ export default function AccountSettings({ email }: Props) {
     setSaving(false);
   }
 
+  async function handleChatbotToggle() {
+    setChatbotSaving(true);
+    const newValue = !chatbotEnabled;
+    await supabase.from("cafes").update({ chatbot_enabled: newValue }).eq("id", cafeId);
+    setChatbotEnabled(newValue);
+    setChatbotSaving(false);
+  }
+
   async function handleLogout() {
     setLoggingOut(true);
     await supabase.auth.signOut();
@@ -80,6 +93,35 @@ export default function AccountSettings({ email }: Props) {
 
   return (
     <div className="space-y-4">
+
+      {/* Chatbot */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center">
+              <Bot className="w-4 h-4 text-orange-500" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-700">Menü Asistanı</p>
+              <p className="text-xs text-gray-400">Müşteriler AI ile menüyü keşfedebilir</p>
+            </div>
+          </div>
+          <button
+            onClick={handleChatbotToggle}
+            disabled={chatbotSaving}
+            className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-60 ${
+              chatbotEnabled ? "bg-orange-500" : "bg-gray-200"
+            }`}
+            aria-label="Chatbot aç/kapat"
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${
+                chatbotEnabled ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
+      </div>
 
       {/* Hesap bilgisi */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 space-y-3">

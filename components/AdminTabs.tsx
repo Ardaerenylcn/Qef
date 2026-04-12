@@ -12,6 +12,8 @@ type Tab = "menu" | "theme" | "qr" | "stats" | "settings";
 
 interface Props {
   email: string;
+  cafeId: string;
+  chatbotEnabled: boolean;
   stats: {
     todayCount: number;
     weekCount: number;
@@ -22,7 +24,7 @@ interface Props {
   };
 }
 
-export default function AdminTabs({ email, stats }: Props) {
+export default function AdminTabs({ email, cafeId, chatbotEnabled, stats }: Props) {
   const [tab, setTab] = useState<Tab>("menu");
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
@@ -56,7 +58,7 @@ export default function AdminTabs({ email, stats }: Props) {
       {tab === "theme"    && <ThemeEditor />}
       {tab === "qr"       && <QRPrint />}
       {tab === "stats"    && <AdminStats {...stats} />}
-      {tab === "settings" && <AccountSettings email={email} />}
+      {tab === "settings" && <AccountSettings email={email} cafeId={cafeId} chatbotEnabled={chatbotEnabled} />}
     </div>
   );
 }

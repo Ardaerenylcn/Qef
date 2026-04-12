@@ -13,6 +13,7 @@ import ParallaxCover from "@/components/ParallaxCover";
 import OpenStatusBadge from "@/components/OpenStatusBadge";
 import AdUnit from "@/components/AdUnit";
 import BannerModal from "@/components/BannerModal";
+import MenuChatbot from "@/components/MenuChatbot";
 
 const BASE_URL = "https://qefmenu.com";
 
@@ -71,7 +72,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   const { data: cafe } = await supabase
     .from("cafes")
-    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url")
+    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled")
     .eq("slug", slug)
     .single();
 
@@ -249,6 +250,11 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
           className="overflow-hidden rounded-xl"
         />
       </div>
+
+      {/* AI Chatbot */}
+      {cafe.chatbot_enabled !== false && (
+        <MenuChatbot cafeId={cafe.id} primaryColor={theme.primaryColor} />
+      )}
 
       {/* Publisher content — editorial section for AdSense compliance */}
       <section className="bg-gray-50 border-t border-gray-100 mt-8">

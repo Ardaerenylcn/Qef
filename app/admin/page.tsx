@@ -20,7 +20,7 @@ export default async function AdminPage({ searchParams }: Props) {
   const admin = createAdminClient();
 
   const [{ data: cafe }, { data: existingMessages }] = await Promise.all([
-    supabase.from("cafes").select("id, slug, name, plan, trial_ends_at, pro_ends_at").eq("user_id", user.id).single(),
+    supabase.from("cafes").select("id, slug, name, plan, trial_ends_at, pro_ends_at, chatbot_enabled").eq("user_id", user.id).single(),
     supabase.from("messages").select("id").eq("user_id", user.id).limit(1),
   ]);
 
@@ -141,7 +141,14 @@ export default async function AdminPage({ searchParams }: Props) {
           if (trialExpired) {
             return <TrialExpiredScreen cafeName={cafe?.name ?? "Kafem"} menuSlug={cafe?.slug ?? ""} />;
           }
-          return <AdminTabs email={user.email ?? ""} stats={stats} />;
+          return (
+            <AdminTabs
+              email={user.email ?? ""}
+              stats={stats}
+              cafeId={cafe?.id ?? ""}
+              chatbotEnabled={cafe?.chatbot_enabled !== false}
+            />
+          );
         })()}
       </div>
     </main>
