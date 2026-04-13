@@ -1,23 +1,31 @@
-export type EffectType = "snow" | "hearts" | "stars" | "confetti" | null;
+export type EffectType =
+  | "snow"       // Yılbaşı, Noel
+  | "hearts"     // Sevgililer
+  | "stars"      // Ramazan
+  | "confetti"   // Milli bayramlar
+  | "fireworks"  // Cumhuriyet
+  | "steam"      // Dünya Kahve Günü
+  | "sakura"     // Kadınlar Günü / Bahar
+  | "leaves"     // Sonbahar
+  | null;
 
 export interface SpecialDay {
   id: string;
   name: string;
   nameEn: string;
-  /** "MM-DD" for annual, "YYYY-MM-DD" for specific year */
   ranges: Array<{ from: string; to: string }>;
-  /** Level 1 — primaryColor override */
   primaryColor: string;
-  /** Level 2 — decorative banner */
   banner: {
     emoji: string;
-    deco: string[];           // decorative emoji row
     text: string;
     textEn: string;
-    gradient: string;         // CSS background (gradient or solid)
+    gradient: string;
     textColor: string;
-    accentColor: string;      // border/divider accent
+    accentColor: string;
     effectType: EffectType;
+    hasOrnaments?: boolean;
+    isFlagDay?: boolean;
+    hasLantern?: boolean;
   };
 }
 
@@ -26,20 +34,17 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     id: "yilbasi",
     name: "Yılbaşı",
     nameEn: "New Year",
-    ranges: [
-      { from: "12-28", to: "12-31" },
-      { from: "01-01", to: "01-05" },
-    ],
+    ranges: [{ from: "12-28", to: "12-31" }, { from: "01-01", to: "01-05" }],
     primaryColor: "#818cf8",
     banner: {
       emoji: "🎉",
-      deco: ["❄️", "✨", "🥂", "🎇", "⭐", "❄️", "🎆", "✨", "🎉"],
       text: "Mutlu Yıllar! Yeni yılın tüm dileklerinizi gerçekleştirmesini dileriz.",
       textEn: "Happy New Year! Wishing you all the best in the coming year.",
       gradient: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
       textColor: "#e0e7ff",
       accentColor: "#818cf8",
       effectType: "snow",
+      hasOrnaments: true,
     },
   },
   {
@@ -50,13 +55,45 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#f43f5e",
     banner: {
       emoji: "❤️",
-      deco: ["🌹", "💝", "❤️", "💕", "🌹", "💗", "❤️", "💖", "🌸"],
-      text: "Sevgililer Günü'nüz kutlu olsun! Sevdiklerinizle keyifli ve romantik vakitler dileriz.",
+      text: "Sevgililer Günü'nüz kutlu olsun! Sevdiklerinizle keyifli vakitler dileriz.",
       textEn: "Happy Valentine's Day! Wishing you a wonderful time with your loved ones.",
       gradient: "linear-gradient(135deg, #fce7f3 0%, #fda4af 40%, #fce7f3 100%)",
       textColor: "#9f1239",
       accentColor: "#fb7185",
       effectType: "hearts",
+      hasOrnaments: true,
+    },
+  },
+  {
+    id: "kadinlar-gunu",
+    name: "Dünya Kadınlar Günü",
+    nameEn: "International Women's Day",
+    ranges: [{ from: "03-07", to: "03-09" }],
+    primaryColor: "#db2777",
+    banner: {
+      emoji: "🌸",
+      text: "8 Mart Dünya Kadınlar Günü kutlu olsun! Güçlü, özgür, eşit bir dünya için.",
+      textEn: "Happy International Women's Day! For a stronger, freer, equal world.",
+      gradient: "linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fdf2f8 100%)",
+      textColor: "#831843",
+      accentColor: "#ec4899",
+      effectType: "sakura",
+    },
+  },
+  {
+    id: "bahar",
+    name: "Bahar",
+    nameEn: "Spring",
+    ranges: [{ from: "03-20", to: "03-22" }],
+    primaryColor: "#16a34a",
+    banner: {
+      emoji: "🌸",
+      text: "Bahar geldi! Çiçekler açsın, renkler coşsun, doğa yenilensin.",
+      textEn: "Spring is here! Let flowers bloom and nature renew.",
+      gradient: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #fdf2f8 100%)",
+      textColor: "#14532d",
+      accentColor: "#4ade80",
+      effectType: "sakura",
     },
   },
   {
@@ -67,13 +104,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "✨", "🕌", "⭐", "🌙", "✨", "🕌", "⭐", "🌟"],
       text: "Hayırlı Ramazanlar! Bu mübarek ayda huzur, sağlık ve bereket dileriz.",
       textEn: "Ramadan Mubarak! Wishing you peace, health and blessings this holy month.",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
     },
   },
   {
@@ -84,13 +121,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "🎉", "✨", "🌟", "🌙", "🎊", "⭐", "✨", "🎉"],
       text: "İyi Bayramlar! Ramazan Bayramınız mübarek, sağlıklı ve huzurlu geçsin.",
       textEn: "Eid Mubarak! Wishing you a joyful and blessed Eid al-Fitr.",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
     },
   },
   {
@@ -101,13 +138,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#ef4444",
     banner: {
       emoji: "🇹🇷",
-      deco: ["🇹🇷", "🎉", "🌸", "🎈", "🇹🇷", "🌷", "🎊", "🌸", "🇹🇷"],
-      text: "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlu olsun! Geleceğimiz çocuklarımıza armağan olsun.",
-      textEn: "Happy April 23rd! National Sovereignty and Children's Day — our future belongs to the children.",
+      text: "23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlu olsun!",
+      textEn: "Happy April 23rd! National Sovereignty and Children's Day.",
       gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)",
       textColor: "#ffffff",
       accentColor: "#fca5a5",
       effectType: "confetti",
+      isFlagDay: true,
     },
   },
   {
@@ -118,9 +155,8 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#ef4444",
     banner: {
       emoji: "🌹",
-      deco: ["🌹", "✊", "🌺", "🌹", "💪", "🌷", "🌹", "✊", "🌺"],
-      text: "1 Mayıs Emek ve Dayanışma Günü kutlu olsun! Emeğe saygı, dayanışmaya güç.",
-      textEn: "Happy International Workers' Day! Solidarity and respect for labour.",
+      text: "1 Mayıs Emek ve Dayanışma Günü kutlu olsun!",
+      textEn: "Happy International Workers' Day!",
       gradient: "linear-gradient(135deg, #dc2626 0%, #9f1239 60%, #881337 100%)",
       textColor: "#ffffff",
       accentColor: "#fca5a5",
@@ -135,13 +171,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#ef4444",
     banner: {
       emoji: "🇹🇷",
-      deco: ["🇹🇷", "⚡", "🏃", "🇹🇷", "💪", "🌟", "🇹🇷", "⚡", "🏅"],
-      text: "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı kutlu olsun! Ne mutlu Türküm diyene.",
+      text: "19 Mayıs Atatürk'ü Anma, Gençlik ve Spor Bayramı kutlu olsun!",
       textEn: "Happy May 19th! Commemoration of Atatürk, Youth and Sports Day.",
       gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)",
       textColor: "#ffffff",
       accentColor: "#fca5a5",
       effectType: "confetti",
+      isFlagDay: true,
     },
   },
   {
@@ -152,13 +188,45 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "🎉", "✨", "🌟", "🌙", "🎊", "⭐", "✨", "🎉"],
-      text: "Kurban Bayramınız Mübarek Olsun! Sevdiklerinizle güzel ve huzurlu bir bayram dileriz.",
-      textEn: "Eid al-Adha Mubarak! Wishing you a blessed and peaceful Eid with your loved ones.",
+      text: "Kurban Bayramınız Mübarek Olsun!",
+      textEn: "Eid al-Adha Mubarak!",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
+    },
+  },
+  {
+    id: "sonbahar",
+    name: "Sonbahar",
+    nameEn: "Autumn",
+    ranges: [{ from: "09-22", to: "09-30" }],
+    primaryColor: "#ea580c",
+    banner: {
+      emoji: "🍂",
+      text: "Sonbahar geldi. Sıcak bir fincan kahveyle keyifli dakikalar dileriz.",
+      textEn: "Autumn is here. Wishing you cozy moments with a warm cup.",
+      gradient: "linear-gradient(135deg, #431407 0%, #7c2d12 50%, #431407 100%)",
+      textColor: "#fed7aa",
+      accentColor: "#ea580c",
+      effectType: "leaves",
+    },
+  },
+  {
+    id: "kahve-gunu",
+    name: "Dünya Kahve Günü",
+    nameEn: "World Coffee Day",
+    ranges: [{ from: "10-01", to: "10-02" }],
+    primaryColor: "#92400e",
+    banner: {
+      emoji: "☕",
+      text: "Dünya Kahve Günü kutlu olsun! İyi kahveler, güzel anlar.",
+      textEn: "Happy World Coffee Day! Good coffee, great moments.",
+      gradient: "linear-gradient(135deg, #1c1004 0%, #3b1a08 50%, #1c1004 100%)",
+      textColor: "#fde68a",
+      accentColor: "#92400e",
+      effectType: "steam",
     },
   },
   {
@@ -169,13 +237,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#ef4444",
     banner: {
       emoji: "🇹🇷",
-      deco: ["🇹🇷", "🎉", "⭐", "🇹🇷", "✨", "🎊", "🇹🇷", "⭐", "🎆"],
-      text: "29 Ekim Cumhuriyet Bayramımız Kutlu Olsun! Cumhuriyetimiz 101 yaşında, yaşasın Türkiye!",
-      textEn: "Happy 29th October Republic Day of Turkey! Our Republic is 101 years strong!",
+      text: "29 Ekim Cumhuriyet Bayramımız Kutlu Olsun! Yaşasın Cumhuriyet!",
+      textEn: "Happy 29th October Republic Day of Turkey!",
       gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%)",
       textColor: "#ffffff",
       accentColor: "#fca5a5",
-      effectType: "confetti",
+      effectType: "fireworks",
+      isFlagDay: true,
     },
   },
   {
@@ -186,13 +254,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "✨", "🕌", "⭐", "🌙", "✨", "🕌", "⭐", "🌟"],
       text: "Hayırlı Ramazanlar! Bu mübarek ayda huzur, sağlık ve bereket dileriz.",
-      textEn: "Ramadan Mubarak! Wishing you peace, health and blessings this holy month.",
+      textEn: "Ramadan Mubarak! Wishing you peace, health and blessings.",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
     },
   },
   {
@@ -203,13 +271,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "🎉", "✨", "🌟", "🌙", "🎊", "⭐", "✨", "🎉"],
-      text: "İyi Bayramlar! Ramazan Bayramınız mübarek, sağlıklı ve huzurlu geçsin.",
-      textEn: "Eid Mubarak! Wishing you a joyful and blessed Eid al-Fitr.",
+      text: "İyi Bayramlar! Ramazan Bayramınız mübarek olsun.",
+      textEn: "Eid Mubarak! Happy Eid al-Fitr.",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
     },
   },
   {
@@ -220,13 +288,13 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#d97706",
     banner: {
       emoji: "🌙",
-      deco: ["🌙", "🎉", "✨", "🌟", "🌙", "🎊", "⭐", "✨", "🎉"],
-      text: "Kurban Bayramınız Mübarek Olsun! Sevdiklerinizle güzel ve huzurlu bir bayram dileriz.",
-      textEn: "Eid al-Adha Mubarak! Wishing you a blessed and peaceful Eid with your loved ones.",
+      text: "Kurban Bayramınız Mübarek Olsun!",
+      textEn: "Eid al-Adha Mubarak!",
       gradient: "linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)",
       textColor: "#fde68a",
       accentColor: "#d97706",
       effectType: "stars",
+      hasLantern: true,
     },
   },
   {
@@ -237,44 +305,33 @@ export const SPECIAL_DAYS: SpecialDay[] = [
     primaryColor: "#16a34a",
     banner: {
       emoji: "🎄",
-      deco: ["🎄", "⭐", "🎁", "❄️", "🦌", "🎅", "🎄", "⭐", "🎁"],
-      text: "Mutlu Noeller! Sevdiklerinizle sıcak ve neşeli bir tatil geçirmenizi dileriz.",
-      textEn: "Merry Christmas! Wishing you a warm and joyful holiday with your loved ones.",
+      text: "Mutlu Noeller! Sevdiklerinizle sıcak bir tatil dileriz.",
+      textEn: "Merry Christmas! Wishing you a warm holiday with loved ones.",
       gradient: "linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%)",
       textColor: "#fef9c3",
       accentColor: "#4ade80",
       effectType: "snow",
+      hasOrnaments: true,
     },
   },
 ];
 
 function isInRange(now: Date, from: string, to: string): boolean {
   if (from.length === 10) {
-    const fromDate = new Date(from + "T00:00:00");
-    const toDate = new Date(to + "T23:59:59");
-    return now >= fromDate && now <= toDate;
+    return now >= new Date(from + "T00:00:00") && now <= new Date(to + "T23:59:59");
   }
-
   const year = now.getFullYear();
   const [fm, fd] = from.split("-").map(Number);
   const [tm, td] = to.split("-").map(Number);
   const fromMD = fm * 100 + fd;
   const toMD = tm * 100 + td;
-
   if (fromMD <= toMD) {
-    const fromDate = new Date(year, fm - 1, fd, 0, 0, 0);
-    const toDate = new Date(year, tm - 1, td, 23, 59, 59);
-    return now >= fromDate && now <= toDate;
-  } else {
-    const fromThisYear = new Date(year, fm - 1, fd, 0, 0, 0);
-    const toNextYear = new Date(year + 1, tm - 1, td, 23, 59, 59);
-    const fromLastYear = new Date(year - 1, fm - 1, fd, 0, 0, 0);
-    const toThisYear = new Date(year, tm - 1, td, 23, 59, 59);
-    return (
-      (now >= fromThisYear && now <= toNextYear) ||
-      (now >= fromLastYear && now <= toThisYear)
-    );
+    return now >= new Date(year, fm - 1, fd) && now <= new Date(year, tm - 1, td, 23, 59, 59);
   }
+  return (
+    (now >= new Date(year, fm - 1, fd) && now <= new Date(year + 1, tm - 1, td, 23, 59, 59)) ||
+    (now >= new Date(year - 1, fm - 1, fd) && now <= new Date(year, tm - 1, td, 23, 59, 59))
+  );
 }
 
 export function getActiveSpecialDay(now: Date = new Date()): SpecialDay | null {

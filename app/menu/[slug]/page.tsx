@@ -16,6 +16,9 @@ import BannerModal from "@/components/BannerModal";
 import MenuChatbot from "@/components/MenuChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
 import SpecialDayEffects from "@/components/SpecialDayEffects";
+import HangingOrnaments from "@/components/HangingOrnaments";
+import WavingFlag from "@/components/WavingFlag";
+import RamazanDecor from "@/components/RamazanDecor";
 import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
@@ -146,6 +149,17 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
         <BannerModal bannerUrl={theme.bannerUrl} bannerLink={theme.bannerLink ?? ""} cafeSlug={slug} />
       )}
 
+      {/* Sarkan süs topları / kalpler — sayfanın en üstü */}
+      {activeSpecialDay?.banner.hasOrnaments && (
+        <HangingOrnaments
+          variant={
+            activeSpecialDay.id === "sevgililer" ? "hearts"
+            : activeSpecialDay.id.startsWith("noel") ? "christmas"
+            : "new-year"
+          }
+        />
+      )}
+
       {/* Sticky header */}
       <StickyMenuHeader
         cafeName={cafeName}
@@ -270,6 +284,12 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
       {activeSpecialDay && (
         <SpecialDayEffects effectType={activeSpecialDay.banner.effectType} />
       )}
+
+      {/* Türk bayrağı — bayram günleri */}
+      {activeSpecialDay?.banner.isFlagDay && <WavingFlag />}
+
+      {/* Ramazan feneri */}
+      {activeSpecialDay?.banner.hasLantern && <RamazanDecor />}
 
       {/* AI Chatbot */}
       {cafe.chatbot_enabled !== false && (
