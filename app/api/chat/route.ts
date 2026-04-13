@@ -1,5 +1,5 @@
 import { streamText, convertToModelMessages } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { azure } from "@ai-sdk/azure";
 import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30;
@@ -52,7 +52,7 @@ Menü:
 ${JSON.stringify(productList, null, 2)}`;
 
   const result = streamText({
-    model: anthropic("claude-haiku-4.5-20251001"),
+    model: azure("gpt-4o-mini"),
     system: systemPrompt,
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 500,
