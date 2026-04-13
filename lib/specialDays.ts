@@ -146,7 +146,7 @@ export const SPECIAL_DAYS: SpecialDay[] = [
       accentColor: "#fca5a5",
       effectType: "confetti",
       isFlagDay: true,
-      heroImage: "/ataturk.jpg",
+      heroImage: "/nisan.jpg",
     },
   },
   {
@@ -180,7 +180,7 @@ export const SPECIAL_DAYS: SpecialDay[] = [
       accentColor: "#fca5a5",
       effectType: "confetti",
       isFlagDay: true,
-      heroImage: "/ataturk.jpg",
+      heroImage: "/nisan.jpg",
     },
   },
   {
