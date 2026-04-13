@@ -328,7 +328,7 @@ export default function HomePage() {
       </section>
 
       {/* AI CHATBOT */}
-      <section className="py-24 px-6 bg-gray-900 overflow-hidden relative">
+      <section className="py-24 px-6 bg-gray-700 overflow-hidden relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/8 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
