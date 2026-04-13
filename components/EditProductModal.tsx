@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { X, Save, Loader2, ImagePlus, ChevronDown, Box, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -31,6 +31,10 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
   const [imagePreview, setImagePreview] = useState(product.image_url ?? "");
   const [modelFile, setModelFile] = useState<File | null>(null);
   const [modelUrl, setModelUrl] = useState(product.model_url ?? "");
+  const [meshyGenerating, setMeshyGenerating] = useState(false);
+  const [meshyProgress, setMeshyProgress] = useState(0);
+  const [meshyError, setMeshyError] = useState("");
+  const meshyPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [showEn, setShowEn] = useState(!!(product.name_en || product.description_en));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -45,6 +49,49 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
     const compressed = await compressImage(file, "product");
     setImageFile(compressed);
     setImagePreview(URL.createObjectURL(compressed));
+  }
+
+  async function handleMeshyGenerate() {
+    const prompt = [name.trim(), description.trim()].filter(Boolean).join(", ");
+    if (!prompt) { setMeshyError("Önce ürün adı gir."); return; }
+
+    setMeshyGenerating(true);
+    setMeshyProgress(0);
+    setMeshyError("");
+
+    const res = await fetch("/api/meshy/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cafeId, prompt }),
+    });
+
+    if (!res.ok) {
+      setMeshyError("Model oluşturulamadı. Tekrar dene.");
+      setMeshyGenerating(false);
+      return;
+    }
+
+    const { taskId } = await res.json();
+
+    meshyPollRef.current = setInterval(async () => {
+      const poll = await fetch(`/api/meshy/status?taskId=${taskId}`);
+      if (!poll.ok) return;
+      const { status, progress, glbUrl } = await poll.json();
+
+      setMeshyProgress(progress);
+
+      if (status === "SUCCEEDED" && glbUrl) {
+        clearInterval(meshyPollRef.current!);
+        setModelUrl(glbUrl);
+        setModelFile(null);
+        setMeshyGenerating(false);
+        setMeshyProgress(100);
+      } else if (status === "FAILED" || status === "CANCELED") {
+        clearInterval(meshyPollRef.current!);
+        setMeshyError("Model oluşturulamadı. Tekrar dene.");
+        setMeshyGenerating(false);
+      }
+    }, 4000);
   }
 
   async function handleSave() {
@@ -194,10 +241,32 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
                     onChange={(e) => { const f = e.target.files?.[0]; if (f) setModelFile(f); }} />
                 </label>
               )}
-              <button disabled
-                className="w-full flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg bg-gray-50 text-gray-300 cursor-not-allowed">
-                <Sparkles className="w-3.5 h-3.5" />
-                AI ile Otomatik Oluştur — Yakında
+              {meshyError && (
+                <p className="text-[11px] text-red-400">{meshyError}</p>
+              )}
+              {meshyGenerating && (
+                <div className="space-y-1">
+                  <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="h-1.5 rounded-full bg-orange-400 transition-all duration-500"
+                      style={{ width: `${meshyProgress}%` }}
+                    />
+                  </div>
+                  <p className="text-[10px] text-gray-400 text-center">
+                    3D model oluşturuluyor... %{meshyProgress}
+                  </p>
+                </div>
+              )}
+              <button
+                onClick={handleMeshyGenerate}
+                disabled={meshyGenerating || saving}
+                className="w-full flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-orange-50 text-orange-500 hover:bg-orange-100"
+              >
+                {meshyGenerating
+                  ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  : <Sparkles className="w-3.5 h-3.5" />
+                }
+                {meshyGenerating ? "Oluşturuluyor..." : "AI ile Otomatik Oluştur"}
               </button>
             </div>
           </div>
