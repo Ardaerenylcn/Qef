@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Save, Loader2, ImagePlus, X, Wifi, Instagram, Link, Megaphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
+import { DEFAULT_THEME, FONTS, BG_TEXTURE_LABELS, getBgTextureStyle, type CafeTheme, type BgTexture } from "@/types/theme";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 import CollapsibleSection from "./CollapsibleSection";
@@ -261,6 +261,36 @@ export default function ThemeEditor() {
               className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
           <p className="text-xs text-gray-400">Müşteri menüyü açtığında ekranda gösterilir, kapatabilir.</p>
+        </div>
+      </CollapsibleSection>
+
+      <CollapsibleSection storageKey="theme_arkaplan_doku" title="Arkaplan Dokusu" defaultOpen={false}>
+        <div className="grid grid-cols-3 gap-2">
+          {(Object.keys(BG_TEXTURE_LABELS) as BgTexture[]).map((key) => {
+            const textureStyle = getBgTextureStyle(key, "#111827");
+            return (
+              <button
+                key={key}
+                onClick={() => update("bgTexture", key)}
+                className={`relative h-16 rounded-xl border-2 overflow-hidden transition-all ${
+                  (theme.bgTexture ?? "none") === key
+                    ? "border-orange-400"
+                    : "border-gray-100 hover:border-gray-200"
+                }`}
+                style={{ backgroundColor: "#f9fafb" }}
+              >
+                {/* Texture preview overlay */}
+                {key !== "none" && (
+                  <div className="absolute inset-0" style={textureStyle} />
+                )}
+                <span className={`relative text-[11px] font-semibold ${
+                  (theme.bgTexture ?? "none") === key ? "text-orange-500" : "text-gray-400"
+                }`}>
+                  {BG_TEXTURE_LABELS[key]}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </CollapsibleSection>
 

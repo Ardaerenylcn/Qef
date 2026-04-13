@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
+import { DEFAULT_THEME, FONTS, getBgTextureStyle, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
 import CategoryTabs from "@/components/CategoryTabs";
 import MenuProductList from "@/components/MenuProductList";
@@ -138,7 +138,14 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   return (
     <main style={{ backgroundColor: theme.bgColor, fontFamily: fontCss, color: theme.textColor }}
-      className="min-h-screen">
+      className="min-h-screen relative">
+      {/* Arkaplan dokusu overlay */}
+      {theme.bgTexture && theme.bgTexture !== "none" && (
+        <div
+          className="fixed inset-0 pointer-events-none z-0"
+          style={getBgTextureStyle(theme.bgTexture, theme.textColor)}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/<\/script>/gi, "<\\/script>") }}
