@@ -117,6 +117,13 @@ export default function OnboardingChecklist({ cafe, categories, products, onSwit
     }
   }, [completedCount]);
 
+  // Tüm adımlar tamamlanınca 3 saniye sonra otomatik kapat
+  useEffect(() => {
+    if (!allDone) return;
+    const t = setTimeout(() => onClose(), 3000);
+    return () => clearTimeout(t);
+  }, [allDone]);
+
   return (
     <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
       {/* Üst bölüm — maskot + başlık */}

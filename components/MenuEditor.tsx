@@ -82,7 +82,10 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newCatName, setNewCatName] = useState("");
   const [catError, setCatError] = useState("");
-  const [showChecklist, setShowChecklist] = useState(true);
+  const [showChecklist, setShowChecklist] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("onboarding_dismissed") !== "true";
+  });
   const [productSearch, setProductSearch] = useState("");
 
   const router = useRouter();
@@ -386,7 +389,10 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
           categories={categories}
           products={products}
           onSwitchTab={onSwitchTab ?? (() => {})}
-          onClose={() => setShowChecklist(false)}
+          onClose={() => {
+            localStorage.setItem("onboarding_dismissed", "true");
+            setShowChecklist(false);
+          }}
         />
       )}
 
