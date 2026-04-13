@@ -14,6 +14,8 @@ import OpenStatusBadge from "@/components/OpenStatusBadge";
 import AdUnit from "@/components/AdUnit";
 import BannerModal from "@/components/BannerModal";
 import MenuChatbot from "@/components/MenuChatbot";
+import SpecialDayBanner from "@/components/SpecialDayBanner";
+import { getActiveSpecialDay } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
@@ -72,7 +74,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   const { data: cafe } = await supabase
     .from("cafes")
-    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled")
+    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
     .eq("slug", slug)
     .single();
 
@@ -87,7 +89,12 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
     .eq("cafe_id", cafe.id)
     .order("position", { ascending: true });
 
-  const theme: CafeTheme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
+  const baseTheme: CafeTheme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
+  const seasonalEnabled = cafe.seasonal_themes_enabled !== false;
+  const activeSpecialDay = seasonalEnabled ? getActiveSpecialDay() : null;
+  const theme: CafeTheme = activeSpecialDay
+    ? { ...baseTheme, primaryColor: activeSpecialDay.primaryColor }
+    : baseTheme;
   const fontCss = FONTS[theme.font]?.css ?? FONTS.sans.css;
 
   const grouped = (products ?? []).reduce<Record<string, typeof products>>((acc, p) => {
@@ -186,6 +193,11 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
             </div>
           )}
         </div>
+
+        {/* Özel gün banner */}
+        {activeSpecialDay && (
+          <SpecialDayBanner day={activeSpecialDay} isEn={isEn} />
+        )}
 
         {/* Menü */}
         {(products ?? []).length === 0 ? (
