@@ -137,15 +137,16 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   };
 
   return (
-    <main style={{ backgroundColor: theme.bgColor, fontFamily: fontCss, color: theme.textColor }}
-      className="min-h-screen relative">
-      {/* Arkaplan dokusu overlay */}
-      {theme.bgTexture && theme.bgTexture !== "none" && (
-        <div
-          className="fixed inset-0 pointer-events-none z-0"
-          style={getBgTextureStyle(theme.bgTexture, theme.textColor)}
-        />
-      )}
+    <main
+      style={{
+        backgroundColor: theme.bgColor,
+        fontFamily: fontCss,
+        color: theme.textColor,
+        ...(theme.bgTexture && theme.bgTexture !== "none"
+          ? getBgTextureStyle(theme.bgTexture, theme.textColor)
+          : {}),
+      }}
+      className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/<\/script>/gi, "<\\/script>") }}

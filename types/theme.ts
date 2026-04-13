@@ -45,40 +45,50 @@ export const BG_TEXTURE_LABELS: Record<BgTexture, string> = {
   noise: "Kumlu",
 };
 
-/** Returns inline style for the texture overlay div. Pass textColor to set the dot/line color. */
+/** Converts a hex color to rgba string with the given alpha. */
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return `rgba(0,0,0,${alpha})`;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+/**
+ * Returns backgroundImage + backgroundSize to apply directly on the page's
+ * <main> element alongside backgroundColor. Never overlays content.
+ */
 export function getBgTextureStyle(texture: BgTexture, textColor: string): CSSProperties {
+  const c = hexToRgba(textColor, 0.07);
+  const cs = hexToRgba(textColor, 0.05);
   switch (texture) {
     case "dots":
       return {
-        backgroundImage: `radial-gradient(circle, ${textColor} 1px, transparent 1px)`,
+        backgroundImage: `radial-gradient(circle, ${c} 1px, transparent 1px)`,
         backgroundSize: "18px 18px",
-        opacity: 0.07,
       };
     case "grid":
       return {
-        backgroundImage: `linear-gradient(${textColor} 1px, transparent 1px), linear-gradient(90deg, ${textColor} 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(${cs} 1px, transparent 1px), linear-gradient(90deg, ${cs} 1px, transparent 1px)`,
         backgroundSize: "24px 24px",
-        opacity: 0.06,
       };
     case "lines":
       return {
-        backgroundImage: `repeating-linear-gradient(0deg, ${textColor}, ${textColor} 1px, transparent 1px, transparent 22px)`,
-        opacity: 0.05,
+        backgroundImage: `repeating-linear-gradient(0deg, ${cs}, ${cs} 1px, transparent 1px, transparent 22px)`,
       };
     case "cross":
       return {
-        backgroundImage: `repeating-linear-gradient(45deg, ${textColor} 0, ${textColor} 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, ${textColor} 0, ${textColor} 1px, transparent 0, transparent 50%)`,
+        backgroundImage: `repeating-linear-gradient(45deg, ${cs} 0, ${cs} 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, ${cs} 0, ${cs} 1px, transparent 0, transparent 50%)`,
         backgroundSize: "14px 14px",
-        opacity: 0.05,
       };
     case "noise":
       return {
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
-        opacity: 0.04,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")`,
         backgroundSize: "200px 200px",
       };
     default:
-      return { display: "none" };
+      return {};
   }
 }
 
