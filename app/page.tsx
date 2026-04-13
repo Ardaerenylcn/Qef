@@ -323,6 +323,33 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* Kalori Bilgisi */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-green-500/10">
+                <Zap className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">Kalori Bilgisi</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Her ürüne opsiyonel kalori değeri ekleyin. Müşteriler menüde ve ürün detayında kcal bilgisini görsün.</p>
+              </div>
+              {/* Kalori mockup */}
+              <div className="space-y-2">
+                {[
+                  { name: "Latte", price: "75₺", kcal: 190 },
+                  { name: "Cheesecake", price: "120₺", kcal: 420 },
+                  { name: "Granola Kase", price: "95₺", kcal: 310 },
+                ].map(({ name, price, kcal }) => (
+                  <div key={name} className="flex items-center justify-between bg-gray-800 rounded-xl px-3 py-2">
+                    <span className="text-xs text-gray-300 font-medium">{name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-semibold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full">{kcal} kcal</span>
+                      <span className="text-xs text-orange-400 font-bold">{price}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* 57+ İçerik İkonu */}
             <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
               <div className="inline-flex p-3 rounded-2xl bg-amber-500/10">
