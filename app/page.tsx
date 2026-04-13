@@ -327,6 +327,74 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* AI CHATBOT */}
+      <section className="py-24 px-6 bg-[#0d1117] overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/8 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+            {/* Sol — Görsel */}
+            <div className="w-full lg:w-[52%] flex-shrink-0 relative">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-500/15 to-yellow-500/5 blur-2xl scale-105 pointer-events-none" />
+              <Image
+                src="/ai-tanitim.png"
+                alt="Qef AI Menü Asistanı"
+                width={800}
+                height={600}
+                className="relative w-full rounded-3xl object-cover shadow-2xl shadow-orange-900/30"
+              />
+            </div>
+
+            {/* Sağ — İçerik */}
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                  Yeni Özellik
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Menünüze yapay zeka<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-300 to-yellow-300">
+                    dokunuşu
+                  </span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Müşterileriniz menüde ne yiyeceğine karar veremedi mi? AI asistanı onlara özel öneriler sunar, soruları anında yanıtlar — 7/24, hiç beklemeden.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { title: "Kişisel öneriler", desc: "\"Hafif bir şeyler istiyorum\" → anında öneri." },
+                  { title: "Türkçe & İngilizce", desc: "Yabancı misafirler için dil engeli ortadan kalkar." },
+                  { title: "Sıfır kurulum", desc: "Menünüzü otomatik okur, hazır gelir." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-orange-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-white font-semibold text-sm">{title}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {["Ücretsiz dahil", "Açıp kapatılabilir", "Anlık yanıt"].map((item) => (
+                  <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
+                ))}
+              </div>
+
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ÖZELLEŞTİRME */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12">
