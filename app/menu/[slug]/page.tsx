@@ -15,13 +15,13 @@ import AdUnit from "@/components/AdUnit";
 import BannerModal from "@/components/BannerModal";
 import MenuChatbot from "@/components/MenuChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
-import { getActiveSpecialDay } from "@/lib/specialDays";
+import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ lang?: string }>;
+  searchParams: Promise<{ lang?: string; day?: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PublicMenuPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const { lang = "tr" } = await searchParams;
+  const { lang = "tr", day: testDay } = await searchParams;
   const isEn = lang === "en";
   const supabase = await createClient();
 
@@ -91,7 +91,9 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   const baseTheme: CafeTheme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
   const seasonalEnabled = cafe.seasonal_themes_enabled !== false;
-  const activeSpecialDay = seasonalEnabled ? getActiveSpecialDay() : null;
+  const activeSpecialDay = testDay
+    ? (SPECIAL_DAYS.find((d) => d.id === testDay) ?? null)
+    : seasonalEnabled ? getActiveSpecialDay() : null;
   const theme: CafeTheme = activeSpecialDay
     ? { ...baseTheme, primaryColor: activeSpecialDay.primaryColor }
     : baseTheme;
