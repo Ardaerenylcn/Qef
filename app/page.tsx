@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, X as XIcon, Crown } from "lucide-react";
+import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, X as XIcon, Crown, UtensilsCrossed, Sparkles } from "lucide-react";
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 
@@ -320,6 +320,77 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* 57+ İçerik İkonu */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-amber-500/10">
+                <UtensilsCrossed className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">57+ İçerik İkonu</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Her ürünün içeriğini emoji ikonlarla belirtin. Müşteriler alerjen veya diyet bilgilerine tek bakışta ulaşsın.</p>
+              </div>
+              {/* İçerik chip mockup */}
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { emoji: "☕", label: "Espresso" },
+                    { emoji: "🥛", label: "Süt" },
+                    { emoji: "🍫", label: "Çikolata" },
+                    { emoji: "🍬", label: "Şeker" },
+                    { emoji: "🌰", label: "Fındık" },
+                    { emoji: "🧁", label: "Krema" },
+                  ].map(({ emoji, label }) => (
+                    <span key={label}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-300 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1">
+                      <span>{emoji}</span>
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { emoji: "🌾", label: "Glüten" },
+                    { emoji: "🥚", label: "Yumurta" },
+                    { emoji: "🍓", label: "Çilek" },
+                  ].map(({ emoji, label }) => (
+                    <span key={label}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-400 bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 py-1 opacity-60">
+                      <span>{emoji}</span>
+                      {label}
+                    </span>
+                  ))}
+                  <span className="text-[11px] text-gray-600 self-center">+48 daha…</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Özel Gün Temaları */}
+            <div className="bg-gray-900 rounded-2xl p-6 space-y-5 border border-gray-800 hover:border-orange-500/30 transition-colors">
+              <div className="inline-flex p-3 rounded-2xl bg-pink-500/10">
+                <Sparkles className="w-5 h-5 text-pink-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-white mb-1">Özel Gün Temaları</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">Yılbaşı, Sevgililer Günü, Ramazan ve milli bayramlarda menünüz otomatik olarak özel tasarıma geçer.</p>
+              </div>
+              {/* Tema satırları mockup */}
+              <div className="space-y-2">
+                {[
+                  { emoji: "❄️", label: "Yılbaşı", color: "bg-indigo-500/20 border-indigo-500/30 text-indigo-300" },
+                  { emoji: "❤️", label: "Sevgililer Günü", color: "bg-rose-500/20 border-rose-500/30 text-rose-300" },
+                  { emoji: "🌙", label: "Ramazan", color: "bg-amber-500/20 border-amber-500/30 text-amber-300" },
+                  { emoji: "🇹🇷", label: "23 Nisan", color: "bg-red-500/20 border-red-500/30 text-red-300" },
+                ].map(({ emoji, label, color }) => (
+                  <div key={label}
+                    className={`flex items-center gap-2.5 border rounded-xl px-3 py-2 ${color}`}>
+                    <span className="text-base leading-none">{emoji}</span>
+                    <span className="text-xs font-semibold">{label}</span>
+                    <span className="ml-auto text-[10px] opacity-60">Otomatik</span>
+                  </div>
+                ))}
               </div>
             </div>
 
