@@ -26,6 +26,7 @@ export interface SpecialDay {
     hasOrnaments?: boolean;
     isFlagDay?: boolean;
     hasLantern?: boolean;
+    heroImage?: string;  // public/ klasöründeki dosya yolu, ör: "/ataturk.jpg"
   };
 }
 
@@ -145,6 +146,7 @@ export const SPECIAL_DAYS: SpecialDay[] = [
       accentColor: "#fca5a5",
       effectType: "confetti",
       isFlagDay: true,
+      heroImage: "/ataturk.jpg",
     },
   },
   {
@@ -178,6 +180,7 @@ export const SPECIAL_DAYS: SpecialDay[] = [
       accentColor: "#fca5a5",
       effectType: "confetti",
       isFlagDay: true,
+      heroImage: "/ataturk.jpg",
     },
   },
   {

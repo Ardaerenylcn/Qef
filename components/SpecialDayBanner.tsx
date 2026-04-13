@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 import type { SpecialDay } from "@/lib/specialDays";
 
@@ -14,7 +15,7 @@ export default function SpecialDayBanner({ day, isEn }: Props) {
   if (dismissed) return null;
 
   const text = isEn ? day.banner.textEn : day.banner.text;
-  const { gradient, textColor, accentColor, emoji, isFlagDay, hasLantern } = day.banner;
+  const { gradient, textColor, accentColor, emoji, isFlagDay, hasLantern, heroImage } = day.banner;
 
   return (
     <div className="rounded-2xl overflow-hidden relative" style={{ background: gradient }}>
@@ -63,9 +64,21 @@ export default function SpecialDayBanner({ day, isEn }: Props) {
 
       {/* Main content */}
       <div className="px-4 py-3.5 flex items-start gap-3">
-        <span className="text-3xl leading-none shrink-0 mt-0.5 select-none" role="img" aria-label={day.name}>
-          {emoji}
-        </span>
+        {/* Hero image (ör: Atatürk portresi) — varsa emoji yerine göster */}
+        {heroImage ? (
+          <Image
+            src={heroImage}
+            alt={day.name}
+            width={52}
+            height={52}
+            className="rounded-full object-cover object-top shrink-0 border-2"
+            style={{ borderColor: `${accentColor}60` }}
+          />
+        ) : (
+          <span className="text-3xl leading-none shrink-0 mt-0.5 select-none" role="img" aria-label={day.name}>
+            {emoji}
+          </span>
+        )}
 
         <p className="text-sm leading-relaxed font-medium flex-1 min-w-0" style={{ color: textColor }}>
           {text}
