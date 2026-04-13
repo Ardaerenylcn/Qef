@@ -12,6 +12,7 @@ export interface Product {
   ingredients: string[];
   in_stock: boolean;
   model_url?: string | null;
+  calories?: number | null;
 }
 
 export const PRODUCT_TAGS: { label: string; labelEn: string; icon: string; color: string; bg: string }[] = [

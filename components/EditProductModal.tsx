@@ -27,6 +27,7 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
   const [descriptionEn, setDescriptionEn] = useState(product.description_en ?? "");
   const [tags, setTags] = useState<string[]>(product.tags ?? []);
   const [ingredients, setIngredients] = useState<string[]>(product.ingredients ?? []);
+  const [calories, setCalories] = useState(product.calories != null ? String(product.calories) : "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(product.image_url ?? "");
   const [showEn, setShowEn] = useState(!!(product.name_en || product.description_en));
@@ -72,6 +73,7 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
       image_url,
       tags,
       ingredients,
+      calories: calories ? parseInt(calories) : null,
     };
 
     const { data, error: err } = await supabase
@@ -123,6 +125,16 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
               )}
             </select>
           </div>
+
+          {/* Kalori */}
+          <input
+            type="number"
+            placeholder="Kalori (kcal) — isteğe bağlı"
+            value={calories}
+            onChange={(e) => setCalories(e.target.value)}
+            min={0}
+            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+          />
 
           {/* Etiketler */}
           <div className="space-y-1.5">

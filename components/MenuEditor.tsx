@@ -73,6 +73,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [descriptionEn, setDescriptionEn] = useState("");
   const [productTags, setProductTags] = useState<string[]>([]);
   const [productIngredients, setProductIngredients] = useState<string[]>([]);
+  const [calories, setCalories] = useState("");
   const [showProductEn, setShowProductEn] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -239,7 +240,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
 
     const { data, error: err } = await supabase
       .from("products")
-      .insert({ cafe_id: cafe.id, name: name.trim(), name_en: nameEn.trim(), price: parsedPrice, category: cat, description: description.trim(), description_en: descriptionEn.trim(), image_url, position, tags: productTags, ingredients: productIngredients })
+      .insert({ cafe_id: cafe.id, name: name.trim(), name_en: nameEn.trim(), price: parsedPrice, category: cat, description: description.trim(), description_en: descriptionEn.trim(), image_url, position, tags: productTags, ingredients: productIngredients, calories: calories ? parseInt(calories) : null })
       .select().single();
 
     if (err) { setError("Ürün eklenemedi. Lütfen tekrar deneyin."); }
@@ -249,7 +250,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       const newCats = buildCategoryOrder(cafe.category_order ?? [], newProducts);
       setCategories(newCats);
       setName(""); setNameEn(""); setPrice(""); setCategory("");
-      setDescription(""); setDescriptionEn("");
+      setDescription(""); setDescriptionEn(""); setCalories("");
       setProductTags([]); setProductIngredients([]);
       clearImage(); setError("");
     }
@@ -585,6 +586,18 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
               <option value="">{categories.length === 0 ? "Önce kategori ekle" : "Kategori seç"}</option>
               {categories.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
+          </div>
+
+          {/* Kalori */}
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              placeholder="Kalori (kcal) — isteğe bağlı"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+              min={0}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+            />
           </div>
 
           {/* Etiketler */}

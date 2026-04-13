@@ -19,6 +19,7 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
+  calories?: number | null;
 }
 
 interface Props {
@@ -168,10 +169,15 @@ export default function MenuProductList({
             </div>
           )}
         </div>
-        <div className="flex flex-col items-end gap-1.5 shrink-0 ml-2">
+        <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
           <span className="font-semibold" style={{ color: primaryColor }}>
             {Number(product.price).toFixed(2)} ₺
           </span>
+          {product.calories && (
+            <span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+              {product.calories} kcal
+            </span>
+          )}
         </div>
       </div>
     );
@@ -260,6 +266,11 @@ export default function MenuProductList({
             <p className="font-bold text-sm" style={{ color: primaryColor }}>
               {Number(product.price).toFixed(2)} ₺
             </p>
+            {product.calories && (
+              <span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+                {product.calories} kcal
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
+  calories?: number | null;
 }
 
 interface Props {
@@ -98,9 +99,16 @@ export default function ProductDetailModal({ product, primaryColor, isEn, onClos
                 </span>
               )}
             </div>
-            <span className="text-2xl font-bold shrink-0" style={{ color: primaryColor }}>
-              {Number(product.price).toFixed(2)} ₺
-            </span>
+            <div className="flex flex-col items-end shrink-0 gap-1">
+              <span className="text-2xl font-bold" style={{ color: primaryColor }}>
+                {Number(product.price).toFixed(2)} ₺
+              </span>
+              {product.calories && (
+                <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                  {product.calories} kcal
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Taglar */}
