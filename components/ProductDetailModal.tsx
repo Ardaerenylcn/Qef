@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { X, Box, UtensilsCrossed } from "lucide-react";
+import { X, UtensilsCrossed } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import OpenmojiIcon from "./OpenmojiIcon";
 
@@ -17,7 +17,6 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
-  model_url?: string | null;
 }
 
 interface Props {
@@ -25,10 +24,9 @@ interface Props {
   primaryColor: string;
   isEn: boolean;
   onClose: () => void;
-  onOpenAR: () => void;
 }
 
-export default function ProductDetailModal({ product, primaryColor, isEn, onClose, onOpenAR }: Props) {
+export default function ProductDetailModal({ product, primaryColor, isEn, onClose }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -152,17 +150,6 @@ export default function ProductDetailModal({ product, primaryColor, isEn, onClos
             </div>
           )}
 
-          {/* AR butonu */}
-          {product.model_url && (
-            <button
-              onClick={onOpenAR}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm border-2 transition-colors"
-              style={{ borderColor: primaryColor, color: primaryColor, backgroundColor: `${primaryColor}10` }}
-            >
-              <Box className="w-4 h-4" />
-              {isEn ? "View in AR" : "AR ile Görüntüle"}
-            </button>
-          )}
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Search, UtensilsCrossed, Box } from "lucide-react";
+import { Search, UtensilsCrossed } from "lucide-react";
 import { PRODUCT_TAGS, PRODUCT_INGREDIENTS } from "@/types/menu";
 import OpenmojiIcon from "./OpenmojiIcon";
 import ProductDetailModal from "./ProductDetailModal";
@@ -19,7 +19,6 @@ interface Product {
   tags: string[] | null;
   ingredients: string[] | null;
   in_stock: boolean | null;
-  model_url?: string | null;
 }
 
 interface Props {
@@ -42,12 +41,6 @@ export default function MenuProductList({
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  function openAR(product: Product) {
-    const name = encodeURIComponent(isEn && product.name_en ? product.name_en : product.name);
-    const url = `/ar-viewer.html?src=${encodeURIComponent(product.model_url!)}&name=${name}&color=${encodeURIComponent(primaryColor)}`;
-    window.open(url, "_blank");
-  }
 
   useEffect(() => {
     setMounted(true);
@@ -179,16 +172,6 @@ export default function MenuProductList({
           <span className="font-semibold" style={{ color: primaryColor }}>
             {Number(product.price).toFixed(2)} ₺
           </span>
-          {product.model_url && (
-            <button
-              onClick={(e) => { e.stopPropagation(); openAR(product); }}
-              className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
-              style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
-            >
-              <Box className="w-3 h-3" />
-              AR
-            </button>
-          )}
         </div>
       </div>
     );
@@ -277,16 +260,6 @@ export default function MenuProductList({
             <p className="font-bold text-sm" style={{ color: primaryColor }}>
               {Number(product.price).toFixed(2)} ₺
             </p>
-            {product.model_url && (
-              <button
-                onClick={() => openAR(product)}
-                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full border transition-colors"
-                style={{ borderColor: `${primaryColor}40`, color: primaryColor, backgroundColor: `${primaryColor}10` }}
-              >
-                <Box className="w-3 h-3" />
-                AR
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -311,7 +284,6 @@ export default function MenuProductList({
           primaryColor={primaryColor}
           isEn={isEn}
           onClose={() => setSelectedProduct(null)}
-          onOpenAR={() => { openAR(selectedProduct); setSelectedProduct(null); }}
         />
       )}
       {/* Arama */}

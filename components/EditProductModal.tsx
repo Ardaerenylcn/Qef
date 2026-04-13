@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { X, Save, Loader2, ImagePlus, ChevronDown, Box, Sparkles } from "lucide-react";
+import { X, Save, Loader2, ImagePlus, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/types/menu";
 import TagSelector from "./TagSelector";
@@ -29,8 +29,6 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
   const [ingredients, setIngredients] = useState<string[]>(product.ingredients ?? []);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(product.image_url ?? "");
-  const [modelFile, setModelFile] = useState<File | null>(null);
-  const [modelUrl, setModelUrl] = useState(product.model_url ?? "");
   const [showEn, setShowEn] = useState(!!(product.name_en || product.description_en));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -64,14 +62,6 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
       image_url = `${urlData.publicUrl}?t=${Date.now()}`;
     }
 
-    let finalModelUrl = modelUrl;
-    if (modelFile) {
-      const path = `${cafeId}/${product.id}.glb`;
-      await supabase.storage.from("models").upload(path, modelFile, { upsert: true });
-      const { data: urlData } = supabase.storage.from("models").getPublicUrl(path);
-      finalModelUrl = urlData.publicUrl;
-    }
-
     const updates = {
       name: name.trim(),
       name_en: nameEn.trim(),
@@ -82,7 +72,6 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
       image_url,
       tags,
       ingredients,
-      model_url: finalModelUrl || null,
     };
 
     const { data, error: err } = await supabase
@@ -163,44 +152,6 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
             </div>
           )}
-
-          {/* AR Model */}
-          <div className="space-y-1.5">
-            <p className="text-xs text-gray-400 font-medium">AR Modeli</p>
-            <div className="border border-dashed border-gray-200 rounded-xl p-3 space-y-2">
-              {modelUrl ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-                    <Box className="w-4 h-4 text-orange-500" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-gray-700">AR modeli mevcut ✓</p>
-                    <label className="text-[10px] text-orange-400 hover:underline cursor-pointer">
-                      Modeli değiştir (.glb)
-                      <input type="file" accept=".glb" className="hidden"
-                        onChange={(e) => { const f = e.target.files?.[0]; if (f) setModelFile(f); }} />
-                    </label>
-                  </div>
-                  <button onClick={() => { setModelUrl(""); setModelFile(null); }}
-                    className="text-gray-300 hover:text-red-400 transition-colors">
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-400 hover:text-orange-400 transition-colors">
-                  <Box className="w-4 h-4" />
-                  {modelFile ? modelFile.name : "3D model yükle (.glb)"}
-                  <input type="file" accept=".glb" className="hidden"
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) setModelFile(f); }} />
-                </label>
-              )}
-              <button disabled
-                className="w-full flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg bg-gray-50 text-gray-300 cursor-not-allowed">
-                <Sparkles className="w-3.5 h-3.5" />
-                AI ile Otomatik Oluştur — Yakında
-              </button>
-            </div>
-          </div>
 
           {/* Görsel */}
           <div>

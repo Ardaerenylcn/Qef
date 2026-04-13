@@ -75,7 +75,6 @@ export default function UpgradePage() {
                 "QR kod oluşturma ve indirme",
                 "Duyuru banner sistemi",
                 "Ziyaret istatistikleri",
-                "AR görselleştirme (yakında)",
               ].map((f) => (
                 <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
