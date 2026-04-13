@@ -15,6 +15,7 @@ import AdUnit from "@/components/AdUnit";
 import BannerModal from "@/components/BannerModal";
 import MenuChatbot from "@/components/MenuChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
+import SpecialDayEffects from "@/components/SpecialDayEffects";
 import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
@@ -264,6 +265,11 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
           className="overflow-hidden rounded-xl"
         />
       </div>
+
+      {/* Özel gün parçacık efektleri */}
+      {activeSpecialDay && (
+        <SpecialDayEffects effectType={activeSpecialDay.banner.effectType} />
+      )}
 
       {/* AI Chatbot */}
       {cafe.chatbot_enabled !== false && (
