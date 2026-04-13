@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { DEFAULT_THEME, FONTS, getBgTextureStyle, type CafeTheme } from "@/types/theme";
+import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
 import CategoryTabs from "@/components/CategoryTabs";
 import MenuProductList from "@/components/MenuProductList";
@@ -137,15 +137,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   };
 
   return (
-    <main
-      style={{
-        backgroundColor: theme.bgColor,
-        fontFamily: fontCss,
-        color: theme.textColor,
-        ...(theme.bgTexture && theme.bgTexture !== "none"
-          ? getBgTextureStyle(theme.bgTexture, theme.textColor)
-          : {}),
-      }}
+    <main style={{ backgroundColor: theme.bgColor, fontFamily: fontCss, color: theme.textColor }}
       className="min-h-screen">
       <script
         type="application/ld+json"
