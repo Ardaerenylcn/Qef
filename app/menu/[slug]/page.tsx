@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
@@ -23,6 +23,17 @@ import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
+// Aynı request içinde generateMetadata + page arasında sorguyu tekilleştir
+const getCafe = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("cafes")
+    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
+    .eq("slug", slug)
+    .single();
+  return data;
+});
+
 interface Props {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ lang?: string; day?: string }>;
@@ -30,13 +41,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: cafe } = await supabase
-    .from("cafes")
-    .select("name, description, theme, address")
-    .eq("slug", slug)
-    .single();
+  const cafe = await getCafe(slug);
 
   if (!cafe) return { title: "Menü Bulunamadı" };
 
@@ -75,23 +80,19 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const { lang = "tr", day: testDay } = await searchParams;
   const isEn = lang === "en";
   const supabase = await createClient();
-
-  const { data: cafe } = await supabase
-    .from("cafes")
-    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
-    .eq("slug", slug)
-    .single();
+  const cafe = await getCafe(slug);
 
   if (!cafe) notFound();
 
-  // Ziyareti kaydet (non-blocking)
-  supabase.from("menu_views").insert({ cafe_id: cafe.id }).then(() => {});
-
-  const { data: products } = await supabase
-    .from("products")
-    .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
-    .eq("cafe_id", cafe.id)
-    .order("position", { ascending: true });
+  // Ziyareti kaydet ve ürünleri paralel çek
+  const [{ data: products }] = await Promise.all([
+    supabase
+      .from("products")
+      .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
+      .eq("cafe_id", cafe.id)
+      .order("position", { ascending: true }),
+    supabase.from("menu_views").insert({ cafe_id: cafe.id }),
+  ]);
 
   const baseTheme: CafeTheme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
   const seasonalEnabled = cafe.seasonal_themes_enabled !== false;
