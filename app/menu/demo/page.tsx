@@ -1,7 +1,7 @@
 import Image from "next/image";
 import CategoryTabs from "@/components/CategoryTabs";
-import MenuProductList from "@/components/MenuProductList";
 import DemoScrollFix from "@/components/DemoScrollFix";
+import DemoLayoutToggle from "@/components/DemoLayoutToggle";
 
 const PRIMARY = "#f97316";
 const LOGO  = "/demo/logo.png";
@@ -114,14 +114,11 @@ export default function DemoMenuPage() {
       {/* Tabs */}
       <CategoryTabs categories={CATS} primaryColor={PRIMARY} bgColor="#fffbf7" />
 
-      <div className="max-w-md mx-auto px-4 py-6">
-        <MenuProductList
+      <div className="max-w-md mx-auto px-4 pb-6">
+        <DemoLayoutToggle
           products={PRODUCTS}
           orderedCats={CATS}
           primaryColor={PRIMARY}
-          isEn={false}
-          productLayout="list"
-          imageRatio="square"
         />
       </div>
 
