@@ -1,5 +1,5 @@
 import { streamText, convertToModelMessages } from "ai";
-import { azure } from "@ai-sdk/azure";
+import { google } from "@ai-sdk/google";
 import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30;
@@ -52,7 +52,7 @@ Menü:
 ${JSON.stringify(productList, null, 2)}`;
 
   const result = streamText({
-    model: azure("gpt-4o-mini"),
+    model: google("gemini-2.0-flash"),
     system: systemPrompt,
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 500,
