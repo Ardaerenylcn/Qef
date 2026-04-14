@@ -13,7 +13,6 @@ import MenuProductList from "@/components/MenuProductList";
 import StickyMenuHeader from "@/components/StickyMenuHeader";
 import ParallaxCover from "@/components/ParallaxCover";
 import OpenStatusBadge from "@/components/OpenStatusBadge";
-import AdUnit from "@/components/AdUnit";
 import BannerModal from "@/components/BannerModal";
 import MenuChatbot from "@/components/MenuChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
@@ -236,13 +235,6 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
           />
         )}
 
-        {/* Reklam — menü listesinin altında */}
-        <AdUnit
-          slot="1760366540"
-          format="auto"
-          className="overflow-hidden rounded-xl"
-        />
-
         {/* WiFi + Instagram + Adres + Maps */}
         {(theme.wifi || theme.instagram || address || mapsUrl) && (
           <div className="border-t pt-6 space-y-3" style={{ borderColor: `${theme.primaryColor}22` }}>
@@ -275,12 +267,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
           </div>
         )}
 
-        {/* Reklam — footer üstünde */}
-        <AdUnit
-          slot="3917291443"
-          format="auto"
-          className="overflow-hidden rounded-xl"
-        />
+
       </div>
 
       {/* Özel gün parçacık efektleri */}

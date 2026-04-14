@@ -51,12 +51,6 @@ export default function RootLayout({
       <body className="bg-gray-50 text-gray-900 antialiased">
         <NavigationProgress />
         {children}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9433411352609938"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         <GoogleAnalytics gaId="G-4X7CYB398D" />
       </body>
     </html>
