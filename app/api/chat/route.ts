@@ -58,7 +58,12 @@ ${JSON.stringify(productList, null, 2)}`;
       messages: await convertToModelMessages(messages),
     });
 
-    return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse({
+      getErrorMessage: (err) => {
+        console.error("[chat/stream] hata:", err);
+        return err instanceof Error ? err.message : "Bir hata oluştu";
+      },
+    });
   } catch (err) {
     console.error("[chat/route] hata:", err);
     return new Response(

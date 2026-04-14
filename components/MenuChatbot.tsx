@@ -17,7 +17,7 @@ export default function MenuChatbot({ cafeId, primaryColor }: Props) {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
       body: { cafeId },
@@ -120,6 +120,14 @@ export default function MenuChatbot({ cafeId, primaryColor }: Props) {
               <div className="flex justify-start">
                 <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-3 py-2">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="flex justify-start">
+                <div className="bg-red-50 text-red-500 rounded-2xl rounded-bl-sm px-3 py-2 text-xs">
+                  {error.message || "Bir hata oluştu, tekrar deneyin."}
                 </div>
               </div>
             )}
