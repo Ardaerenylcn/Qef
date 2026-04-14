@@ -1,7 +1,9 @@
+export const revalidate = 30; // 30 saniye ISR cache
+
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Suspense, cache } from "react";
+import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
@@ -23,17 +25,6 @@ import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
-// Aynı request içinde generateMetadata + page arasında sorguyu tekilleştir
-const getCafe = cache(async (slug: string) => {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("cafes")
-    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
-    .eq("slug", slug)
-    .single();
-  return data;
-});
-
 interface Props {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ lang?: string; day?: string }>;
@@ -41,7 +32,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const cafe = await getCafe(slug);
+  const supabase = await createClient();
+
+  const { data: cafe } = await supabase
+    .from("cafes")
+    .select("name, description, theme, address")
+    .eq("slug", slug)
+    .single();
 
   if (!cafe) return { title: "Menü Bulunamadı" };
 
@@ -80,7 +77,12 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const { lang = "tr", day: testDay } = await searchParams;
   const isEn = lang === "en";
   const supabase = await createClient();
-  const cafe = await getCafe(slug);
+
+  const { data: cafe } = await supabase
+    .from("cafes")
+    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
+    .eq("slug", slug)
+    .single();
 
   if (!cafe) notFound();
 
