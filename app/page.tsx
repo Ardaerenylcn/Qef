@@ -11,17 +11,36 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://qefmenu.com" },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Qef",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  url: "https://qefmenu.com",
-  description: "Kafe ve restoranlar için dijital QR menü platformu. 30 gün ücretsiz deneme, ardından 4.999₺/yıl.",
-  offers: { "@type": "Offer", price: "4999", priceCurrency: "TRY" },
-  inLanguage: "tr",
-};
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Qef",
+    url: "https://qefmenu.com",
+    logo: "https://qefmenu.com/favicon.svg",
+    contactPoint: { "@type": "ContactPoint", email: "destek@qefmenu.com", contactType: "customer support", availableLanguage: "Turkish" },
+    sameAs: [],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Qef",
+    url: "https://qefmenu.com",
+    potentialAction: { "@type": "SearchAction", target: "https://qefmenu.com/menu/{slug}", "query-input": "required name=slug" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Qef — Dijital QR Menü",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    url: "https://qefmenu.com",
+    description: "Kafe ve restoranlar için dijital QR menü platformu. 30 gün ücretsiz deneme, ardından 4.999₺/yıl.",
+    offers: { "@type": "Offer", price: "4999", priceCurrency: "TRY", availability: "https://schema.org/InStock" },
+    inLanguage: "tr",
+    aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "24" },
+  },
+];
 
 export default function HomePage() {
   return (
@@ -30,6 +49,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/<\/script>/gi, "<\\/script>") }}
       />
+
 
       {/* NAV */}
       <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">

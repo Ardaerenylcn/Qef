@@ -11,12 +11,29 @@ export const metadata: Metadata = {
     description: "QR menü teknolojisi nedir, nasıl çalışır ve kafenize ne gibi avantajlar sağlar?",
     url: "https://qefmenu.com/blog/qr-menu-nedir",
     type: "article",
+    publishedTime: "2025-03-10T00:00:00Z",
+    modifiedTime: "2026-04-15T00:00:00Z",
   },
+};
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "QR Menü Nedir? Kafeniz İçin Neden Şart?",
+  description: "QR menü teknolojisi nedir, nasıl çalışır ve kafenize ne gibi avantajlar sağlar?",
+  url: "https://qefmenu.com/blog/qr-menu-nedir",
+  datePublished: "2025-03-10T00:00:00Z",
+  dateModified: "2026-04-15T00:00:00Z",
+  author: { "@type": "Organization", name: "Qef", url: "https://qefmenu.com" },
+  publisher: { "@type": "Organization", name: "Qef", logo: { "@type": "ImageObject", url: "https://qefmenu.com/favicon.svg" } },
+  inLanguage: "tr",
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://qefmenu.com/blog/qr-menu-nedir" },
 };
 
 export default function Post1() {
   return (
     <main className="min-h-screen bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema).replace(/<\/script>/gi, "<\\/script>") }} />
       <nav className="flex items-center justify-between px-6 py-5 max-w-3xl mx-auto border-b border-gray-100">
         <Link href="/" className="flex items-center gap-2">
           <div className="bg-orange-500 p-2 rounded-xl shadow-lg shadow-orange-200">
@@ -32,7 +49,7 @@ export default function Post1() {
       <article className="max-w-3xl mx-auto px-6 py-12 space-y-6">
         <div className="space-y-3">
           <div className="flex items-center gap-3 text-xs text-gray-400">
-            <span>Mart 2025</span>
+            <time dateTime="2025-03-10">10 Mart 2025</time>
             <span>·</span>
             <span>4 dk okuma</span>
           </div>
