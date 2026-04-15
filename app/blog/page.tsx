@@ -10,24 +10,31 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: "qr-menu-fiyatlari-2026",
+    title: "QR Menü Fiyatları 2026: Ücretli mi, Ücretsiz mi?",
+    description: "Türkiye'deki QR menü platformlarının 2026 fiyatlarını karşılaştırın. Ücretsiz ve ücretli seçenekler arasındaki farkları öğrenin.",
+    date: "16 Nisan 2026",
+    readTime: "5 dk",
+  },
+  {
     slug: "qr-menu-nedir",
     title: "QR Menü Nedir? Kafeniz İçin Neden Şart?",
     description: "QR menü teknolojisi nedir, nasıl çalışır ve kafenize ne gibi avantajlar sağlar? Tüm sorularınızın yanıtı bu yazıda.",
-    date: "Mart 2025",
+    date: "10 Mart 2025",
     readTime: "4 dk",
   },
   {
     slug: "ucretsiz-dijital-menu-nasil-olusturulur",
     title: "Ücretsiz Dijital Menü Nasıl Oluşturulur?",
     description: "Hiç teknik bilgi gerektirmeden 5 dakikada ücretsiz dijital QR menü oluşturmanın adım adım rehberi.",
-    date: "Mart 2025",
+    date: "15 Mart 2025",
     readTime: "5 dk",
   },
   {
     slug: "kagit-menuden-dijital-menuye-gecmenin-5-faydasi",
     title: "Kağıt Menüden Dijital Menüye Geçmenin 5 Faydası",
     description: "Kağıt menüler neden modası geçiyor? Dijital QR menüye geçen kafeler ne kazanıyor? İşte 5 somut fayda.",
-    date: "Mart 2025",
+    date: "20 Mart 2025",
     readTime: "3 dk",
   },
 ];
