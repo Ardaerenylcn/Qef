@@ -26,6 +26,7 @@ import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 import OpeningHoursEditor from "./OpeningHoursEditor";
 import OnboardingChecklist from "./OnboardingChecklist";
+import { revalidateMenu } from "@/lib/revalidateMenu";
 
 interface Cafe {
   id: string;
@@ -199,7 +200,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
         maps_url: mapsUrl.trim(),
       })
       .eq("id", cafe.id).select().single();
-    if (data) { setCafe(data); setCafeSlug(data.slug); setSlugConfirmed(false); router.refresh(); }
+    if (data) { setCafe(data); setCafeSlug(data.slug); setSlugConfirmed(false); revalidateMenu(data.slug); router.refresh(); }
     setSavingCafe(false);
   }
 
@@ -707,6 +708,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       <EditProductModal
         product={editingProduct}
         cafeId={cafe.id}
+        cafeSlug={cafe.slug}
         categories={categories}
         onClose={() => setEditingProduct(null)}
         onSave={handleProductSaved}

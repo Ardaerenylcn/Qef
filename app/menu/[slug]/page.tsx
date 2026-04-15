@@ -1,4 +1,4 @@
-export const revalidate = 30; // 30 saniye ISR cache
+export const revalidate = 3600; // 1 saatlik ISR cache — admin kaydettiğinde on-demand revalidate ile güncellenir
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -85,15 +85,14 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
   if (!cafe) notFound();
 
-  // Ziyareti kaydet ve ürünleri paralel çek
-  const [{ data: products }] = await Promise.all([
-    supabase
-      .from("products")
-      .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
-      .eq("cafe_id", cafe.id)
-      .order("position", { ascending: true }),
-    supabase.from("menu_views").insert({ cafe_id: cafe.id }),
-  ]);
+  // Ziyareti kaydet (fire-and-forget — sayfayı bekletme)
+  supabase.from("menu_views").insert({ cafe_id: cafe.id });
+
+  const { data: products } = await supabase
+    .from("products")
+    .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
+    .eq("cafe_id", cafe.id)
+    .order("position", { ascending: true });
 
   const baseTheme: CafeTheme = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
   const seasonalEnabled = cafe.seasonal_themes_enabled !== false;

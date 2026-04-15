@@ -8,9 +8,11 @@ import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 import CollapsibleSection from "./CollapsibleSection";
+import { revalidateMenu } from "@/lib/revalidateMenu";
 
 export default function ThemeEditor() {
   const [cafeId, setCafeId] = useState<string | null>(null);
+  const [cafeSlugForRevalidate, setCafeSlugForRevalidate] = useState<string | null>(null);
   const [theme, setTheme] = useState<CafeTheme>(DEFAULT_THEME);
   const [savedTheme, setSavedTheme] = useState<CafeTheme>(DEFAULT_THEME);
   const [loading, setLoading] = useState(true);
@@ -34,12 +36,13 @@ export default function ThemeEditor() {
 
       const { data: cafe } = await supabase
         .from("cafes")
-        .select("id, theme")
+        .select("id, theme, slug")
         .eq("user_id", user.id)
         .single();
 
       if (cafe) {
         setCafeId(cafe.id);
+        setCafeSlugForRevalidate(cafe.slug);
         const loaded = { ...DEFAULT_THEME, ...(cafe.theme ?? {}) };
         setTheme(loaded);
         setSavedTheme(loaded);
@@ -85,6 +88,7 @@ export default function ThemeEditor() {
       const { error: dbErr } = await supabase.from("cafes").update({ theme: newTheme }).eq("id", cafeId);
       if (dbErr) throw dbErr;
 
+      if (cafeSlugForRevalidate) revalidateMenu(cafeSlugForRevalidate);
       setTheme(newTheme);
       setSavedTheme(newTheme);
       setSaved(true);

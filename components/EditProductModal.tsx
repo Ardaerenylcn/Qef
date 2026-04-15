@@ -9,16 +9,18 @@ import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
+import { revalidateMenu } from "@/lib/revalidateMenu";
 
 interface Props {
   product: Product;
   cafeId: string;
+  cafeSlug: string;
   categories: string[];
   onClose: () => void;
   onSave: (updated: Product) => void;
 }
 
-export default function EditProductModal({ product, cafeId, categories, onClose, onSave }: Props) {
+export default function EditProductModal({ product, cafeId, cafeSlug, categories, onClose, onSave }: Props) {
   const [name, setName] = useState(product.name);
   const [nameEn, setNameEn] = useState(product.name_en ?? "");
   const [price, setPrice] = useState(String(product.price));
@@ -84,7 +86,7 @@ export default function EditProductModal({ product, cafeId, categories, onClose,
       .single();
 
     if (err) { setError("Ürün güncellenemedi. Lütfen tekrar deneyin."); setSaving(false); return; }
-    if (data) onSave(data);
+    if (data) { revalidateMenu(cafeSlug); onSave(data); }
     onClose();
   }
 
