@@ -42,6 +42,11 @@ body {
   50% { transform: translateY(-7px); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
 @keyframes mascot-wave {
   0%   { transform: translateY(0px) rotate(0deg); }
   15%  { transform: translateY(-4px) rotate(-6deg); }

@@ -101,20 +101,104 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Sağ: maskot */}
+        {/* Sağ: telefon mockup */}
         <div className="flex-shrink-0 flex justify-center relative z-10">
+          {/* Arka ışık */}
+          <div className="absolute w-80 h-80 bg-orange-300 rounded-full blur-[80px] opacity-30 pointer-events-none" />
+
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-200 to-yellow-100 rounded-full scale-[0.85] blur-3xl opacity-80" />
-            <div className="absolute inset-0 bg-orange-50 rounded-full scale-75" />
-            <Image
-              src="/mascot.webp"
-              alt="Qef Maskotu"
-              width={380}
-              height={380}
-              className="relative hover:scale-105 transition-transform duration-500"
-              priority
-              style={{ width: 380, height: 380, mixBlendMode: "multiply" }}
-            />
+            {/* Yüzen rozet — QR */}
+            <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-xl shadow-gray-200 px-3 py-2.5 flex items-center gap-2.5 z-20 animate-[float_3s_ease-in-out_infinite]">
+              <div className="grid grid-cols-3 gap-[2px] w-7 h-7">
+                {[1,1,1, 1,0,1, 1,1,1].map((v,i)=>(
+                  <div key={i} className={`rounded-[2px] ${v ? "bg-gray-900" : "bg-white"}`} />
+                ))}
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-800 leading-none">QR Hazır</p>
+                <p className="text-[9px] text-gray-400 mt-0.5">Masaya koy, tara</p>
+              </div>
+            </div>
+
+            {/* Yüzen rozet — ziyaretçi */}
+            <div className="absolute -bottom-2 -right-10 bg-white rounded-2xl shadow-xl shadow-gray-200 px-3 py-2.5 flex items-center gap-2 z-20 animate-[float_3s_ease-in-out_infinite_1.5s]">
+              <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-sm">👁</div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-800 leading-none">248 ziyaret</p>
+                <p className="text-[9px] text-gray-400 mt-0.5">Bu hafta</p>
+              </div>
+            </div>
+
+            {/* Telefon çerçevesi */}
+            <div className="w-[220px] bg-gray-900 rounded-[36px] p-[10px] shadow-2xl shadow-gray-400/40 ring-1 ring-white/10">
+              {/* Ekran */}
+              <div className="bg-[#fafaf8] rounded-[28px] overflow-hidden" style={{ height: 400 }}>
+                {/* Durum çubuğu */}
+                <div className="flex justify-between items-center px-5 pt-3 pb-1">
+                  <span className="text-[9px] text-gray-400 font-semibold">9:41</span>
+                  <div className="w-16 h-4 bg-gray-900 rounded-full" />
+                  <div className="flex gap-1 items-center">
+                    <div className="w-3 h-2 border border-gray-400 rounded-[2px]">
+                      <div className="w-2 h-1 bg-gray-400 rounded-[1px] m-px" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Kapak + logo alanı */}
+                <div className="mx-3 mt-1 rounded-2xl overflow-hidden relative" style={{ height: 80 }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-500" />
+                  <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)",
+                    backgroundSize: "20px 20px"
+                  }} />
+                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                    <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-xs font-black text-orange-500">Q</span>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-white leading-none">Kafe Demo</p>
+                      <p className="text-[8px] text-orange-100 mt-0.5">Lezzet & Keyif</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Arama çubuğu */}
+                <div className="mx-3 mt-2.5 bg-gray-100 rounded-xl px-3 py-2 flex items-center gap-2">
+                  <svg className="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 111 11a6 6 0 0116 0z" />
+                  </svg>
+                  <span className="text-[10px] text-gray-400">Menüde ara…</span>
+                </div>
+
+                {/* Kategori chips */}
+                <div className="flex gap-1.5 px-3 mt-2.5 overflow-hidden">
+                  {[["☕","Kahveler",true],["🥐","Atıştırmalık",false],["🍰","Tatlılar",false]].map(([em,label,active])=>(
+                    <div key={String(label)} className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-semibold whitespace-nowrap ${active ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500"}`}>
+                      <span>{em}</span>{label}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Ürün kartları */}
+                <div className="px-3 mt-2.5 space-y-2">
+                  {[
+                    { name: "Latte", price: "75₺", kcal: "190 kcal", color: "bg-amber-100" },
+                    { name: "Cheesecake", price: "120₺", kcal: "420 kcal", color: "bg-rose-100" },
+                  ].map(({ name, price, kcal, color }) => (
+                    <div key={name} className="flex items-center gap-2.5 bg-white rounded-2xl px-2.5 py-2 shadow-sm border border-gray-100">
+                      <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center text-lg flex-shrink-0`}>
+                        {name === "Latte" ? "☕" : "🍰"}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-gray-800 leading-none">{name}</p>
+                        <p className="text-[9px] text-gray-400 mt-0.5">{kcal}</p>
+                      </div>
+                      <span className="text-[11px] font-extrabold text-orange-500">{price}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
