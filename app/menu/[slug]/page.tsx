@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink, QrCode } from "lucide-react";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
@@ -24,6 +25,17 @@ import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
+// Aynı istek içinde generateMetadata ve sayfa aynı sorguyu paylaşır — 2 DB round-trip → 1
+const getCafe = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("cafes")
+    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
+    .eq("slug", slug)
+    .single();
+  return data;
+});
+
 interface Props {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ lang?: string; day?: string }>;
@@ -31,13 +43,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: cafe } = await supabase
-    .from("cafes")
-    .select("name, description, theme, address")
-    .eq("slug", slug)
-    .single();
+  const cafe = await getCafe(slug);
 
   if (!cafe) return { title: "Menü Bulunamadı" };
 
@@ -77,12 +83,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const isEn = lang === "en";
   const supabase = await createClient();
 
-  const { data: cafe } = await supabase
-    .from("cafes")
-    .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, chatbot_enabled, seasonal_themes_enabled")
-    .eq("slug", slug)
-    .single();
-
+  const cafe = await getCafe(slug);
   if (!cafe) notFound();
 
   // Ziyareti kaydet (fire-and-forget — sayfayı bekletme)
