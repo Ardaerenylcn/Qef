@@ -397,8 +397,7 @@ export default function HomePage() {
                 {/* Popup kart */}
                 <div className="absolute inset-0 flex items-center justify-center px-4">
                   <div className="relative w-[90px] rounded-xl overflow-hidden shadow-2xl">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/banner.png" alt="Duyuru örnek" className="w-full object-cover" />
+                    <Image src="/banner.png" alt="Duyuru örnek" width={90} height={120} className="w-full object-cover" />
                     <div className="absolute top-1.5 right-1.5 bg-black/50 rounded-full p-0.5">
                       <XIcon className="w-2.5 h-2.5 text-white" />
                     </div>
@@ -524,6 +523,7 @@ export default function HomePage() {
                 alt="Qef AI Menü Asistanı"
                 width={800}
                 height={600}
+                sizes="(max-width: 768px) 100vw, 52vw"
                 className="relative w-full rounded-3xl object-cover shadow-2xl shadow-orange-900/30"
               />
             </div>
