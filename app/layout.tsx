@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     siteName: "Qef",
     title: "Qef — Kafen için ücretsiz dijital menü",
     description: "Saniyeler içinde kafen için dijital QR menü oluştur. QR kodu tarat, menünü gör.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Qef - Dijital QR Menü" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Qef - Dijital QR Menü" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Qef — Kafen için ücretsiz dijital menü",
     description: "Saniyeler içinde kafen için dijital QR menü oluştur.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
   icons: {
     icon: "/favicon.svg",

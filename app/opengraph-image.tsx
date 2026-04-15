@@ -119,7 +119,7 @@ export default function OgImage() {
             display: "flex",
           }}
         >
-          qef-sepia.vercel.app
+          qefmenu.com
         </div>
       </div>
     ),
