@@ -1,4 +1,4 @@
-import { google } from "@ai-sdk/google";
+import { createVertex } from "@ai-sdk/google-vertex";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
@@ -28,8 +28,15 @@ export async function POST(req: Request) {
     return new Response("1–15 arası görsel gerekli", { status: 400 });
   }
 
+  const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON!);
+  const vertex = createVertex({
+    project: credentials.project_id,
+    location: "us-central1",
+    googleAuthOptions: { credentials },
+  });
+
   const { object } = await generateObject({
-    model: google("gemini-2.5-flash"),
+    model: vertex("gemini-2.0-flash"),
     schema: ResultSchema,
     messages: [
       {
