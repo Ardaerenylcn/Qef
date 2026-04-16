@@ -28,7 +28,7 @@ export function SortableProductCard({
         transition,
         opacity: isDragging ? 0.4 : 1,
       }}
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 min-w-0"
     >
       <button
         {...attributes}
@@ -37,7 +37,7 @@ export function SortableProductCard({
       >
         <GripVertical className="w-4 h-4" />
       </button>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <ProductCard product={product} onDelete={onDelete} onEdit={onEdit} onToggleStock={onToggleStock} />
       </div>
     </div>
