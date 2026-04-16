@@ -307,8 +307,8 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
           </p>
 
           {products.map((p, i) => (
-            <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-              <div className="flex gap-4 p-4">
+            <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-hidden">
+              <div className="flex gap-4 p-4 min-w-0">
                 {/* Görsel */}
                 <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -330,8 +330,8 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
                     value={p.description}
                     onChange={(e) => updateProduct(i, "description", e.target.value)}
                     placeholder="Açıklama"
-                    rows={2}
-                    className="w-full text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-orange-400 resize-none"
+                    rows={3}
+                    className="w-full text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-orange-400 resize-none break-words"
                   />
 
                   <div className="flex gap-2">
