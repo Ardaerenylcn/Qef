@@ -1,18 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { UtensilsCrossed, Palette, QrCode, BarChart2, Settings } from "lucide-react";
+import { UtensilsCrossed, Palette, QrCode, BarChart2, Settings, Sparkles } from "lucide-react";
 import MenuEditor from "./MenuEditor";
 import ThemeEditor from "./ThemeEditor";
 import QRPrint from "./QRPrint";
 import AdminStats from "./AdminStats";
 import AccountSettings from "./AccountSettings";
+import BulkAIScan from "./BulkAIScan";
 
-type Tab = "menu" | "theme" | "qr" | "stats" | "settings";
+type Tab = "menu" | "theme" | "qr" | "stats" | "settings" | "ai";
 
 interface Props {
   email: string;
   cafeId: string;
+  cafeSlug: string;
+  existingCategories: string[];
   chatbotEnabled: boolean;
   seasonalThemesEnabled: boolean;
   stats: {
@@ -25,11 +28,12 @@ interface Props {
   };
 }
 
-export default function AdminTabs({ email, cafeId, chatbotEnabled, seasonalThemesEnabled, stats }: Props) {
+export default function AdminTabs({ email, cafeId, cafeSlug, existingCategories, chatbotEnabled, seasonalThemesEnabled, stats }: Props) {
   const [tab, setTab] = useState<Tab>("menu");
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
     { key: "menu",     label: "Menü",        icon: <UtensilsCrossed className="w-4 h-4" /> },
+    { key: "ai",       label: "AI Kayıt",    icon: <Sparkles className="w-4 h-4" /> },
     { key: "theme",    label: "Görünüm",     icon: <Palette className="w-4 h-4" /> },
     { key: "qr",       label: "QR Kodlar",   icon: <QrCode className="w-4 h-4" /> },
     { key: "stats",    label: "İstatistik",  icon: <BarChart2 className="w-4 h-4" /> },
@@ -56,6 +60,7 @@ export default function AdminTabs({ email, cafeId, chatbotEnabled, seasonalTheme
       </div>
 
       {tab === "menu"     && <MenuEditor onSwitchTab={setTab} />}
+      {tab === "ai"       && <BulkAIScan cafeId={cafeId} cafeSlug={cafeSlug} existingCategories={existingCategories} />}
       {tab === "theme"    && <ThemeEditor />}
       {tab === "qr"       && <QRPrint />}
       {tab === "stats"    && <AdminStats {...stats} />}
