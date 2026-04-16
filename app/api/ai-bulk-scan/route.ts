@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   });
 
   const { object } = await generateObject({
-    model: vertex("gemini-2.0-flash"),
+    model: vertex("gemini-2.0-flash-001"),
     schema: ResultSchema,
     messages: [
       {
