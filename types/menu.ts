@@ -24,7 +24,7 @@ export const PRODUCT_TAGS: { label: string; labelEn: string; icon: string; color
   { label: "İndirimli",    labelEn: "On Sale",       icon: "🏷️", color: "#16a34a", bg: "#dcfce7" },
 ];
 
-export interface Ingredient { id: string; label: string; labelEn: string; icon: string; group: string }
+export interface Ingredient { id: string; label: string; labelEn: string; icon: string; group: string; showLabel?: boolean }
 
 export const INGREDIENT_GROUPS: string[] = [
   "Tahıl & Temel", "Süt Ürünleri", "Et & Deniz", "Sebze", "Meyve",
@@ -35,24 +35,24 @@ export const PRODUCT_INGREDIENTS: Ingredient[] = [
   // Tahıl & Temel
   { id: "flour",    label: "Un",          labelEn: "Flour",        icon: "🌾", group: "Tahıl & Temel" },
   { id: "rice",     label: "Pirinç",      labelEn: "Rice",         icon: "🍚", group: "Tahıl & Temel" },
-  { id: "sugar",    label: "Şeker",       labelEn: "Sugar",        icon: "🍬", group: "Tahıl & Temel" },
+  { id: "sugar",    label: "Şeker",       labelEn: "Sugar",        icon: "🍬", group: "Tahıl & Temel", showLabel: true },
   { id: "salt",     label: "Tuz",         labelEn: "Salt",         icon: "🧂", group: "Tahıl & Temel" },
-  { id: "starch",   label: "Nişasta",     labelEn: "Starch",       icon: "🫙", group: "Tahıl & Temel" },
-  { id: "oat",      label: "Yulaf",       labelEn: "Oat",          icon: "🌿", group: "Tahıl & Temel" },
+  { id: "starch",   label: "Nişasta",     labelEn: "Starch",       icon: "🫙", group: "Tahıl & Temel", showLabel: true },
+  { id: "oat",      label: "Yulaf",       labelEn: "Oat",          icon: "🌾", group: "Tahıl & Temel" },
   // Süt Ürünleri
   { id: "milk",     label: "Süt",         labelEn: "Milk",         icon: "🥛", group: "Süt Ürünleri" },
   { id: "butter",   label: "Tereyağı",    labelEn: "Butter",       icon: "🧈", group: "Süt Ürünleri" },
   { id: "cheese",   label: "Peynir",      labelEn: "Cheese",       icon: "🧀", group: "Süt Ürünleri" },
-  { id: "cream",    label: "Krema",       labelEn: "Cream",        icon: "🍦", group: "Süt Ürünleri" },
+  { id: "cream",    label: "Krema",       labelEn: "Cream",        icon: "🍦", group: "Süt Ürünleri", showLabel: true },
   { id: "yogurt",   label: "Yoğurt",      labelEn: "Yogurt",       icon: "🥣", group: "Süt Ürünleri" },
   { id: "egg",      label: "Yumurta",     labelEn: "Egg",          icon: "🥚", group: "Süt Ürünleri" },
   // Et & Deniz
   { id: "beef",     label: "Dana Eti",    labelEn: "Beef",         icon: "🥩", group: "Et & Deniz" },
   { id: "chicken",  label: "Tavuk",       labelEn: "Chicken",      icon: "🍗", group: "Et & Deniz" },
-  { id: "lamb",     label: "Kuzu Eti",    labelEn: "Lamb",         icon: "🫕", group: "Et & Deniz" },
+  { id: "lamb",     label: "Kuzu Eti",    labelEn: "Lamb",         icon: "🫕", group: "Et & Deniz", showLabel: true },
   { id: "fish",     label: "Balık",       labelEn: "Fish",         icon: "🐟", group: "Et & Deniz" },
   { id: "shrimp",   label: "Karides",     labelEn: "Shrimp",       icon: "🍤", group: "Et & Deniz" },
-  { id: "pastrami", label: "Pastırma",    labelEn: "Pastrami",     icon: "🥓", group: "Et & Deniz" },
+  { id: "pastrami", label: "Pastırma",    labelEn: "Pastrami",     icon: "🥓", group: "Et & Deniz", showLabel: true },
   // Sebze
   { id: "tomato",   label: "Domates",     labelEn: "Tomato",       icon: "🍅", group: "Sebze" },
   { id: "onion",    label: "Soğan",       labelEn: "Onion",        icon: "🧅", group: "Sebze" },
@@ -78,7 +78,7 @@ export const PRODUCT_INGREDIENTS: Ingredient[] = [
   { id: "espresso", label: "Espresso",    labelEn: "Espresso",     icon: "☕", group: "Kahve & İçecek" },
   { id: "coffee",   label: "Kahve",       labelEn: "Coffee",       icon: "🫘", group: "Kahve & İçecek" },
   { id: "tea",      label: "Çay",         labelEn: "Tea",          icon: "🍵", group: "Kahve & İçecek" },
-  { id: "cocoa",    label: "Kakao",       labelEn: "Cocoa",        icon: "🍫", group: "Kahve & İçecek" },
+  { id: "cocoa",    label: "Kakao",       labelEn: "Cocoa",        icon: "🍫", group: "Kahve & İçecek", showLabel: true },
   { id: "juice",    label: "Meyve Suyu",  labelEn: "Fruit Juice",  icon: "🧃", group: "Kahve & İçecek" },
   { id: "soda",     label: "Soda",        labelEn: "Soda",         icon: "🫧", group: "Kahve & İçecek" },
   { id: "ice",      label: "Buz",         labelEn: "Ice",          icon: "🧊", group: "Kahve & İçecek" },
@@ -86,22 +86,22 @@ export const PRODUCT_INGREDIENTS: Ingredient[] = [
   // Tatlı & Fırın
   { id: "chocolate",label: "Çikolata",    labelEn: "Chocolate",    icon: "🍫", group: "Tatlı & Fırın" },
   { id: "honey",    label: "Bal",         labelEn: "Honey",        icon: "🍯", group: "Tatlı & Fırın" },
-  { id: "caramel",  label: "Karamel",     labelEn: "Caramel",      icon: "🍮", group: "Tatlı & Fırın" },
+  { id: "caramel",  label: "Karamel",     labelEn: "Caramel",      icon: "🍮", group: "Tatlı & Fırın", showLabel: true },
   { id: "hazelnut", label: "Fındık",      labelEn: "Hazelnut",     icon: "🌰", group: "Tatlı & Fırın" },
   { id: "peanut",   label: "Fıstık",      labelEn: "Peanut",       icon: "🥜", group: "Tatlı & Fırın" },
-  { id: "vanilla",  label: "Vanilya",     labelEn: "Vanilla",      icon: "🫙", group: "Tatlı & Fırın" },
+  { id: "vanilla",  label: "Vanilya",     labelEn: "Vanilla",      icon: "🌼", group: "Tatlı & Fırın", showLabel: true },
   { id: "icecream", label: "Dondurma",    labelEn: "Ice Cream",    icon: "🍨", group: "Tatlı & Fırın" },
-  { id: "cinnamon", label: "Tarçın",      labelEn: "Cinnamon",     icon: "🪵", group: "Tatlı & Fırın" },
+  { id: "cinnamon", label: "Tarçın",      labelEn: "Cinnamon",     icon: "🪵", group: "Tatlı & Fırın", showLabel: true },
   // Yağ & Sos
   { id: "oliveoil", label: "Zeytinyağı",  labelEn: "Olive Oil",    icon: "🫒", group: "Yağ & Sos" },
   { id: "tomatosauce",label:"Domates Sosu",labelEn:"Tomato Sauce", icon: "🥫", group: "Yağ & Sos" },
-  { id: "mayo",     label: "Mayonez",     labelEn: "Mayonnaise",   icon: "🧴", group: "Yağ & Sos" },
+  { id: "mayo",     label: "Mayonez",     labelEn: "Mayonnaise",   icon: "🧴", group: "Yağ & Sos", showLabel: true },
   { id: "hotsauce", label: "Acı Sos",     labelEn: "Hot Sauce",    icon: "🌶️", group: "Yağ & Sos" },
   // Baharat & Ot
   { id: "mint",     label: "Nane",        labelEn: "Mint",         icon: "🌿", group: "Baharat & Ot" },
   { id: "basil",    label: "Fesleğen",    labelEn: "Basil",        icon: "🌱", group: "Baharat & Ot" },
-  { id: "turmeric", label: "Zerdeçal",    labelEn: "Turmeric",     icon: "🟡", group: "Baharat & Ot" },
-  { id: "pepper2",  label: "Karabiber",   labelEn: "Black Pepper", icon: "🫙", group: "Baharat & Ot" },
+  { id: "turmeric", label: "Zerdeçal",    labelEn: "Turmeric",     icon: "🟡", group: "Baharat & Ot", showLabel: true },
+  { id: "pepper2",  label: "Karabiber",   labelEn: "Black Pepper", icon: "⚫", group: "Baharat & Ot" },
 ];
 
 export interface OpeningHour {
