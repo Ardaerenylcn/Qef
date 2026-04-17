@@ -139,7 +139,7 @@
 | `POST /api/superadmin-auth` | Superadmin giriş |
 | `DELETE /api/superadmin-auth` | Superadmin çıkış |
 | `POST /api/revalidate-menu` | Admin kaydettiğinde ISR cache temizleme |
-| `POST /api/chat` | AI menü asistanı (Gemini 2.0 Flash) |
+| `POST /api/chat` | AI menü asistanı (Vertex AI / Gemini 2.5 Flash) |
 | `POST /api/ai-bulk-scan` | Toplu AI ürün taraması (Vertex AI / Gemini 2.5 Flash) |
 
 ---
@@ -233,7 +233,7 @@ IYZICO_BASE_URL
 NEXT_PUBLIC_SITE_URL
 RESEND_API_KEY
 CRON_SECRET
-GOOGLE_GENERATIVE_AI_API_KEY       ← AI menü asistanı (Gemini 2.0 Flash, AI Studio)
+GOOGLE_GENERATIVE_AI_API_KEY       ← (artık kullanılmıyor, kaldırılabilir)
 GOOGLE_APPLICATION_CREDENTIALS_JSON ← Vertex AI service account JSON (toplu AI tarama)
 ```
 

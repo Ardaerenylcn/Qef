@@ -1,5 +1,5 @@
 import { streamText, convertToModelMessages } from "ai";
-import { google } from "@ai-sdk/google";
+import { createVertex } from "@ai-sdk/google-vertex";
 import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30;
@@ -52,8 +52,15 @@ Kısa ve samimi cevaplar ver. Müşteri Türkçe yazarsa Türkçe, İngilizce ya
 Menü:
 ${JSON.stringify(productList, null, 2)}`;
 
+    const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON!);
+    const vertex = createVertex({
+      project: credentials.project_id,
+      location: "us-central1",
+      googleAuthOptions: { credentials },
+    });
+
     const result = streamText({
-      model: google("gemini-2.0-flash"),
+      model: vertex("gemini-2.5-flash"),
       system: systemPrompt,
       messages: await convertToModelMessages(messages),
     });
