@@ -37,19 +37,6 @@ async function checkRateLimit(ip: string): Promise<boolean> {
 
 export async function POST(req: Request) {
   try {
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-      req.headers.get("x-real-ip") ??
-      "unknown";
-
-    const allowed = await checkRateLimit(ip);
-    if (!allowed) {
-      return new Response(
-        JSON.stringify({ error: "Günlük mesaj limitine ulaştınız." }),
-        { status: 429, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
     const body = await req.json();
     const { messages, cafeId } = body;
 
@@ -58,6 +45,22 @@ export async function POST(req: Request) {
     }
 
     const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      const ip =
+        req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+        req.headers.get("x-real-ip") ??
+        "unknown";
+
+      const allowed = await checkRateLimit(ip);
+      if (!allowed) {
+        return new Response(
+          JSON.stringify({ error: "Günlük mesaj limitine ulaştınız." }),
+          { status: 429, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     const { data: cafe } = await supabase
       .from("cafes")
