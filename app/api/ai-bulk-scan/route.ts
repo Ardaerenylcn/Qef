@@ -11,7 +11,7 @@ const ResultSchema = z.object({
       index: z.number().describe("Görselin sıra numarası, 0'dan başlar"),
       name: z.string().describe("Ürünün kısa, iştah açıcı Türkçe adı"),
       name_en: z.string().describe("Ürünün İngilizce adı"),
-      description: z.string().max(60).describe("Maksimum 60 karakter, tek cümle, iştah açıcı Türkçe açıklama. Nokta ile bitir."),
+      description: z.string().describe("Maksimum 60 karakter, tek cümle, iştah açıcı Türkçe açıklama. Nokta ile bitir."),
     })
   ),
 });
