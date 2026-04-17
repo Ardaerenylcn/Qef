@@ -159,9 +159,10 @@ export default function MenuProductList({
                   if (!ing) return null;
                   return (
                     <span key={id}
-                      className="flex-shrink-0 inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
+                      className="flex-shrink-0 inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1"
+                      title={isEn ? ing.labelEn : ing.label}>
                       <OpenmojiIcon emoji={ing.icon} size={16} />
-                      {isEn ? ing.labelEn : ing.label}
+                      {ing.showLabel && (isEn ? ing.labelEn : ing.label)}
                     </span>
                   );
                 })}
@@ -253,9 +254,10 @@ export default function MenuProductList({
                   if (!ing) return null;
                   return (
                     <span key={id}
-                      className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1">
+                      className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1"
+                      title={isEn ? ing.labelEn : ing.label}>
                       <OpenmojiIcon emoji={ing.icon} size={16} />
-                      {isEn ? ing.labelEn : ing.label}
+                      {ing.showLabel && (isEn ? ing.labelEn : ing.label)}
                     </span>
                   );
                 })}
