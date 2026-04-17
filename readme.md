@@ -44,6 +44,23 @@
 ### 11. Yeni Blog Yazısı ✅
 `/blog/qr-menu-fiyatlari-2026` — "QR menü fiyatları 2026" hedefli, karşılaştırma tablosu içeren yazı. Sitemap güncellendi.
 
+### 12. Toplu AI Ürün Kaydı ✅
+- `app/api/ai-bulk-scan/route.ts` — Gemini 2.5 Flash ile toplu görsel analizi. Max 15 görsel, tek istekte isim + İngilizce isim + açıklama üretiyor. Auth korumalı, Zod schema ile yapılandırılmış output.
+- `components/BulkAIScan.tsx` — Drag & drop yükleme alanı, client-side sıkıştırma + base64 dönüşümü, AI tarama sonuçları inline düzenleme (isim, açıklama, kategori, fiyat), mevcut kategorilerden seçim + yeni kategori ekleme, toplu Supabase Storage yükleme + products tablosuna insert, `revalidateMenu` çağrısı.
+- `components/AdminTabs.tsx` — "AI Kayıt" sekmesi eklendi (Menü sekmesinin yanına, Sparkles ikonu).
+- `app/admin/page.tsx` — `category_order`, `cafeSlug`, `existingCategories` AdminTabs'e aktarıldı.
+
+### 13. Sürükle-Bırak Kart Taşma Düzeltmesi ✅
+`components/SortableProductCard.tsx` — Uzun ürün açıklamalarının yatayda taşması giderildi. Flex container ve wrapper'a `min-w-0` eklendi.
+
+### 14. Vertex AI Entegrasyonu ($300 Google Cloud Kredisi) ✅
+- Google Cloud "My First Project" üzerinde billing hesabı açıldı, $300 free trial kredisi aktif edildi (geçerlilik: 90 gün).
+- Vertex AI API ve service account (`qef-vertex`) oluşturuldu, `Vertex AI User` rolü atandı.
+- `@ai-sdk/google-vertex` paketi eklendi.
+- `app/api/ai-bulk-scan/route.ts` — `@ai-sdk/google` yerine `@ai-sdk/google-vertex` kullanıyor. Service account credentials `GOOGLE_APPLICATION_CREDENTIALS_JSON` env variable üzerinden alınıyor.
+- Model: `gemini-2.5-flash` (Vertex AI üzerinden, Google Cloud kredisi kullanılıyor).
+- Vercel'e `GOOGLE_APPLICATION_CREDENTIALS_JSON` env variable eklendi.
+
 ---
 
 ## PROJE HARİTASI
@@ -123,13 +140,14 @@
 | `DELETE /api/superadmin-auth` | Superadmin çıkış |
 | `POST /api/revalidate-menu` | Admin kaydettiğinde ISR cache temizleme |
 | `POST /api/chat` | AI menü asistanı (Gemini 2.0 Flash) |
+| `POST /api/ai-bulk-scan` | Toplu AI ürün taraması (Vertex AI / Gemini 2.5 Flash) |
 
 ---
 
 ### COMPONENT'LER (49 adet)
 
 **Admin Panel**
-`AdminHeader`, `AdminTabs`, `AdminStats`, `AdminInbox`, `AccountSettings`, `OnboardingChecklist`, `TrialExpiredScreen`, `BulkPriceUpdate`
+`AdminHeader`, `AdminTabs`, `AdminStats`, `AdminInbox`, `AccountSettings`, `OnboardingChecklist`, `TrialExpiredScreen`, `BulkPriceUpdate`, `BulkAIScan`
 
 **Menü & Ürün**
 `MenuEditor`, `MenuView`, `MenuProductList`, `ProductCard`, `ProductDetailModal`, `EditProductModal`, `SortableCategoryBlock`, `SortableProductCard`, `CategoryTabs`, `OpeningHoursEditor`
@@ -201,7 +219,7 @@
 
 ---
 
-### ENV VARIABLE'LAR (12 adet)
+### ENV VARIABLE'LAR (14 adet)
 
 ```
 NEXT_PUBLIC_SUPABASE_URL
@@ -215,8 +233,11 @@ IYZICO_BASE_URL
 NEXT_PUBLIC_SITE_URL
 RESEND_API_KEY
 CRON_SECRET
-GOOGLE_GENERATIVE_AI_API_KEY
+GOOGLE_GENERATIVE_AI_API_KEY       ← AI menü asistanı (Gemini 2.0 Flash, AI Studio)
+GOOGLE_APPLICATION_CREDENTIALS_JSON ← Vertex AI service account JSON (toplu AI tarama)
 ```
+
+> **Not:** `GOOGLE_APPLICATION_CREDENTIALS_JSON` içeriği Google Cloud "My First Project" (fair-portal-458521-e9) üzerindeki `qef-vertex` service account'una ait JSON key dosyasıdır. Vertex AI üzerinden Gemini 2.5 Flash kullanılır, $300 Google Cloud free trial kredisinden düşer.
 
 ---
 
