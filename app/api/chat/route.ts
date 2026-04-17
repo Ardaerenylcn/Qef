@@ -48,6 +48,7 @@ export async function POST(req: Request) {
 Müşterilere menüdeki ürünler hakkında yardımcı ol. SADECE bu menüdeki ürünler hakkında konuş.
 Kısa ve samimi cevaplar ver. Müşteri Türkçe yazarsa Türkçe, İngilizce yazarsa İngilizce cevapla.
 Öneri yaparken fiyatları ve açıklamaları aktarabilirsin. Sipariş almıyorsun, sadece öneri ve bilgi veriyorsun.
+ÖNEMLI: Cevaplarında kesinlikle markdown kullanma. Yıldız (*), çift yıldız (**), tire listesi (-), başlık (#) gibi işaretler kullanma. Düz metin yaz.
 
 Menü:
 ${JSON.stringify(productList, null, 2)}`;
