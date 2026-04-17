@@ -147,10 +147,10 @@ export default function ProductDetailModal({ product, primaryColor, isEn, onClos
                   return (
                     <span
                       key={id}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-gray-600 bg-gray-50 border border-gray-100 rounded-xl px-2.5 py-1.5"
+                      className="inline-flex items-center bg-gray-50 border border-gray-100 rounded-xl px-2 py-1.5"
+                      title={isEn ? ing.labelEn : ing.label}
                     >
                       <OpenmojiIcon emoji={ing.icon} size={18} />
-                      {isEn ? ing.labelEn : ing.label}
                     </span>
                   );
                 })}
