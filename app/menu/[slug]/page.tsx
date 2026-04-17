@@ -283,7 +283,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
 
       {/* AI Chatbot */}
       {cafe.chatbot_enabled !== false && (
-        <MenuChatbot cafeId={cafe.id} primaryColor={theme.primaryColor} />
+        <MenuChatbot cafeId={cafe.id} cafeName={cafe.name} primaryColor={theme.primaryColor} />
       )}
 
       <footer className="border-t border-gray-100 mt-8 py-6">

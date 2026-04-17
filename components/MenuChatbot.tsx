@@ -7,12 +7,13 @@ import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
 
 interface Props {
   cafeId: string;
+  cafeName: string;
   primaryColor: string;
 }
 
 const MAX_USER_MESSAGES = 7;
 
-export default function MenuChatbot({ cafeId, primaryColor }: Props) {
+export default function MenuChatbot({ cafeId, cafeName, primaryColor }: Props) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -79,10 +80,23 @@ export default function MenuChatbot({ cafeId, primaryColor }: Props) {
 
           {/* Mesajlar */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+            <div className="flex justify-start">
+              <div className="max-w-[85%] rounded-2xl rounded-bl-sm px-3 py-2 text-sm leading-relaxed bg-gray-100 text-gray-800">
+                Merhaba! Ben {cafeName} menü asistanıyım. Ürünler, fiyatlar veya öneriler hakkında her şeyi sorabilirsiniz.
+              </div>
+            </div>
+
             {messages.length === 0 && (
-              <div className="text-center text-gray-400 text-sm py-8 space-y-2">
-                <Bot className="w-8 h-8 mx-auto opacity-20" />
-                <p>Menü hakkında bir şeyler sormak ister misiniz?</p>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {["Ne önerirsiniz?", "Veganlar için ne var?", "En popüler ürün?"].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => { setInput(q); }}
+                    className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors"
+                  >
+                    {q}
+                  </button>
+                ))}
               </div>
             )}
 
