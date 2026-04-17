@@ -1,7 +1,7 @@
 import { streamText, convertToModelMessages } from "ai";
 import { createVertex } from "@ai-sdk/google-vertex";
 import { createClient } from "@/lib/supabase/server";
-import { createClient as createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const maxDuration = 30;
 
