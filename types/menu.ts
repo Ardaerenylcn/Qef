@@ -98,10 +98,10 @@ export const PRODUCT_INGREDIENTS: Ingredient[] = [
   { id: "mayo",     label: "Mayonez",     labelEn: "Mayonnaise",   icon: "🧴", group: "Yağ & Sos", showLabel: true },
   { id: "hotsauce", label: "Acı Sos",     labelEn: "Hot Sauce",    icon: "🌶️", group: "Yağ & Sos" },
   // Baharat & Ot
-  { id: "mint",     label: "Nane",        labelEn: "Mint",         icon: "🌿", group: "Baharat & Ot" },
+  { id: "mint",     label: "Nane",        labelEn: "Mint",         icon: "🌿", group: "Baharat & Ot", showLabel: true },
   { id: "basil",    label: "Fesleğen",    labelEn: "Basil",        icon: "🌱", group: "Baharat & Ot" },
   { id: "turmeric", label: "Zerdeçal",    labelEn: "Turmeric",     icon: "🟡", group: "Baharat & Ot", showLabel: true },
-  { id: "pepper2",  label: "Karabiber",   labelEn: "Black Pepper", icon: "⚫", group: "Baharat & Ot" },
+  { id: "pepper2",  label: "Karabiber",   labelEn: "Black Pepper", icon: "⚫", group: "Baharat & Ot", showLabel: true },
 ];
 
 export interface OpeningHour {
