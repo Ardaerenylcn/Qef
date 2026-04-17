@@ -1,11 +1,55 @@
 import { streamText, convertToModelMessages } from "ai";
 import { createVertex } from "@ai-sdk/google-vertex";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@/lib/supabase/admin";
 
 export const maxDuration = 30;
 
+const DAILY_LIMIT = 7;
+
+async function checkRateLimit(ip: string): Promise<boolean> {
+  const admin = createAdminClient();
+  const today = new Date().toISOString().slice(0, 10);
+
+  const { data } = await admin
+    .from("chat_rate_limit")
+    .select("count")
+    .eq("ip", ip)
+    .eq("date", today)
+    .single();
+
+  if (data && data.count >= DAILY_LIMIT) return false;
+
+  if (data) {
+    await admin
+      .from("chat_rate_limit")
+      .update({ count: data.count + 1 })
+      .eq("ip", ip)
+      .eq("date", today);
+  } else {
+    await admin
+      .from("chat_rate_limit")
+      .insert({ ip, date: today, count: 1 });
+  }
+
+  return true;
+}
+
 export async function POST(req: Request) {
   try {
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      req.headers.get("x-real-ip") ??
+      "unknown";
+
+    const allowed = await checkRateLimit(ip);
+    if (!allowed) {
+      return new Response(
+        JSON.stringify({ error: "Günlük mesaj limitine ulaştınız." }),
+        { status: 429, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const body = await req.json();
     const { messages, cafeId } = body;
 

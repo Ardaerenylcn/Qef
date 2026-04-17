@@ -10,7 +10,7 @@ interface Props {
   primaryColor: string;
 }
 
-const MAX_USER_MESSAGES = 15;
+const MAX_USER_MESSAGES = 7;
 
 export default function MenuChatbot({ cafeId, primaryColor }: Props) {
   const [open, setOpen] = useState(false);
