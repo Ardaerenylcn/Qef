@@ -27,7 +27,7 @@ import { compressImage } from "@/lib/compressImage";
 import OpeningHoursEditor from "./OpeningHoursEditor";
 import OnboardingChecklist from "./OnboardingChecklist";
 import { revalidateMenu } from "@/lib/revalidateMenu";
-import ProductPreviewPhone from "./ProductPreviewPhone";
+import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
 
 interface Cafe {
   id: string;
@@ -81,6 +81,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
   const [imagePreview, setImagePreview] = useState("");
   const [error, setError] = useState("");
   const [adding, setAdding] = useState(false);
+  const [activePhoneId, setActivePhoneId] = useState<string>("__new__");
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newCatName, setNewCatName] = useState("");
   const [catError, setCatError] = useState("");
@@ -254,10 +255,12 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       setProducts(newProducts);
       const newCats = buildCategoryOrder(cafe.category_order ?? [], newProducts);
       setCategories(newCats);
+      setActivePhoneId(data.id);
       setName(""); setNameEn(""); setPrice(""); setCategory("");
       setDescription(""); setDescriptionEn(""); setCalories("");
       setProductTags([]); setProductIngredients([]);
       clearImage(); setError("");
+      setTimeout(() => setActivePhoneId("__new__"), 2000);
     }
     setAdding(false);
   }
@@ -370,18 +373,18 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
     ? categories.filter((c) => grouped[c]?.length > 0)
     : categories;
 
+  const phoneProducts: PhoneProduct[] = [
+    ...products.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined })),
+    ...(name.trim() ? [{ id: "__new__", name: name.trim(), price: price, imageUrl: imagePreview || undefined, isNew: true }] : []),
+  ];
+
   return (
     <>
     {/* Telefon önizleme — sadece geniş ekran, fixed sağ kenar */}
     <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
-      <ProductPreviewPhone
-        name={name}
-        description={description}
-        price={price}
-        imagePreview={imagePreview}
-        tags={productTags}
-        ingredients={productIngredients}
-        calories={calories}
+      <MenuListPreviewPhone
+        products={phoneProducts}
+        activeId={activePhoneId}
       />
     </div>
 

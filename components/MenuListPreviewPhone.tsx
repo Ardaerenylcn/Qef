@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { ImageOff } from "lucide-react";
 
 export interface PhoneProduct {
@@ -17,6 +18,14 @@ interface Props {
 }
 
 export default function MenuListPreviewPhone({ products, activeId, primaryColor = "#f97316" }: Props) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!activeId || !scrollRef.current) return;
+    const el = scrollRef.current.querySelector(`[data-id="${activeId}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [activeId]);
+
   const displayPrice = (p: string | number) => {
     const n = parseFloat(String(p));
     return n > 0 ? `${n.toFixed(2)} ₺` : "—";
@@ -86,13 +95,14 @@ export default function MenuListPreviewPhone({ products, activeId, primaryColor 
               <p className="text-[10px] text-gray-300">Henüz ürün yok</p>
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto p-2">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-2">
               <div className="grid grid-cols-2 gap-1.5">
                 {products.map((p) => {
                   const isActive = p.id === activeId;
                   return (
                     <div
                       key={p.id}
+                      data-id={p.id}
                       className="rounded-xl overflow-hidden bg-white border-2 transition-all"
                       style={{ borderColor: isActive ? primaryColor : "#f1f5f9", boxShadow: isActive ? `0 0 0 1px ${primaryColor}40` : undefined }}
                     >
