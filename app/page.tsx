@@ -4,6 +4,7 @@ import Image from "next/image";
 import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, X as XIcon, Crown, UtensilsCrossed, Sparkles } from "lucide-react";
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
+import AIChatMockup from "@/components/AIChatMockup";
 
 export const metadata: Metadata = {
   title: "Qef — Kafeniz için dijital QR menü",
@@ -535,18 +536,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
 
-            {/* Sol — Görsel */}
-            <div className="w-full lg:w-[52%] flex-shrink-0 relative">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-500/15 to-yellow-500/5 blur-2xl scale-105 pointer-events-none" />
-              <Image
-                src="/ai-tanitim.png"
-                alt="Qef AI Menü Asistanı"
-                width={800}
-                height={600}
-                sizes="(max-width: 768px) 100vw, 52vw"
-                className="relative w-full rounded-3xl object-cover shadow-2xl shadow-orange-900/30"
-              />
-            </div>
+            <AIChatMockup />
 
             {/* Sağ — İçerik */}
             <div className="flex-1 space-y-7">
