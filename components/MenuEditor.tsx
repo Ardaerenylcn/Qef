@@ -28,6 +28,7 @@ import OpeningHoursEditor from "./OpeningHoursEditor";
 import OnboardingChecklist from "./OnboardingChecklist";
 import { revalidateMenu } from "@/lib/revalidateMenu";
 import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
+import HelpButton from "./HelpButton";
 
 interface Cafe {
   id: string;
@@ -416,7 +417,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       )}
 
       {/* Kafe Bilgileri */}
-      <CollapsibleSection storageKey="menu_kafe_bilgileri" title="Kafe bilgileri" defaultOpen={false}>
+      <CollapsibleSection storageKey="menu_kafe_bilgileri" title="Kafe bilgileri" defaultOpen={false} helpSection="kafe-bilgileri">
         <input type="text" placeholder="Kafe adı" value={cafeName}
           onChange={(e) => handleCafeNameChange(e.target.value)}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
@@ -538,7 +539,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
 
       {/* Kategori Yönetimi */}
       <div id="categories-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Kategoriler</h2>
+        <h2 className="font-semibold text-gray-700 flex items-center gap-2">Kategoriler <HelpButton section="kategoriler" /></h2>
         {categories.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
@@ -574,7 +575,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
 
       {/* Ürün Ekleme Formu */}
       <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
-        <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
+        <h2 className="font-semibold text-gray-700 flex items-center gap-2">Yeni ürün ekle <HelpButton section="urun-ekleme" /></h2>
         <input type="text" placeholder="Ürün adı (ör. Türk Kahvesi)" value={name}
           onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />

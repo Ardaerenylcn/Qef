@@ -9,6 +9,7 @@ import { revalidateMenu } from "@/lib/revalidateMenu";
 import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
 import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
+import HelpButton from "./HelpButton";
 
 interface ScannedProduct {
   index: number;
@@ -245,7 +246,10 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
         <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 rounded-2xl p-5 space-y-2">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-orange-500" />
-            <h2 className="font-bold text-gray-900">Toplu AI Ürün Kaydı</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-bold text-gray-900">Toplu AI Ürün Kaydı</h2>
+              <HelpButton section="ai-kayit" />
+            </div>
           </div>
           <p className="text-sm text-gray-600 leading-relaxed">
             Ürün fotoğraflarını yükle, AI her ürün için otomatik <strong>isim ve açıklama</strong> oluştursun.
