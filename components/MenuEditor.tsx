@@ -27,6 +27,7 @@ import { compressImage } from "@/lib/compressImage";
 import OpeningHoursEditor from "./OpeningHoursEditor";
 import OnboardingChecklist from "./OnboardingChecklist";
 import { revalidateMenu } from "@/lib/revalidateMenu";
+import ProductPreviewPhone from "./ProductPreviewPhone";
 
 interface Cafe {
   id: string;
@@ -555,9 +556,10 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       </div>
 
       {/* Ürün Ekleme Formu */}
-      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-        <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
-        <div className="space-y-3">
+      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="font-semibold text-gray-700 mb-4">Yeni ürün ekle</h2>
+        <div className="lg:flex lg:gap-8">
+        <div className="flex-1 space-y-3">
           <input type="text" placeholder="Ürün adı (ör. Türk Kahvesi)" value={name}
             onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown}
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
@@ -637,12 +639,27 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
             </label>
           )}
         </div>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        <button onClick={handleAdd} disabled={adding}
-          className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
-          {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
-          Ekle
-        </button>
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+          <button onClick={handleAdd} disabled={adding}
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+            {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
+            Ekle
+          </button>
+        </div>
+
+        {/* Önizleme — sadece masaüstü */}
+        <div className="hidden lg:flex items-start justify-center pt-8 border-l border-gray-100 pl-8 min-w-[260px]">
+          <ProductPreviewPhone
+            name={name}
+            description={description}
+            price={price}
+            imagePreview={imagePreview}
+            tags={productTags}
+            ingredients={productIngredients}
+            calories={calories}
+          />
+        </div>
+        </div>
       </div>
 
       {/* Ürün Listesi — sürükle bırak */}

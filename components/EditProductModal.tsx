@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Product } from "@/types/menu";
 import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
+import ProductPreviewPhone from "./ProductPreviewPhone";
 import { validateImage } from "@/lib/validateImage";
 import { compressImage } from "@/lib/compressImage";
 import { revalidateMenu } from "@/lib/revalidateMenu";
@@ -93,101 +94,105 @@ export default function EditProductModal({ product, cafeId, cafeSlug, categories
   return (
     <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 px-0 sm:px-4"
       onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto"
+      <div className="bg-white w-full sm:max-w-md lg:max-w-3xl rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}>
 
         {/* Başlık */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
           <h2 className="font-semibold text-gray-800">Ürünü Düzenle</h2>
           <button onClick={onClose} className="text-gray-300 hover:text-gray-500 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Form */}
-        <div className="px-6 py-4 space-y-3">
-          <input type="text" placeholder="Ürün adı" value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-          <input type="text" placeholder="Açıklama (isteğe bağlı)" value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-          <div className="flex gap-2">
-            <input type="number" placeholder="Fiyat (₺)" value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              min={0} step={0.5}
-              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <select value={category} onChange={(e) => setCategory(e.target.value)}
-              className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
-              <option value="">Kategori seç</option>
-              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-              {/* Mevcut kategori listede yoksa göster */}
-              {category && !categories.includes(category) && (
-                <option value={category}>{category}</option>
-              )}
-            </select>
-          </div>
-
-          {/* Kalori */}
-          <input
-            type="number"
-            placeholder="Kalori (kcal) — isteğe bağlı"
-            value={calories}
-            onChange={(e) => setCalories(e.target.value)}
-            min={0}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
-          />
-
-          {/* Etiketler */}
-          <div className="space-y-1.5">
-            <p className="text-xs text-gray-400 font-medium">Etiketler</p>
-            <TagSelector selected={tags} onChange={setTags} />
-          </div>
-
-          {/* İçerik */}
-          <div className="space-y-1.5">
-            <p className="text-xs text-gray-400 font-medium">İçerik</p>
-            <IngredientSelector selected={ingredients} onChange={setIngredients} />
-          </div>
-
-          {/* İngilizce */}
-          <button type="button" onClick={() => setShowEn((v) => !v)}
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-orange-400 transition-colors">
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showEn ? "rotate-180" : ""}`} />
-            İngilizce çeviri {showEn ? "gizle" : "ekle"}
-          </button>
-          {showEn && (
-            <div className="space-y-2 border-l-2 border-orange-100 pl-3">
-              <input type="text" placeholder="Product name (EN)" value={nameEn}
-                onChange={(e) => setNameEn(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-              <input type="text" placeholder="Description (EN)" value={descriptionEn}
-                onChange={(e) => setDescriptionEn(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+        <div className="lg:flex">
+          {/* Sol — Form */}
+          <div className="flex-1 min-w-0 px-6 py-4 space-y-3">
+            <input type="text" placeholder="Ürün adı" value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <input type="text" placeholder="Açıklama (isteğe bağlı)" value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <div className="flex gap-2">
+              <input type="number" placeholder="Fiyat (₺)" value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                min={0} step={0.5}
+                className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              <select value={category} onChange={(e) => setCategory(e.target.value)}
+                className="w-1/2 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+                <option value="">Kategori seç</option>
+                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                {category && !categories.includes(category) && (
+                  <option value={category}>{category}</option>
+                )}
+              </select>
             </div>
-          )}
 
-          {/* Görsel */}
-          <div>
-            {imagePreview ? (
-              <div className="flex items-center gap-3">
-                <Image src={imagePreview} alt="Görsel" width={64} height={64}
-                  className="w-16 h-16 rounded-xl object-cover border border-gray-200" />
-                <label className="text-xs text-orange-400 hover:underline cursor-pointer">
-                  Görseli değiştir
+            <input type="number" placeholder="Kalori (kcal) — isteğe bağlı" value={calories}
+              onChange={(e) => setCalories(e.target.value)} min={0}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+
+            <div className="space-y-1.5">
+              <p className="text-xs text-gray-400 font-medium">Etiketler</p>
+              <TagSelector selected={tags} onChange={setTags} />
+            </div>
+
+            <div className="space-y-1.5">
+              <p className="text-xs text-gray-400 font-medium">İçerik</p>
+              <IngredientSelector selected={ingredients} onChange={setIngredients} />
+            </div>
+
+            <button type="button" onClick={() => setShowEn((v) => !v)}
+              className="flex items-center gap-1 text-xs text-gray-400 hover:text-orange-400 transition-colors">
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showEn ? "rotate-180" : ""}`} />
+              İngilizce çeviri {showEn ? "gizle" : "ekle"}
+            </button>
+            {showEn && (
+              <div className="space-y-2 border-l-2 border-orange-100 pl-3">
+                <input type="text" placeholder="Product name (EN)" value={nameEn}
+                  onChange={(e) => setNameEn(e.target.value)}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                <input type="text" placeholder="Description (EN)" value={descriptionEn}
+                  onChange={(e) => setDescriptionEn(e.target.value)}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              </div>
+            )}
+
+            <div>
+              {imagePreview ? (
+                <div className="flex items-center gap-3">
+                  <Image src={imagePreview} alt="Görsel" width={64} height={64}
+                    className="w-16 h-16 rounded-xl object-cover border border-gray-200" />
+                  <label className="text-xs text-orange-400 hover:underline cursor-pointer">
+                    Görseli değiştir
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                  </label>
+                </div>
+              ) : (
+                <label className="flex items-center gap-2 w-fit cursor-pointer text-sm text-gray-400 hover:text-orange-400 transition-colors">
+                  <ImagePlus className="w-4 h-4" />
+                  Görsel ekle
                   <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                 </label>
-              </div>
-            ) : (
-              <label className="flex items-center gap-2 w-fit cursor-pointer text-sm text-gray-400 hover:text-orange-400 transition-colors">
-                <ImagePlus className="w-4 h-4" />
-                Görsel ekle
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
-              </label>
-            )}
+              )}
+            </div>
+
+            {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {/* Sağ — Önizleme (sadece masaüstü) */}
+          <div className="hidden lg:flex items-center justify-center px-6 py-4 border-l border-gray-100 bg-gray-50/50 min-w-[260px]">
+            <ProductPreviewPhone
+              name={name}
+              description={description}
+              price={price}
+              imagePreview={imagePreview}
+              tags={tags}
+              ingredients={ingredients}
+              calories={calories}
+            />
+          </div>
         </div>
 
         {/* Footer */}
