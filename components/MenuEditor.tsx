@@ -556,19 +556,8 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       </div>
 
       {/* Ürün Ekleme Formu + Önizleme */}
-      <div className="hidden lg:block sticky top-4 float-right ml-6 mb-4 z-10">
-        <ProductPreviewPhone
-          name={name}
-          description={description}
-          price={price}
-          imagePreview={imagePreview}
-          tags={productTags}
-          ingredients={productIngredients}
-          calories={calories}
-        />
-      </div>
-
-      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
+      <div className="lg:flex lg:gap-6 lg:items-start">
+      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3 flex-1 min-w-0">
         <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
         <input type="text" placeholder="Ürün adı (ör. Türk Kahvesi)" value={name}
           onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown}
@@ -643,6 +632,20 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
           Ekle
         </button>
+      </div>
+
+      {/* Telefon önizleme — sadece masaüstü */}
+      <div className="hidden lg:block sticky top-4 flex-shrink-0">
+        <ProductPreviewPhone
+          name={name}
+          description={description}
+          price={price}
+          imagePreview={imagePreview}
+          tags={productTags}
+          ingredients={productIngredients}
+          calories={calories}
+        />
+      </div>
       </div>
 
       {/* Ürün Listesi — sürükle bırak */}
