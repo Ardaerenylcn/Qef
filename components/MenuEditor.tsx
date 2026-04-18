@@ -638,7 +638,6 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
               <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
             </label>
           )}
-        </div>
           {error && <p className="text-red-400 text-sm">{error}</p>}
           <button onClick={handleAdd} disabled={adding}
             className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
