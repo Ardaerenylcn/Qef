@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Sparkles, Upload, X, Loader2, Check, ChevronDown, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { compressImage } from "@/lib/compressImage";
@@ -8,7 +8,7 @@ import { validateImage } from "@/lib/validateImage";
 import { revalidateMenu } from "@/lib/revalidateMenu";
 import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
-import ProductPreviewPhone from "./ProductPreviewPhone";
+import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
 
 interface ScannedProduct {
   index: number;
@@ -41,8 +41,25 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
   const [newCatValue, setNewCatValue] = useState("");
   const [allCategories, setAllCategories] = useState<string[]>(existingCategories);
   const [previewIndex, setPreviewIndex] = useState(0);
+  const [existingProducts, setExistingProducts] = useState<PhoneProduct[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
+
+  useEffect(() => {
+    supabase
+      .from("products")
+      .select("id, name, price, image_url")
+      .eq("cafe_id", cafeId)
+      .order("position")
+      .then(({ data }) => {
+        if (data) {
+          setExistingProducts(
+            data.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined }))
+          );
+        }
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cafeId]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? []);
@@ -197,21 +214,25 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
     );
   }
 
-  const preview = products[previewIndex];
+  const scannedPhoneProducts: PhoneProduct[] = products.map((p, i) => ({
+    id: `new-${i}`,
+    name: p.name,
+    price: p.price,
+    imageUrl: p.imagePreview,
+    isNew: true,
+  }));
+
+  const allPhoneProducts: PhoneProduct[] = [...existingProducts, ...scannedPhoneProducts];
+  const activePhoneId = products.length > 0 ? `new-${previewIndex}` : null;
 
   return (
     <>
       {/* Telefon önizleme — sadece geniş ekran */}
-      {products.length > 0 && preview && (
+      {allPhoneProducts.length > 0 && (
         <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
-          <ProductPreviewPhone
-            name={preview.name}
-            description={preview.description}
-            price={preview.price}
-            imagePreview={preview.imagePreview}
-            tags={preview.tags}
-            ingredients={preview.ingredients}
-            calories={preview.calories}
+          <MenuListPreviewPhone
+            products={allPhoneProducts}
+            activeId={activePhoneId}
           />
         </div>
       )}
