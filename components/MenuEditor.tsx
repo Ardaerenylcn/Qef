@@ -372,6 +372,19 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
 
   return (
     <>
+    {/* Telefon önizleme — sadece geniş ekran, fixed sağ kenar */}
+    <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
+      <ProductPreviewPhone
+        name={name}
+        description={description}
+        price={price}
+        imagePreview={imagePreview}
+        tags={productTags}
+        ingredients={productIngredients}
+        calories={calories}
+      />
+    </div>
+
     <div className="space-y-6">
       {/* Onboarding toggle butonu */}
       {cafe && !showChecklist && (
@@ -555,9 +568,8 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
         {catError && <p className="text-sm text-red-400">{catError}</p>}
       </div>
 
-      {/* Ürün Ekleme Formu + Önizleme */}
-      <div className="lg:flex lg:gap-6 lg:items-start">
-      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3 flex-1 min-w-0">
+      {/* Ürün Ekleme Formu */}
+      <div id="add-product-section" className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
         <h2 className="font-semibold text-gray-700">Yeni ürün ekle</h2>
         <input type="text" placeholder="Ürün adı (ör. Türk Kahvesi)" value={name}
           onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown}
@@ -632,20 +644,6 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
           {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
           Ekle
         </button>
-      </div>
-
-      {/* Telefon önizleme — sadece masaüstü */}
-      <div className="hidden lg:block sticky top-4 flex-shrink-0">
-        <ProductPreviewPhone
-          name={name}
-          description={description}
-          price={price}
-          imagePreview={imagePreview}
-          tags={productTags}
-          ingredients={productIngredients}
-          calories={calories}
-        />
-      </div>
       </div>
 
       {/* Ürün Listesi — sürükle bırak */}
