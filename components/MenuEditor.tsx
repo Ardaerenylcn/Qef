@@ -374,8 +374,8 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
     : categories;
 
   const phoneProducts: PhoneProduct[] = [
-    ...products.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined })),
-    ...(name.trim() ? [{ id: "__new__", name: name.trim(), price: price, imageUrl: imagePreview || undefined, isNew: true }] : []),
+    ...products.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined, category: p.category ?? "Genel" })),
+    ...(name.trim() ? [{ id: "__new__", name: name.trim(), price: price, imageUrl: imagePreview || undefined, category: category || "Genel", isNew: true }] : []),
   ];
 
   return (
@@ -384,6 +384,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
     <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
       <MenuListPreviewPhone
         products={phoneProducts}
+        categories={categories}
         activeId={activePhoneId}
       />
     </div>

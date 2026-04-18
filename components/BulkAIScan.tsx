@@ -48,13 +48,13 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
   useEffect(() => {
     supabase
       .from("products")
-      .select("id, name, price, image_url")
+      .select("id, name, price, image_url, category")
       .eq("cafe_id", cafeId)
       .order("position")
       .then(({ data }) => {
         if (data) {
           setExistingProducts(
-            data.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined }))
+            data.map((p) => ({ id: p.id, name: p.name, price: p.price, imageUrl: p.image_url ?? undefined, category: p.category ?? "Genel" }))
           );
         }
       });
@@ -219,6 +219,7 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
     name: p.name,
     price: p.price,
     imageUrl: p.imagePreview,
+    category: p.category || "Genel",
     isNew: true,
   }));
 
@@ -232,6 +233,7 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
         <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
           <MenuListPreviewPhone
             products={allPhoneProducts}
+            categories={allCategories}
             activeId={activePhoneId}
           />
         </div>

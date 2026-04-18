@@ -8,16 +8,18 @@ export interface PhoneProduct {
   name: string;
   price: string | number;
   imageUrl?: string;
+  category?: string;
   isNew?: boolean;
 }
 
 interface Props {
   products: PhoneProduct[];
+  categories?: string[];
   activeId?: string | number | null;
   primaryColor?: string;
 }
 
-export default function MenuListPreviewPhone({ products, activeId, primaryColor = "#f97316" }: Props) {
+export default function MenuListPreviewPhone({ products, categories, activeId, primaryColor = "#f97316" }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,6 +32,25 @@ export default function MenuListPreviewPhone({ products, activeId, primaryColor 
     const n = parseFloat(String(p));
     return n > 0 ? `${n.toFixed(2)} ₺` : "—";
   };
+
+  // Kategorilere göre grupla
+  const grouped = products.reduce<Record<string, PhoneProduct[]>>((acc, p) => {
+    const key = p.category || "Genel";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(p);
+    return acc;
+  }, {});
+
+  // Sıralı kategori listesi
+  const orderedCats = categories
+    ? categories.filter((c) => grouped[c]?.length > 0)
+    : Object.keys(grouped);
+
+  // Kategorisiz ürünler varsa sona ekle
+  const allCats = [
+    ...orderedCats,
+    ...Object.keys(grouped).filter((c) => !orderedCats.includes(c)),
+  ];
 
   return (
     <div className="flex flex-col items-center gap-2 select-none">
@@ -95,52 +116,71 @@ export default function MenuListPreviewPhone({ products, activeId, primaryColor 
               <p className="text-[10px] text-gray-300">Henüz ürün yok</p>
             </div>
           ) : (
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-2">
-              <div className="grid grid-cols-2 gap-1.5">
-                {products.map((p) => {
-                  const isActive = p.id === activeId;
-                  return (
-                    <div
-                      key={p.id}
-                      data-id={p.id}
-                      className="rounded-xl overflow-hidden bg-white border-2 transition-all"
-                      style={{ borderColor: isActive ? primaryColor : "#f1f5f9", boxShadow: isActive ? `0 0 0 1px ${primaryColor}40` : undefined }}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-2 pt-2 pb-1 space-y-2">
+              {allCats.map((cat) => (
+                <div key={cat}>
+                  {/* Kategori başlığı */}
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span
+                      className="text-[8px] font-bold uppercase tracking-widest"
+                      style={{ color: primaryColor }}
                     >
-                      {/* Görsel */}
-                      <div className="w-full bg-gray-100 overflow-hidden" style={{ aspectRatio: "4/3" }}>
-                        {p.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <ImageOff className="w-4 h-4 text-gray-300" />
-                          </div>
-                        )}
-                      </div>
+                      {cat}
+                    </span>
+                    <div className="flex-1 h-px" style={{ backgroundColor: primaryColor + "33" }} />
+                  </div>
 
-                      {/* Metin */}
-                      <div className="px-1.5 py-1 space-y-0.5">
-                        <p className="text-[8.5px] font-semibold text-gray-800 line-clamp-2 leading-tight">
-                          {p.name || "Ürün adı"}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <p className="text-[9px] font-bold" style={{ color: primaryColor }}>
-                            {displayPrice(p.price)}
-                          </p>
-                          {p.isNew && (
-                            <span
-                              className="text-[7px] font-bold px-1 py-0.5 rounded-full text-white"
-                              style={{ backgroundColor: primaryColor }}
-                            >
-                              Yeni
-                            </span>
-                          )}
+                  {/* Ürün kartları */}
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {grouped[cat].map((p) => {
+                      const isActive = p.id === activeId;
+                      return (
+                        <div
+                          key={p.id}
+                          data-id={p.id}
+                          className="rounded-xl overflow-hidden bg-white border-2 transition-all"
+                          style={{
+                            borderColor: isActive ? primaryColor : "#f1f5f9",
+                            boxShadow: isActive ? `0 0 0 1px ${primaryColor}40` : undefined,
+                          }}
+                        >
+                          {/* Görsel */}
+                          <div className="w-full bg-gray-100 overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                            {p.imageUrl ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <ImageOff className="w-4 h-4 text-gray-300" />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Metin */}
+                          <div className="px-1.5 py-1 space-y-0.5">
+                            <p className="text-[8.5px] font-semibold text-gray-800 line-clamp-2 leading-tight">
+                              {p.name || "Ürün adı"}
+                            </p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-[9px] font-bold" style={{ color: primaryColor }}>
+                                {displayPrice(p.price)}
+                              </p>
+                              {p.isNew && (
+                                <span
+                                  className="text-[7px] font-bold px-1 py-0.5 rounded-full text-white"
+                                  style={{ backgroundColor: primaryColor }}
+                                >
+                                  Yeni
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
