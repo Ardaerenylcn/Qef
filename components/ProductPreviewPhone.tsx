@@ -29,7 +29,7 @@ export default function ProductPreviewPhone({
   const displayPrice = parseFloat(price) > 0 ? parseFloat(price).toFixed(2) : "0.00";
 
   return (
-    <div className="hidden lg:flex flex-col items-center gap-3 select-none">
+    <div className="flex flex-col items-center gap-3 select-none">
       <p className="text-xs text-gray-400 font-medium tracking-wide uppercase">Müşteri Görünümü</p>
 
       {/* Telefon çerçevesi */}
