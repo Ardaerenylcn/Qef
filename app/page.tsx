@@ -5,6 +5,7 @@ import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Meg
 import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 import AIChatMockup from "@/components/AIChatMockup";
+import AIBulkScanMockup from "@/components/AIBulkScanMockup";
 
 export const metadata: Metadata = {
   title: "Qef — Kafeniz için dijital QR menü",
@@ -580,6 +581,64 @@ export default function HomePage() {
 
               <a href="/register"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI BULK SCAN */}
+      <section className="py-24 px-6 bg-gray-800 overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-purple-500/8 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+            <AIBulkScanMockup />
+
+            {/* Sağ — İçerik */}
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                  Yapay Zeka
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Fotoğraf çek,<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-purple-300">
+                    menü hazır
+                  </span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Ürün fotoğraflarını yükleyin, gerisini AI halleder. İsim, açıklama — 15 ürüne kadar tek seferde, saniyeler içinde.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { title: "15 ürüne kadar tek seferde", desc: "Onlarca fotoğrafı tek seferde yükle, hepsini tarasın." },
+                  { title: "Türkçe & İngilizce isim", desc: "Her ürün için otomatik çift dil desteği." },
+                  { title: "Düzenle ve kaydet", desc: "AI çıktılarını tek tek düzenle, onay ver, menüye ekle." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-white font-semibold text-sm">{title}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {["Pro dahil", "Sıfır yazma", "Anında önizleme"].map((item) => (
+                  <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
+                ))}
+              </div>
+
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5">
                 Hemen Ücretsiz Dene →
               </a>
             </div>
