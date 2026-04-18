@@ -22,11 +22,13 @@ interface Props {
 export default function MenuListPreviewPhone({ products, categories, activeId, primaryColor = "#f97316" }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const activeProduct = products.find((p) => p.id === activeId);
+
   useEffect(() => {
     if (!activeId || !scrollRef.current) return;
     const el = scrollRef.current.querySelector(`[data-id="${activeId}"]`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [activeId]);
+  }, [activeId, activeProduct?.category]);
 
   const displayPrice = (p: string | number) => {
     const n = parseFloat(String(p));
