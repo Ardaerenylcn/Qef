@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink } from "lucide-react";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
 import CategoryTabs from "@/components/CategoryTabs";
@@ -27,12 +26,13 @@ import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 const BASE_URL = "https://qefmenu.com";
 
 const getCafe = cache(async (slug: string) => {
-  const admin = createAdminClient();
-  const { data } = await admin
+  const supabase = await createClient();
+  const { data, error } = await supabase
     .from("cafes")
     .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, google_review_url, chatbot_enabled, seasonal_themes_enabled")
     .eq("slug", slug)
     .single();
+  if (error) console.error("[getCafe] error:", error.message, "slug:", slug);
   return data;
 });
 
@@ -82,7 +82,6 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const { lang = "tr", day: testDay } = await searchParams;
   const isEn = lang === "en";
   const supabase = await createClient();
-  const admin = createAdminClient();
 
   const cafe = await getCafe(slug);
   if (!cafe) notFound();
@@ -90,7 +89,7 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   // Ziyareti kaydet (fire-and-forget — sayfayı bekletme)
   supabase.from("menu_views").insert({ cafe_id: cafe.id });
 
-  const { data: products } = await admin
+  const { data: products } = await supabase
     .from("products")
     .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
     .eq("cafe_id", cafe.id)
