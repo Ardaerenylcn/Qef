@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendProWelcome } from "@/lib/email";
 
 async function verifySuperAdmin() {
   const supabase = await createClient();
@@ -72,15 +73,24 @@ export async function deleteUnverifiedUserAction(userId: string) {
   await admin.auth.admin.deleteUser(userId);
 }
 
-export async function activatePlanAction(cafeId: string) {
+export async function activatePlanAction(cafeId: string, userEmail?: string) {
   const admin = await verifySuperAdmin();
   const proEndsAt = new Date();
   proEndsAt.setFullYear(proEndsAt.getFullYear() + 1);
-  const { error } = await admin
+  const { error, data } = await admin
     .from("cafes")
     .update({ plan: "pro", pro_ends_at: proEndsAt.toISOString() })
-    .eq("id", cafeId);
+    .eq("id", cafeId)
+    .select("name, user_id")
+    .single();
   if (error) return { error: "Aktivasyon başarısız" };
+
+  // Teşekkür maili gönder (best-effort)
+  try {
+    const email = userEmail ?? (await admin.auth.admin.getUserById(data.user_id)).data.user?.email;
+    if (email) await sendProWelcome(email, data.name ?? "Kafeniz", proEndsAt);
+  } catch { /* mail hatası aktivasyonu engellemesin */ }
+
   return { success: true };
 }
 

@@ -41,6 +41,24 @@ export async function sendRenewalReminder(to: string, proEndsAt: Date, cafeName:
   });
 }
 
+export async function sendProWelcome(to: string, cafeName: string, proEndsAt: Date) {
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: "Qef Pro'ya hoş geldiniz 🎉",
+    html: `
+      <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#1a1a1a">
+        <h2 style="color:#f97316;margin:0 0 8px">Teşekkürler! 🙏</h2>
+        <p style="color:#555;margin:0 0 16px">Merhaba! <strong>${cafeName}</strong> için Qef Pro planına geçtiğiniz için çok teşekkür ederiz.</p>
+        <p style="color:#555;margin:0 0 24px">Planınız <strong>${proEndsAt.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</strong> tarihine kadar geçerli. Bu süre boyunca tüm Pro özelliklerine sınırsız erişiminiz var.</p>
+        <a href="https://qefmenu.com/admin" style="display:inline-block;background:#f97316;color:#fff;font-weight:700;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:15px">Admin Paneline Git</a>
+        <p style="color:#555;font-size:14px;margin:28px 0 0">Herhangi bir sorunuz olursa <a href="mailto:destek@qefmenu.com" style="color:#f97316">destek@qefmenu.com</a> adresinden bize ulaşabilirsiniz.</p>
+        <p style="color:#aaa;font-size:12px;margin:24px 0 0">Qef · qefmenu.com</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendPaymentReceipt(to: string, cafeName: string, paymentId: string, proEndsAt: Date) {
   await resend.emails.send({
     from: FROM,
