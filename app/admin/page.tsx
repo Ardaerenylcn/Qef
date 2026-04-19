@@ -20,7 +20,7 @@ export default async function AdminPage({ searchParams }: Props) {
   const admin = createAdminClient();
 
   const [{ data: cafe }, { data: existingMessages }] = await Promise.all([
-    supabase.from("cafes").select("id, slug, name, plan, trial_ends_at, pro_ends_at, chatbot_enabled, seasonal_themes_enabled, category_order").eq("user_id", user.id).single(),
+    supabase.from("cafes").select("id, slug, name, plan, trial_ends_at, pro_ends_at, chatbot_enabled, seasonal_themes_enabled, category_order, ai_scan_count, ai_scan_limit").eq("user_id", user.id).single(),
     supabase.from("messages").select("id").eq("user_id", user.id).limit(1),
   ]);
 
@@ -150,6 +150,8 @@ export default async function AdminPage({ searchParams }: Props) {
               existingCategories={cafe?.category_order ?? []}
               chatbotEnabled={cafe?.chatbot_enabled !== false}
               seasonalThemesEnabled={cafe?.seasonal_themes_enabled !== false}
+              aiScanCount={cafe?.ai_scan_count ?? 0}
+              aiScanLimit={cafe?.ai_scan_limit ?? 150}
             />
           );
         })()}

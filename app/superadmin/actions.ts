@@ -93,6 +93,26 @@ export async function deactivatePlanAction(cafeId: string) {
   return { success: true };
 }
 
+export async function setAiScanLimitAction(cafeId: string, limit: number) {
+  const admin = await verifySuperAdmin();
+  const { error } = await admin
+    .from("cafes")
+    .update({ ai_scan_limit: limit })
+    .eq("id", cafeId);
+  if (error) return { error: "Limit güncellenemedi" };
+  return { success: true };
+}
+
+export async function resetAiScanCountAction(cafeId: string) {
+  const admin = await verifySuperAdmin();
+  const { error } = await admin
+    .from("cafes")
+    .update({ ai_scan_count: 0 })
+    .eq("id", cafeId);
+  if (error) return { error: "Sıfırlama başarısız" };
+  return { success: true };
+}
+
 export async function updateSlugAction(cafeId: string, newSlug: string) {
   const admin = await verifySuperAdmin();
 

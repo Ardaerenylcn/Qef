@@ -18,6 +18,8 @@ interface Props {
   existingCategories: string[];
   chatbotEnabled: boolean;
   seasonalThemesEnabled: boolean;
+  aiScanCount: number;
+  aiScanLimit: number;
   stats: {
     todayCount: number;
     weekCount: number;
@@ -28,7 +30,7 @@ interface Props {
   };
 }
 
-export default function AdminTabs({ email, cafeId, cafeSlug, existingCategories, chatbotEnabled, seasonalThemesEnabled, stats }: Props) {
+export default function AdminTabs({ email, cafeId, cafeSlug, existingCategories, chatbotEnabled, seasonalThemesEnabled, aiScanCount, aiScanLimit, stats }: Props) {
   const [tab, setTab] = useState<Tab>("menu");
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
@@ -60,7 +62,7 @@ export default function AdminTabs({ email, cafeId, cafeSlug, existingCategories,
       </div>
 
       {tab === "menu"     && <MenuEditor onSwitchTab={setTab} />}
-      {tab === "ai"       && <BulkAIScan cafeId={cafeId} cafeSlug={cafeSlug} existingCategories={existingCategories} />}
+      {tab === "ai"       && <BulkAIScan cafeId={cafeId} cafeSlug={cafeSlug} existingCategories={existingCategories} initialScanCount={aiScanCount} scanLimit={aiScanLimit} />}
       {tab === "theme"    && <ThemeEditor />}
       {tab === "qr"       && <QRPrint />}
       {tab === "stats"    && <AdminStats {...stats} />}

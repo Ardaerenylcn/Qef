@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn, Crown } from "lucide-react";
-import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction, activatePlanAction, deactivatePlanAction } from "@/app/superadmin/actions";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn, Crown, Sparkles, RotateCcw } from "lucide-react";
+import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction, activatePlanAction, deactivatePlanAction, setAiScanLimitAction, resetAiScanCountAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -17,6 +17,8 @@ interface Props {
     plan?: string | null;
     trial_ends_at?: string | null;
     pro_ends_at?: string | null;
+    ai_scan_count?: number | null;
+    ai_scan_limit?: number | null;
   };
   views: number;
   userInfo: { email: string; phone: string };
@@ -40,6 +42,10 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const logoUrl = cafe.theme?.logoUrl;
   const productCount = cafe.products?.[0]?.count ?? 0;
   const isUuid = /^[0-9a-f-]{36}$/.test(cafe.slug ?? "");
+  const aiScanCount = cafe.ai_scan_count ?? 0;
+  const aiScanLimit = cafe.ai_scan_limit ?? 150;
+  const [aiLimitInput, setAiLimitInput] = useState(String(aiScanLimit));
+  const [editingAiLimit, setEditingAiLimit] = useState(false);
 
   const isPro = cafe.plan === "pro" && cafe.pro_ends_at && new Date(cafe.pro_ends_at) > new Date();
   const trialExpired = cafe.plan !== "pro" && cafe.trial_ends_at && new Date(cafe.trial_ends_at) < new Date();
@@ -95,6 +101,23 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
     if (!confirmDelete) { setConfirmDelete(true); return; }
     startTransition(async () => {
       await deleteUserAction(cafe.user_id, cafe.id);
+      router.refresh();
+    });
+  }
+
+  function handleAiLimitSave() {
+    const val = parseInt(aiLimitInput);
+    if (isNaN(val) || val < 0) return;
+    startTransition(async () => {
+      await setAiScanLimitAction(cafe.id, val);
+      setEditingAiLimit(false);
+      router.refresh();
+    });
+  }
+
+  function handleAiScanReset() {
+    startTransition(async () => {
+      await resetAiScanCountAction(cafe.id);
       router.refresh();
     });
   }
@@ -315,6 +338,52 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
                 {isPending ? "..." : "Pro Yap"}
               </button>
             )}
+          </div>
+        </div>
+
+        {/* AI Tarama Limiti */}
+        <div className="pt-1 border-t border-gray-50 space-y-1.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1 text-[10px] text-gray-400">
+              <Sparkles className="w-3 h-3 text-purple-400" />
+              <span>AI tarama: <span className={`font-semibold ${aiScanCount >= aiScanLimit ? "text-red-500" : "text-gray-600"}`}>{aiScanCount}</span> / {aiScanLimit}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              {editingAiLimit ? (
+                <>
+                  <input
+                    value={aiLimitInput}
+                    onChange={(e) => setAiLimitInput(e.target.value)}
+                    type="number" min="0"
+                    className="text-xs border border-gray-200 rounded px-1.5 py-0.5 w-16 focus:outline-none focus:border-purple-400"
+                    autoFocus
+                  />
+                  <button onClick={handleAiLimitSave} disabled={isPending} className="text-green-500 hover:text-green-600">
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => { setEditingAiLimit(false); setAiLimitInput(String(aiScanLimit)); }} className="text-gray-300 hover:text-gray-500">
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setEditingAiLimit(true)} title="Limiti düzenle"
+                    className="text-gray-200 hover:text-purple-400 transition-colors">
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button onClick={handleAiScanReset} disabled={isPending || aiScanCount === 0} title="Sayacı sıfırla"
+                    className="text-gray-200 hover:text-orange-400 transition-colors disabled:opacity-30">
+                    <RotateCcw className="w-3 h-3" />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full ${aiScanCount >= aiScanLimit ? "bg-red-400" : "bg-purple-400"}`}
+              style={{ width: `${Math.min((aiScanCount / aiScanLimit) * 100, 100)}%` }}
+            />
           </div>
         </div>
 

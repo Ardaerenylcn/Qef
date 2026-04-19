@@ -28,6 +28,21 @@ export async function POST(req: Request) {
     return new Response("1–15 arası görsel gerekli", { status: 400 });
   }
 
+  const { data: cafe } = await supabase
+    .from("cafes")
+    .select("id, ai_scan_count, ai_scan_limit")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!cafe) return new Response("Kafe bulunamadı", { status: 404 });
+
+  const scanCount = cafe.ai_scan_count ?? 0;
+  const scanLimit = cafe.ai_scan_limit ?? 150;
+
+  if (scanCount >= scanLimit) {
+    return Response.json({ limitExceeded: true, scanCount, scanLimit }, { status: 429 });
+  }
+
   const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON!);
   const vertex = createVertex({
     project: credentials.project_id,
@@ -59,5 +74,10 @@ Sadece gördüğün ürünü tanımla, abartma.`,
     ],
   });
 
-  return Response.json(object);
+  await supabase
+    .from("cafes")
+    .update({ ai_scan_count: scanCount + images.length })
+    .eq("id", cafe.id);
+
+  return Response.json({ ...object, scanCount: scanCount + images.length, scanLimit });
 }

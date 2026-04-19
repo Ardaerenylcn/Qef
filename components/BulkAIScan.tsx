@@ -29,15 +29,18 @@ interface Props {
   cafeId: string;
   cafeSlug: string;
   existingCategories: string[];
+  initialScanCount?: number;
+  scanLimit?: number;
 }
 
-export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Props) {
+export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initialScanCount = 0, scanLimit = 150 }: Props) {
   const [files, setFiles] = useState<{ file: File; preview: string }[]>([]);
   const [scanning, setScanning] = useState(false);
   const [products, setProducts] = useState<ScannedProduct[]>([]);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [scanCount, setScanCount] = useState(initialScanCount);
   const [newCatInputIndex, setNewCatInputIndex] = useState<number | null>(null);
   const [newCatValue, setNewCatValue] = useState("");
   const [allCategories, setAllCategories] = useState<string[]>(existingCategories);
@@ -113,9 +116,19 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
         body: JSON.stringify({ images: base64Images }),
       });
 
+      if (res.status === 429) {
+        const data = await res.json();
+        if (data.limitExceeded) {
+          setScanCount(data.scanCount ?? scanLimit);
+          setError(`AI tarama limitine ulaştın (${data.scanLimit ?? scanLimit} ürün). Destek için bize ulaş.`);
+          return;
+        }
+      }
       if (!res.ok) throw new Error(await res.text());
 
-      const data = await res.json() as { products: { index: number; name: string; name_en: string; description: string }[] };
+      const data = await res.json() as { products: { index: number; name: string; name_en: string; description: string }[]; scanCount?: number; scanLimit?: number };
+
+      if (data.scanCount !== undefined) setScanCount(data.scanCount);
 
       const scanned: ScannedProduct[] = data.products.map((p) => ({
         ...p,
@@ -243,7 +256,7 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
       <div className="space-y-6">
 
         {/* Başlık */}
-        <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 rounded-2xl p-5 space-y-2">
+        <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 rounded-2xl p-5 space-y-3">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-orange-500" />
             <div className="flex items-center gap-2">
@@ -254,8 +267,23 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
           <p className="text-sm text-gray-600 leading-relaxed">
             Ürün fotoğraflarını yükle, AI her ürün için otomatik <strong>isim ve açıklama</strong> oluştursun.
             <br />
-            <span className="text-gray-500">Kategori, fiyat ve detayları sen belirlersin.</span>
+            <span className="text-gray-500">Tek seferde 15, toplamda {scanLimit} ürün.</span>
           </p>
+          {/* Limit bar */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <span>{scanCount} / {scanLimit} ürün kullanıldı</span>
+              <span className={scanCount >= scanLimit ? "text-red-500 font-semibold" : "text-gray-400"}>
+                {scanCount >= scanLimit ? "Limit doldu" : `${scanLimit - scanCount} kaldı`}
+              </span>
+            </div>
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${scanCount >= scanLimit ? "bg-red-400" : "bg-orange-400"}`}
+                style={{ width: `${Math.min((scanCount / scanLimit) * 100, 100)}%` }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Upload alanı */}
@@ -292,10 +320,16 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories }: Pro
               ))}
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
-            <button onClick={handleScan} disabled={scanning}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 disabled:opacity-60 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-orange-200">
-              {scanning ? <><Loader2 className="w-4 h-4 animate-spin" />AI analiz ediyor…</> : <><Sparkles className="w-4 h-4" />{files.length} Görseli Analiz Et</>}
-            </button>
+            {scanCount >= scanLimit ? (
+              <div className="w-full text-center py-3.5 rounded-2xl bg-red-50 border border-red-200 text-sm font-semibold text-red-500">
+                AI tarama limitine ulaştın — destek için bize ulaş
+              </div>
+            ) : (
+              <button onClick={handleScan} disabled={scanning}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 disabled:opacity-60 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-orange-200">
+                {scanning ? <><Loader2 className="w-4 h-4 animate-spin" />AI analiz ediyor…</> : <><Sparkles className="w-4 h-4" />{files.length} Görseli Analiz Et</>}
+              </button>
+            )}
           </div>
         )}
 
