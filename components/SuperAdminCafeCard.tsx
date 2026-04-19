@@ -52,10 +52,11 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
   const trialDaysLeft = cafe.trial_ends_at && !trialExpired
     ? Math.ceil((new Date(cafe.trial_ends_at).getTime() - Date.now()) / 86400000)
     : null;
+  const [proMonths, setProMonths] = useState(12);
 
   function handleActivate() {
     startTransition(async () => {
-      await activatePlanAction(cafe.id);
+      await activatePlanAction(cafe.id, proMonths);
       router.refresh();
     });
   }
@@ -341,11 +342,21 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
                 İptal et
               </button>
             ) : (
-              <button onClick={handleActivate} disabled={isPending}
-                className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white transition-colors disabled:opacity-40">
-                <Crown className="w-2.5 h-2.5" />
-                {isPending ? "..." : "Pro Yap"}
-              </button>
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="number" min="1" max="120"
+                  value={proMonths}
+                  onChange={(e) => setProMonths(Number(e.target.value))}
+                  className="w-10 text-[10px] border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:border-yellow-400 text-center"
+                  title="Ay sayısı"
+                />
+                <span className="text-[9px] text-gray-400">ay</span>
+                <button onClick={handleActivate} disabled={isPending}
+                  className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white transition-colors disabled:opacity-40">
+                  <Crown className="w-2.5 h-2.5" />
+                  {isPending ? "..." : "Pro Yap"}
+                </button>
+              </div>
             )}
           </div>
         </div>

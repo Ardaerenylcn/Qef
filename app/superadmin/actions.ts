@@ -72,13 +72,16 @@ export async function deleteUnverifiedUserAction(userId: string) {
   await admin.auth.admin.deleteUser(userId);
 }
 
-export async function activatePlanAction(cafeId: string) {
+export async function activatePlanAction(cafeId: string, months = 12) {
   const admin = await verifySuperAdmin();
-  const proEndsAt = new Date();
-  proEndsAt.setFullYear(proEndsAt.getFullYear() + 1);
+  const { data: existing } = await admin.from("cafes").select("pro_ends_at, plan").eq("id", cafeId).single();
+  const base = existing?.plan === "pro" && existing?.pro_ends_at && new Date(existing.pro_ends_at) > new Date()
+    ? new Date(existing.pro_ends_at)
+    : new Date();
+  base.setMonth(base.getMonth() + months);
   const { error } = await admin
     .from("cafes")
-    .update({ plan: "pro", pro_ends_at: proEndsAt.toISOString() })
+    .update({ plan: "pro", pro_ends_at: base.toISOString() })
     .eq("id", cafeId);
   if (error) return { error: "Aktivasyon başarısız" };
   return { success: true };

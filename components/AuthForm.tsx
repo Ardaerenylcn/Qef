@@ -46,6 +46,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
         setError("Kayıt olunamadı. E-posta zaten kullanımda olabilir.");
       } else {
         setSuccess("Hesabın oluşturuldu! E-postanı doğrula, ardından giriş yap.");
+        fetch("/api/notify-new-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, fullName: fullName.trim(), venueName: venueName.trim() }),
+        }).catch(() => {});
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });

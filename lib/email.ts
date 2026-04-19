@@ -41,6 +41,28 @@ export async function sendRenewalReminder(to: string, proEndsAt: Date, cafeName:
   });
 }
 
+export async function sendNewUserNotification(userEmail: string, fullName: string, venueName: string) {
+  const adminEmail = process.env.SUPER_ADMIN_EMAIL;
+  if (!adminEmail) return;
+  await resend.emails.send({
+    from: FROM,
+    to: adminEmail,
+    subject: `Yeni kayıt: ${venueName || userEmail}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#1a1a1a">
+        <h3 style="margin:0 0 16px;color:#f97316">Yeni Kayıt 🎉</h3>
+        <table style="width:100%;border-collapse:collapse">
+          ${fullName ? `<tr><td style="padding:6px 0;color:#888;font-size:13px;width:100px">Ad Soyad</td><td style="padding:6px 0;font-size:13px;font-weight:600">${fullName}</td></tr>` : ""}
+          ${venueName ? `<tr><td style="padding:6px 0;color:#888;font-size:13px">Mekan</td><td style="padding:6px 0;font-size:13px;font-weight:600">${venueName}</td></tr>` : ""}
+          <tr><td style="padding:6px 0;color:#888;font-size:13px">E-posta</td><td style="padding:6px 0;font-size:13px">${userEmail}</td></tr>
+          <tr><td style="padding:6px 0;color:#888;font-size:13px">Zaman</td><td style="padding:6px 0;font-size:13px">${new Date().toLocaleString("tr-TR")}</td></tr>
+        </table>
+        <a href="https://qefmenu.com/superadmin" style="display:inline-block;margin-top:20px;background:#f97316;color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:13px">Superadmin'de Gör</a>
+      </div>
+    `,
+  });
+}
+
 export async function sendProWelcome(to: string, cafeName: string, proEndsAt: Date) {
   await resend.emails.send({
     from: FROM,
