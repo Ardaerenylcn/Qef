@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { retrieveCheckoutForm } from "@/lib/iyzico";
-import { sendPaymentReceipt } from "@/lib/email";
+import { sendProWelcome } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       const { data: userData } = await admin.auth.admin.getUserById(cafe?.user_id ?? "");
       const email = userData?.user?.email;
       if (email) {
-        await sendPaymentReceipt(email, cafe?.name ?? "Kafeniz", String(result.paymentId ?? ""), base);
+        await sendProWelcome(email, cafe?.name ?? "Kafeniz", base);
       }
     } catch { /* email hatası ödemeyi etkilemesin */ }
 
