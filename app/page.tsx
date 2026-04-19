@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Megaphone, X as XIcon, Crown, UtensilsCrossed, Sparkles } from "lucide-react";
-import DemoCustomizer from "@/components/DemoCustomizer";
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 import AIChatMockup from "@/components/AIChatMockup";
 import AIBulkScanMockup from "@/components/AIBulkScanMockup";
+import AppearanceDemo from "@/components/help/demos/AppearanceDemo";
+import QRDemo from "@/components/help/demos/QRDemo";
 
 export const metadata: Metadata = {
   title: "Qef — Kafeniz için dijital QR menü",
@@ -646,15 +647,101 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ÖZELLEŞTİRME */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="text-center space-y-3">
-            <p className="text-orange-500 font-bold text-sm uppercase tracking-widest">Özelleştirme</p>
-            <h2 className="text-3xl font-extrabold text-gray-900">Kafenizin kimliğini yansıtın</h2>
-            <p className="text-gray-400 max-w-md mx-auto">Renkler, yazı tipleri, ürün düzeni — hepsini tek panelden ayarlayın.</p>
+      {/* QR KODLAR */}
+      <section className="py-24 px-6 bg-white overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-gray-100 rounded-full blur-[80px] pointer-events-none" />
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+            <div className="relative flex-shrink-0 flex items-center justify-center">
+              <div className="absolute w-64 h-64 bg-gray-200/60 rounded-full blur-[60px] pointer-events-none" />
+              <div className="relative">
+                <QRDemo />
+              </div>
+            </div>
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gray-800 inline-block" />
+                  Anında Paylaş
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15]">
+                  QR kodu yap,<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 to-gray-600">
+                    masaya koy
+                  </span>
+                </h2>
+                <p className="text-gray-500 leading-relaxed text-[15px]">
+                  QR kodunuzu tek tıkla indirin, yazıcıdan çıktı alın ve masaya yapıştırın. Müşteri telefon kamerasını tutunca doğrudan menünüz açılır — uygulama yok, link ezber yok.
+                </p>
+              </div>
+              <div className="space-y-2.5">
+                {[
+                  { title: "Menü değişse QR değişmez", desc: "Yeni ürün ekleseniz, fiyat güncelleseniz QR kodu aynı kalır — basılı kodları yeniden yazdırmanıza gerek yok." },
+                  { title: "Masa numaralı kod desteği", desc: "Her masa için ayrı QR oluşturun, sipariş notlarında masa bilgisi otomatik görünsün." },
+                  { title: "PNG olarak indir", desc: "Tek tık ile yüksek çözünürlüklü PNG alın, hazır baskıya gönderin." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-gray-800 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-gray-900 font-semibold text-sm">{title}</p>
+                      <p className="text-gray-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-200 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
           </div>
-          <DemoCustomizer />
+        </div>
+      </section>
+
+      {/* ÖZELLEŞTİRME */}
+      <section className="py-24 px-6 bg-gray-50 overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+            <div className="flex-1 space-y-7 text-center lg:text-left">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-pink-50 border border-pink-200 text-pink-600 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 inline-block" />
+                  Görünüm & Tema
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15]">
+                  Renk, düzen,<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">
+                    kafenizin tarzı
+                  </span>
+                </h2>
+                <p className="text-gray-500 leading-relaxed text-[15px] max-w-md mx-auto lg:mx-0">
+                  Ana rengi seçin, ürün düzenini ayarlayın, görsel oranını belirleyin. Kaydet&apos;e bastığınız an müşteri menüsüne yansır.
+                </p>
+              </div>
+              <div className="space-y-2.5">
+                {[
+                  { title: "Sonsuz renk seçeneği", desc: "Kafenizin brandına uygun herhangi bir rengi seçin." },
+                  { title: "Liste veya Kart görünümü", desc: "İki ürün düzeni arasında tek tıkla geçin." },
+                  { title: "Anında önizleme", desc: "Değişiklik yaparken müşterinin gördüğünü siz de görün." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white hover:bg-pink-50/50 border border-gray-200 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-gray-900 font-semibold text-sm">{title}</p>
+                      <p className="text-gray-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-pink-200 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
+            <div className="flex-shrink-0 flex justify-center">
+              <AppearanceDemo />
+            </div>
+          </div>
         </div>
       </section>
 

@@ -33,8 +33,8 @@ export default function StatsDemo() {
                   style={{
                     height: on ? `${(d.v / max) * 100}%` : "0%",
                     background: i === 4
-                      ? "linear-gradient(to top, #ea580c, #f97316)"
-                      : "linear-gradient(to top, #fed7aa, #fdba74)",
+                      ? "linear-gradient(to top, #c2410c, #ea580c)"
+                      : "linear-gradient(to top, #f97316, #fb923c)",
                     transitionDelay: `${i * 55}ms`,
                   }}
                 />

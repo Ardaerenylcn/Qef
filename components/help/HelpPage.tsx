@@ -13,7 +13,8 @@ import StatsDemo from "./demos/StatsDemo";
 import QRDemo from "./demos/QRDemo";
 import CategoryDemo from "./demos/CategoryDemo";
 import AppearanceDemo from "./demos/AppearanceDemo";
-import ProductDemo from "./demos/ProductDemo";
+import HelpProductDemo from "./demos/HelpProductDemo";
+import MenuListPreviewPhone from "@/components/MenuListPreviewPhone";
 
 // ─── Bölüm tanımları ────────────────────────────────────────────────
 const SECTIONS = [
@@ -265,7 +266,7 @@ export default function HelpPage() {
 
         {/* ── İçerik ────────────────────────────────────────────────── */}
         <main className="flex-1 lg:ml-64 min-w-0">
-          <div className="max-w-4xl mx-auto px-4 lg:px-10 py-10 space-y-6">
+          <div className="max-w-5xl mx-auto px-4 lg:px-10 py-10 space-y-6">
 
             {/* ── 01 BAŞLANGIÇ ─────────────────────────────────────── */}
             <section id="baslangic" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
@@ -308,13 +309,13 @@ export default function HelpPage() {
                   <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-100 space-y-3">
                     <div className="bg-white rounded-xl border border-gray-200 px-4 py-3">
                       <p className="text-[10px] text-gray-400 font-medium mb-1">Kafe Adı</p>
-                      <p className="text-sm font-semibold text-gray-800">Antep Kahvesi</p>
+                      <p className="text-sm font-semibold text-gray-800">Drita Cafe</p>
                     </div>
                     <div className="bg-white rounded-xl border border-gray-200 px-4 py-3">
                       <p className="text-[10px] text-gray-400 font-medium mb-1">Otomatik oluşturulan menü linki</p>
                       <div className="flex items-center gap-1 flex-wrap">
                         <span className="text-xs text-gray-400">qefmenu.com/menu/</span>
-                        <span className="text-xs font-bold text-orange-500 bg-orange-100 px-1.5 py-0.5 rounded-md">antep-kahvesi</span>
+                        <span className="text-xs font-bold text-orange-500 bg-orange-100 px-1.5 py-0.5 rounded-md">drita-cafe</span>
                       </div>
                       <p className="text-[9px] text-gray-400 mt-1">↑ Kafe adından otomatik oluşturuldu</p>
                     </div>
@@ -331,7 +332,7 @@ export default function HelpPage() {
                   </div>
                 }
                 steps={[
-                  "Kafe adınızı girin — menü linki (URL) kafe adınızdan otomatik oluşturulur. Örneğin \"Antep Kahvesi\" yazarsanız link \"antep-kahvesi\" olur.",
+                  "Kafe adınızı girin — menü linki (URL) kafe adınızdan otomatik oluşturulur. Örneğin \"Drita Cafe\" yazarsanız link \"drita-cafe\" olur.",
                   "İsterseniz URL'i kendiniz de düzenleyebilirsiniz. Sadece küçük harf ve tire kullanın (boşluk yok).",
                   "İsteğe bağlı: kısa bir açıklama, çalışma saatleri, adres veya Google Maps linki ekleyin — bunlar müşteriye görünür.",
                   "En üstteki \"Kaydet\" butonuna tıklayın.",
@@ -368,7 +369,7 @@ export default function HelpPage() {
               <SectionHeader s={SECTIONS[3]} />
               <SectionLayout
                 description="Menünüze tek tek ürün ekleyebileceğiniz formdur. Zorunlu olan sadece ürün adı, fiyat ve kategori — geri kalan her şey isteğe bağlı."
-                demo={<ProductDemo />}
+                demo={<HelpProductDemo />}
                 steps={[
                   "\"Yeni ürün ekle\" bölümüne gelin. Ürün adını yazın — sağda telefon önizlemesi anında güncellenir.",
                   "Fiyatı girin ve hangi kategoriye ait olduğunu seçin. Kategori seçmezseniz otomatik olarak \"Genel\"e eklenir.",
@@ -415,41 +416,7 @@ export default function HelpPage() {
               <SectionHeader s={SECTIONS[5]} />
               <SectionLayout
                 description="Ürün eklerken ekranın sağ tarafında küçük bir telefon simülasyonu belirir. Yazdığınız her şey o telefonda anında güncellenir — müşterinizin gördüğünü siz de görürsünüz."
-                demo={
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100 space-y-3">
-                    {/* Mock split-screen */}
-                    <div className="flex gap-3 items-start">
-                      <div className="flex-1 space-y-2 min-w-0">
-                        <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider">Admin Paneli</p>
-                        {["Ürün adı: Türk Kahvesi", "Fiyat: 45 ₺", "Kategori: Kahveler", "Açıklama: ..."].map((line, i) => (
-                          <div key={i} className="bg-white rounded-xl border border-gray-200 px-3 py-2">
-                            <p className="text-xs text-gray-600">{line}</p>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col items-center justify-center gap-1 pt-10">
-                        <div className="w-5 h-0.5 bg-blue-300 rounded" />
-                        <div className="w-0 h-0 border-t-3 border-t-transparent border-b-3 border-b-transparent border-l-[5px] border-l-blue-300" />
-                      </div>
-                      <div className="flex-shrink-0">
-                        <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider mb-2">Önizleme</p>
-                        <div className="w-[72px] h-[100px] bg-gray-900 rounded-[16px] p-[2.5px] shadow-lg">
-                          <div className="w-full h-full bg-white rounded-[13px] overflow-hidden flex flex-col">
-                            <div className="h-10 bg-gradient-to-b from-gray-200 to-gray-100 flex-shrink-0" />
-                            <div className="p-1.5 flex-1 space-y-1">
-                              <p className="text-[7px] font-bold text-gray-800">Türk Kahvesi</p>
-                              <p className="text-[6px] text-orange-500 font-bold">45.00 ₺</p>
-                              <div className="flex gap-0.5">
-                                <span className="text-[5.5px] bg-orange-100 text-orange-600 px-1 rounded-full font-medium">Kahveler</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-[10px] text-blue-400 text-center">← Her değişiklik anında yansır →</p>
-                  </div>
-                }
+                demo={<HelpProductDemo />}
                 steps={[
                   "Ürün ekleme formuna gelin — ekranın sağında telefon önizlemesi otomatik açılır.",
                   "Ürün adını yazmaya başlayın, fiyat girin — her şey sağdaki telefonda anında güncellenir.",
@@ -526,11 +493,14 @@ export default function HelpPage() {
             <section id="chatbot" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[9]} />
 
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-                <div className="lg:col-span-3">
-                  <AIChatMockup />
+              {/* Geniş layout: chat tam genişlikte, metin altında */}
+              <div className="space-y-8">
+                <div className="flex justify-center">
+                  <div className="w-full max-w-lg">
+                    <AIChatMockup />
+                  </div>
                 </div>
-                <div className="lg:col-span-2 space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
                   <p className="text-gray-600 leading-relaxed mb-5">
                     Menünüzün sağ alt köşesinde bir sohbet balonu belirir. Müşteri buna tıklayıp soru sorabilir — &quot;glutensiz bir şeyiniz var mı?&quot;, &quot;en popüler tatlınız ne?&quot; gibi. Yapay zeka sizin menünüzdeki ürünleri bilerek yanıt verir, genel bilgi vermez.
                   </p>

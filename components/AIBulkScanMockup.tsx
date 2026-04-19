@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { Sparkles, Check, Loader2 } from "lucide-react";
 
 const PHOTOS = [
-  { emoji: "🍕", name: "Margarita Pizza",       desc: "İnce hamur, domates sos, mozzarella.",  price: "₺180", color: "from-orange-400/20 to-red-400/10" },
-  { emoji: "🥗", name: "Akdeniz Salatası",       desc: "Taze sebzeler, zeytin, beyaz peynir.",  price: "₺120", color: "from-green-400/20 to-emerald-400/10" },
-  { emoji: "🍰", name: "Cheesecake",             desc: "Kremamsı dolgu, çilek sosu.",            price: "₺95",  color: "from-pink-400/20 to-rose-400/10" },
-  { emoji: "☕", name: "Filtre Kahve",            desc: "Tek köken, soğuk demleme.",             price: "₺65",  color: "from-amber-400/20 to-yellow-400/10" },
+  { img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=80&q=75", name: "Margarita Pizza",   desc: "İnce hamur, domates sos, mozzarella.", price: "₺180" },
+  { img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=80&q=75", name: "Akdeniz Salatası", desc: "Taze sebzeler, zeytin, beyaz peynir.",  price: "₺120" },
+  { img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=80&q=75", name: "Cheesecake",       desc: "Kremamsı dolgu, çilek sosu.",           price: "₺95"  },
+  { img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=80&q=75", name: "Filtre Kahve",     desc: "Tek köken, soğuk demleme.",            price: "₺65"  },
 ];
 
 type Phase = "idle" | "scanning" | "done";
@@ -87,8 +87,9 @@ export default function AIBulkScanMockup() {
         <div className="mx-4 mt-4 border-2 border-dashed border-white/10 rounded-2xl p-3 flex items-center gap-3 bg-white/[0.03]">
           <div className="flex gap-1.5">
             {PHOTOS.map((p, i) => (
-              <div key={i} className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color} border border-white/10 flex items-center justify-center text-xl relative overflow-hidden`}>
-                {p.emoji}
+              <div key={i} className="w-10 h-10 rounded-xl border border-white/10 relative overflow-hidden bg-gray-800">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
                 {phase !== "idle" && doneCount > i && (
                   <div className="absolute inset-0 bg-green-500/30 flex items-center justify-center animate-fadeIn">
                     <Check className="w-4 h-4 text-green-300" />
@@ -112,8 +113,9 @@ export default function AIBulkScanMockup() {
         <div className="px-4 py-3 space-y-2 min-h-[220px]">
           {PHOTOS.slice(0, doneCount).map((p, i) => (
             <div key={i} className="flex items-center gap-3 bg-white/[0.05] border border-white/10 rounded-2xl px-3 py-2.5 animate-fadeIn">
-              <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${p.color} flex items-center justify-center text-lg shrink-0`}>
-                {p.emoji}
+              <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 bg-gray-800">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-white text-[12px] font-semibold truncate">{p.name}</p>
