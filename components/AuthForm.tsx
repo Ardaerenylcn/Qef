@@ -15,6 +15,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [venueName, setVenueName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -32,7 +34,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
         email,
         password,
         options: {
-          data: { phone: phone.trim() },
+          data: {
+            phone: phone.trim(),
+            full_name: fullName.trim(),
+            venue_name: venueName.trim(),
+          },
           emailRedirectTo: "https://qefmenu.com/auth/callback",
         },
       });
@@ -88,6 +94,26 @@ export default function AuthForm({ mode }: AuthFormProps) {
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
           <div className="space-y-3">
+            {mode === "register" && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Ad Soyad"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                />
+                <input
+                  type="text"
+                  placeholder="Mekan Adı (ör. Cafe Nora)"
+                  value={venueName}
+                  onChange={(e) => setVenueName(e.target.value)}
+                  required
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                />
+              </>
+            )}
             <input
               type="email"
               placeholder="E-posta"
