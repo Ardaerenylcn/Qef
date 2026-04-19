@@ -26,8 +26,12 @@ export default function MenuListPreviewPhone({ products, categories, activeId, p
 
   useEffect(() => {
     if (!activeId || !scrollRef.current) return;
-    const el = scrollRef.current.querySelector(`[data-id="${activeId}"]`);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const container = scrollRef.current;
+    const el = container.querySelector(`[data-id="${activeId}"]`) as HTMLElement | null;
+    if (el) {
+      const top = el.offsetTop - container.clientHeight / 2 + el.clientHeight / 2;
+      container.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
   }, [activeId, activeProduct?.category]);
 
   const displayPrice = (p: string | number) => {

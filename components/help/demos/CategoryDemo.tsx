@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GripVertical } from "lucide-react";
 
 const BASE = ["☕ Kahveler", "🍰 Tatlılar", "🥤 Soğuk İçecekler", "🍪 Atıştırmalıklar"];
@@ -9,7 +9,7 @@ export default function CategoryDemo() {
   const [items, setItems] = useState(BASE);
   const [liftedIdx, setLiftedIdx] = useState<number | null>(null);
   const [moving, setMoving] = useState(false);
-  const [cursorY, setCursorY] = useState(0);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ts: ReturnType<typeof setTimeout>[] = [];
@@ -33,14 +33,17 @@ export default function CategoryDemo() {
     return () => { clearInterval(id); ts.forEach(clearTimeout); };
   }, []);
 
-  // Cursor up-down float animation
+  // Cursor up-down float animation — DOM ref yerine setState kullanmıyoruz
   useEffect(() => {
     let frame: number;
     let start: number | null = null;
     const animate = (ts: number) => {
       if (!start) start = ts;
       const t = (ts - start) / 1000;
-      setCursorY(Math.sin(t * 2.2) * 7);
+      if (cursorRef.current) {
+        const y = Math.sin(t * 2.2) * 7;
+        cursorRef.current.style.transform = `translateY(calc(-50% + ${y}px))`;
+      }
       frame = requestAnimationFrame(animate);
     };
     frame = requestAnimationFrame(animate);
@@ -72,11 +75,9 @@ export default function CategoryDemo() {
 
         {/* Animated drag cursor */}
         <div
+          ref={cursorRef}
           className="absolute right-2 pointer-events-none"
-          style={{
-            top: "50%",
-            transform: `translateY(calc(-50% + ${cursorY}px))`,
-          }}
+          style={{ top: "50%", transform: "translateY(-50%)" }}
         >
           <div className="flex flex-col items-center gap-0.5">
             <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
