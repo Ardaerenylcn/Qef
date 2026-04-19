@@ -421,7 +421,7 @@ export default function MenuEditor({ onSwitchTab }: MenuEditorProps) {
       )}
 
       {/* Kafe Bilgileri */}
-      <CollapsibleSection storageKey="menu_kafe_bilgileri" title="Kafe bilgileri" defaultOpen={false} helpSection="kafe-bilgileri">
+      <CollapsibleSection storageKey="menu_kafe_bilgileri" title="Kafe bilgileri" defaultOpen={true} helpSection="kafe-bilgileri">
         <input type="text" placeholder="Kafe adı" value={cafeName}
           onChange={(e) => handleCafeNameChange(e.target.value)}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
