@@ -227,8 +227,10 @@ export default function HomePage() {
       </section>
 
       {/* DEMO */}
-      <section className="py-24 px-6 bg-gray-950 overflow-hidden relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/6 rounded-full blur-[120px] pointer-events-none" />
+      <section className="py-24 px-6 bg-gray-950 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/6 rounded-full blur-[120px]" />
+        </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
 
@@ -550,8 +552,10 @@ export default function HomePage() {
       </section>
 
       {/* AI CHATBOT */}
-      <section className="py-24 px-6 bg-gray-700 overflow-hidden relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/8 rounded-full blur-[100px] pointer-events-none" />
+      <section className="py-24 px-6 bg-gray-700 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/8 rounded-full blur-[100px]" />
+        </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
@@ -608,8 +612,10 @@ export default function HomePage() {
       </section>
 
       {/* AI BULK SCAN */}
-      <section className="py-24 px-6 bg-gray-800 overflow-hidden relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-purple-500/8 rounded-full blur-[100px] pointer-events-none" />
+      <section className="py-24 px-6 bg-gray-800 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-purple-500/8 rounded-full blur-[100px]" />
+        </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
@@ -666,8 +672,10 @@ export default function HomePage() {
       </section>
 
       {/* QR KODLAR */}
-      <section className="py-24 px-6 bg-white overflow-hidden relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-gray-100 rounded-full blur-[80px] pointer-events-none" />
+      <section className="py-24 px-6 bg-white relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-gray-100 rounded-full blur-[80px]" />
+        </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
             <div className="relative flex-shrink-0 flex items-center justify-center">
@@ -790,8 +798,10 @@ export default function HomePage() {
       </section>
 
       {/* GOOGLE YORUMLAR */}
-      <section className="py-24 px-6 bg-gray-950 overflow-hidden relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-green-500/6 rounded-full blur-[100px] pointer-events-none" />
+      <section className="py-24 px-6 bg-gray-950 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-green-500/6 rounded-full blur-[100px]" />
+        </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">

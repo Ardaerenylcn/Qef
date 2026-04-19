@@ -43,9 +43,11 @@ export default function AIBulkScanMockup() {
   return (
     <div className="relative w-full lg:w-[52%] flex-shrink-0 flex items-center justify-center order-last lg:order-first">
 
-      {/* Glow */}
-      <div className="absolute w-72 h-72 bg-purple-500/20 rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute w-48 h-48 bg-pink-400/10 rounded-full blur-[60px] -translate-x-16 translate-y-8 pointer-events-none" />
+      {/* Glow — overflow-visible kalması için ayrı container */}
+      <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+        <div className="absolute w-72 h-72 bg-purple-500/20 rounded-full blur-[80px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute w-48 h-48 bg-pink-400/10 rounded-full blur-[60px] left-1/2 top-1/2 -translate-x-2/3 translate-y-8" />
+      </div>
 
       {/* Yüzen rozetler */}
       <div className="absolute -top-4 -left-2 lg:left-4 bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-3 py-2 text-xs text-white font-semibold shadow-xl animate-bounce" style={{ animationDuration: "3.5s" }}>
