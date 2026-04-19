@@ -449,6 +449,110 @@ export default function HelpPage() {
                   </Tip>
                 }
               />
+
+              {/* ── Alt bölümler ── */}
+              <div className="mt-10 space-y-8 border-t border-gray-100 pt-8">
+
+                {/* Logo */}
+                <div id="gorunum-logo" className="scroll-mt-20">
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Logo</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Müşteriler menüyü açtığında sayfanın üstünde, kafe adının yanında gösterilen küçük simgedir. Kafenizin markasını yansıtır.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                    {[
+                      { title: "Önerilen format", desc: "PNG veya SVG. Arka planı şeffaf PNG en temiz görünümü verir." },
+                      { title: "Boyut", desc: "En az 200×200 piksel yükleyin. Sistem otomatik küçültür, kare olmak zorunda değil." },
+                      { title: "Kaldırmak için", desc: "Logo alanındaki X butonuna tıklayın. Kafe adı başlık olarak kalır." },
+                    ].map((c) => (
+                      <div key={c.title} className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                        <p className="text-xs font-bold text-gray-700 mb-1">{c.title}</p>
+                        <p className="text-xs text-gray-500 leading-relaxed">{c.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Note>Logo yükledikten sonra sağ üstteki <strong>Kaydet</strong> butonuna basmayı unutmayın — aksi halde tarayıcı sekmesini kapattığınızda kaybolur.</Note>
+                </div>
+
+                {/* Kapak Görseli */}
+                <div id="gorunum-kapak" className="scroll-mt-20">
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Kapak Görseli</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Menü sayfasının en üstünde tam genişlikte gösterilen afis fotoğrafıdır. Kafenizin atmosferini, özel ürününüzü veya mevsimsel bir görseli buraya koyabilirsiniz.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                    {[
+                      { title: "Önerilen boyut", desc: "En az 1200×400 piksel, yatay (landscape) formatlı görsel en iyi görünümü verir." },
+                      { title: "Dosya boyutu", desc: "Ne kadar büyük yüklerseniz yükleyin, sistem otomatik sıkıştırır. Maksimum 6 MB önerilir." },
+                      { title: "Ne göstermeli?", desc: "Kafenizin içi, sizi temsil eden bir ürün veya mevsimsel bir fotoğraf idealdir." },
+                    ].map((c) => (
+                      <div key={c.title} className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                        <p className="text-xs font-bold text-gray-700 mb-1">{c.title}</p>
+                        <p className="text-xs text-gray-500 leading-relaxed">{c.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Tip>Kapak görseli müşterinin ilk gördüğü şeydir — sezonluk değiştirmek menüye canlılık katar. Yeni bir görsel yükleyip Kaydet&apos;e basmanız yeterli.</Tip>
+                </div>
+
+                {/* Duyuru */}
+                <div id="gorunum-duyuru" className="scroll-mt-20">
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Duyuru Görseli</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Müşteri menüyü açtığında ekranın ortasında bir popup olarak belirir. Kampanya, yeni ürün lansmanı veya özel etkinlik için kullanabilirsiniz. Müşteri X&apos;e tıklayarak kapatabilir.
+                  </p>
+                  <StepList steps={[
+                    "\"Görünüm → Duyuru\" bölümüne gelin. Görseli sürükleyip bırakın veya tıklayarak seçin.",
+                    "İsteğe bağlı: Görselin altına bir link ekleyin — tıklayınca kampanya sayfanıza veya Instagram&apos;ınıza yönlendirebilirsiniz.",
+                    "Duyuruyu aktif/pasif etmek için Duyuru başlığının yanındaki toggle&apos;ı kullanın. Aktifken müşteri her menü açılışında görür.",
+                    "Kaydet&apos;e basın.",
+                  ]} />
+                  <Warning>Duyuru görseli dikkat çekici ama rahatsız edici olmamalı. Çok sık güncellenmeyecekse toggle ile &quot;Pasif&quot; konumda tutun; önemli bir kampanya olduğunda açın.</Warning>
+                </div>
+
+                {/* Ürün Düzeni */}
+                <div id="gorunum-urun-duzeni" className="scroll-mt-20">
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Ürün Düzeni</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Ürünlerin müşteriye nasıl gösterileceğini belirler. İki seçenek arasından kafenize uygun olanı seçin.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5">
+                      <p className="font-bold text-gray-800 text-sm mb-2">📋 Liste Görünümü</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">Ürünler yatay satırlar halinde dizilir. İsim solda, fiyat sağda görünür. Fotoğraflar küçük kare olarak yanında çıkar. İçecek ağırlıklı veya uzun listeli menüler için idealdir — hızlı taranır.</p>
+                    </div>
+                    <div className="bg-orange-50 border border-orange-100 rounded-2xl p-5">
+                      <p className="font-bold text-gray-800 text-sm mb-2">🃏 Kart Görünümü</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">Ürünler 2 sütunlu ızgara halinde gösterilir. Fotoğraflar büyük ve belirgin çıkar. Yemek menüleri veya görsel açıdan öne çıkarmak istediğiniz ürünler için idealdir.</p>
+                    </div>
+                  </div>
+                  <Tip>Menünüz genelde yemek odaklıysa <strong>Kart</strong>, içecek veya basit ürünlerse <strong>Liste</strong> daha temiz görünür. İstediğiniz zaman değiştirebilirsiniz.</Tip>
+                </div>
+
+                {/* Özel Gün Teması */}
+                <div id="gorunum-ozel-tema" className="scroll-mt-20">
+                  <h3 className="text-lg font-bold text-gray-800 mb-1">Özel Gün Teması</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Belirli tarih ve dönemlerde menünüz otomatik olarak özel bir görünüme geçer — siz hiçbir şey yapmak zorunda değilsiniz. Ayarlar sekmesindeki &quot;Özel Gün Teması&quot; toggle&apos;ını açık bırakmanız yeterli.
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                    {[
+                      { emoji: "❄️", label: "Yılbaşı", when: "26–31 Ara" },
+                      { emoji: "❤️", label: "Sevgililer", when: "14 Şub" },
+                      { emoji: "🌙", label: "Ramazan", when: "Ramazan ayı" },
+                      { emoji: "🇹🇷", label: "Milli Bayramlar", when: "23 Nis · 19 May · 29 Eki" },
+                    ].map(({ emoji, label, when }) => (
+                      <div key={label} className="bg-gray-50 border border-gray-100 rounded-2xl p-3 text-center">
+                        <span className="text-2xl">{emoji}</span>
+                        <p className="text-xs font-semibold text-gray-700 mt-1">{label}</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{when}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Note>Özel gün temasını <strong>Ayarlar</strong> sekmesinden açıp kapatabilirsiniz. Kapalıyken menü her zaman normal görünümde kalır.</Note>
+                </div>
+
+              </div>
             </section>
 
             {/* ── 08 QR KODLAR ─────────────────────────────────────── */}

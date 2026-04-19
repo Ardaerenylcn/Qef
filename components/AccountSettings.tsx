@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Save, Loader2, Eye, EyeOff, LogOut, Bot, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import HelpButton from "./HelpButton";
 
 interface Props {
   email: string;
@@ -114,7 +115,10 @@ export default function AccountSettings({ email, cafeId, chatbotEnabled: initial
               <Bot className="w-4 h-4 text-orange-500" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-700">Menü Asistanı</p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-semibold text-gray-700">Menü Asistanı</p>
+                <HelpButton section="chatbot" />
+              </div>
               <p className="text-xs text-gray-400">Müşteriler AI ile menüyü keşfedebilir</p>
             </div>
           </div>
@@ -143,7 +147,10 @@ export default function AccountSettings({ email, cafeId, chatbotEnabled: initial
               <Sparkles className="w-4 h-4 text-orange-500" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-700">Özel Gün Teması</p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-semibold text-gray-700">Özel Gün Teması</p>
+                <HelpButton section="gorunum-ozel-tema" />
+              </div>
               <p className="text-xs text-gray-400">Bayram & tatillerde otomatik tema değişir</p>
             </div>
           </div>

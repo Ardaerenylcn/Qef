@@ -177,7 +177,7 @@ export default function ThemeEditor() {
         </div>
       </CollapsibleSection>
 
-      <CollapsibleSection storageKey="theme_logo" title="Logo" defaultOpen={false}>
+      <CollapsibleSection storageKey="theme_logo" title="Logo" defaultOpen={false} helpSection="gorunum-logo">
         <div className="flex items-center gap-4">
           {logoSrc ? (
             <div className="relative w-20 h-20">
@@ -202,7 +202,7 @@ export default function ThemeEditor() {
         </div>
       </CollapsibleSection>
 
-      <CollapsibleSection storageKey="theme_kapak" title="Kapak Görseli" defaultOpen={false}>
+      <CollapsibleSection storageKey="theme_kapak" title="Kapak Görseli" defaultOpen={false} helpSection="gorunum-kapak">
         <div className="space-y-3">
           {coverSrc ? (
             <div className="relative w-full h-32">
@@ -227,7 +227,7 @@ export default function ThemeEditor() {
         </div>
       </CollapsibleSection>
 
-      <CollapsibleSection storageKey="theme_duyuru" title="Duyuru" defaultOpen={false}>
+      <CollapsibleSection storageKey="theme_duyuru" title="Duyuru" defaultOpen={false} helpSection="gorunum-duyuru">
         <div className="flex items-center justify-between -mt-1 mb-1">
           <div className="flex items-center gap-2 text-gray-400">
             <Megaphone className="w-4 h-4" />
@@ -268,7 +268,7 @@ export default function ThemeEditor() {
         </div>
       </CollapsibleSection>
 
-      <CollapsibleSection storageKey="theme_urun_duzeni" title="Ürün Düzeni" defaultOpen={false}>
+      <CollapsibleSection storageKey="theme_urun_duzeni" title="Ürün Düzeni" defaultOpen={false} helpSection="gorunum-urun-duzeni">
         <div className="grid grid-cols-2 gap-3">
           {(["list", "card"] as const).map((layout) => (
             <button key={layout} onClick={() => update("productLayout", layout)}
