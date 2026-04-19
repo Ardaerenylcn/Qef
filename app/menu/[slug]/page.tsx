@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // 1 saatlik ISR cache — admin kaydettiğinde on-demand revalidate ile güncellenir
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { UtensilsCrossed, Wifi, Instagram, MapPin, ExternalLink } from "lucide-react";
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { DEFAULT_THEME, FONTS, type CafeTheme } from "@/types/theme";
 import LangToggle from "@/components/LangToggle";
 import CategoryTabs from "@/components/CategoryTabs";
@@ -26,10 +25,10 @@ import { getActiveSpecialDay, SPECIAL_DAYS } from "@/lib/specialDays";
 
 const BASE_URL = "https://qefmenu.com";
 
-// Admin client kullanarak RLS bypass — public menü sayfası için
+// Aynı istek içinde generateMetadata ve sayfa aynı sorguyu paylaşır — 2 DB round-trip → 1
 const getCafe = cache(async (slug: string) => {
-  const admin = createAdminClient();
-  const { data } = await admin
+  const supabase = await createClient();
+  const { data } = await supabase
     .from("cafes")
     .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, google_review_url, chatbot_enabled, seasonal_themes_enabled")
     .eq("slug", slug)
@@ -87,12 +86,10 @@ export default async function PublicMenuPage({ params, searchParams }: Props) {
   const cafe = await getCafe(slug);
   if (!cafe) notFound();
 
-  const admin = createAdminClient();
-
   // Ziyareti kaydet (fire-and-forget — sayfayı bekletme)
   supabase.from("menu_views").insert({ cafe_id: cafe.id });
 
-  const { data: products } = await admin
+  const { data: products } = await supabase
     .from("products")
     .select("id, name, name_en, price, category, description, description_en, image_url, position, tags, ingredients, in_stock, model_url, calories")
     .eq("cafe_id", cafe.id)
