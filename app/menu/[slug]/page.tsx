@@ -1,4 +1,4 @@
-export const revalidate = 3600; // 1 saatlik ISR cache — admin kaydettiğinde on-demand revalidate ile güncellenir
+export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
