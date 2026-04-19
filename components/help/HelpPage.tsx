@@ -271,12 +271,16 @@ export default function HelpPage() {
             <section id="baslangic" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[0]} />
 
+              <p className="text-gray-600 leading-relaxed mb-6">
+                Hoş geldiniz! Qef&apos;te dijital menünüzü oluşturmak çok basit. Sadece 3 adım var ve hepsini bir kez yapmanız yeterli — sonrasında menüde değişiklik yapmak istediğinizde sadece ilgili ürünü düzenliyorsunuz.
+              </p>
+
               {/* 3-adım kartları */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { icon: "📂", title: "Kategoriler oluştur", desc: "Kahveler, Tatlılar, Ana Yemekler gibi menü bölümlerinizi belirleyin." },
-                  { icon: "🍽️", title: "Ürünleri ekle", desc: "Fotoğraf, fiyat ve açıklamayı girin. AI ile tek seferde onlarcasını yükleyin." },
-                  { icon: "📲", title: "QR kodu paylaş", desc: "Kodu yazdırıp masalara yapıştırın. Müşteriler tarayarak menüye ulaşsın." },
+                  { icon: "📂", title: "Önce kategorileri kur", desc: "Menünüzü bölümlere ayırın. Örneğin: Kahveler, Tatlılar, Soğuk İçecekler. Bunları istediğiniz zaman değiştirebilirsiniz." },
+                  { icon: "🍽️", title: "Ürünleri gir", desc: "Her ürüne isim, fiyat ve isteğe bağlı fotoğraf ekleyin. Çok ürününüz varsa AI ile tek seferde onlarcasını yükleyebilirsiniz." },
+                  { icon: "📲", title: "QR kodu paylaş", desc: "Hazır! Kodu yazdırıp masalara yapıştırın. Müşteri telefonu ile tarayınca doğrudan menünüz açılır." },
                 ].map((step, i) => (
                   <div
                     key={i}
@@ -291,7 +295,7 @@ export default function HelpPage() {
               </div>
 
               <Tip>
-                İlk kurulumda <strong>AI Toplu Kayıt</strong> özelliğini kullanarak ürün fotoğraflarınızı yükleyin — AI isim ve açıklamayı otomatik oluştursun. Dakikalar içinde onlarca ürün ekleyebilirsiniz.
+                Çok sayıda ürününüz varsa önce <strong>AI Toplu Kayıt</strong> sekmesine gidin. Ürün fotoğraflarını yükleyin — AI isimleri ve açıklamaları otomatik yazsın. Siz sadece fiyatları girin, dakikalar içinde biter.
               </Tip>
             </section>
 
@@ -299,7 +303,7 @@ export default function HelpPage() {
             <section id="kafe-bilgileri" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[1]} />
               <SectionLayout
-                description="Kafe adınız, menü URL'iniz, çalışma saatleriniz, adres ve Google Maps linkinizi buradan yönetin."
+                description="Burada kafeye ait temel bilgileri giriyorsunuz. Müşterileriniz menüde kafe adınızı, açıklamanızı ve çalışma saatlerinizi görebilir."
                 demo={
                   <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 border border-amber-100 space-y-3">
                     <div className="bg-white rounded-xl border border-gray-200 px-4 py-3">
@@ -307,11 +311,12 @@ export default function HelpPage() {
                       <p className="text-sm font-semibold text-gray-800">Antep Kahvesi</p>
                     </div>
                     <div className="bg-white rounded-xl border border-gray-200 px-4 py-3">
-                      <p className="text-[10px] text-gray-400 font-medium mb-1">Menü URL&apos;i</p>
-                      <div className="flex items-center gap-1">
+                      <p className="text-[10px] text-gray-400 font-medium mb-1">Otomatik oluşturulan menü linki</p>
+                      <div className="flex items-center gap-1 flex-wrap">
                         <span className="text-xs text-gray-400">qefmenu.com/menu/</span>
                         <span className="text-xs font-bold text-orange-500 bg-orange-100 px-1.5 py-0.5 rounded-md">antep-kahvesi</span>
                       </div>
+                      <p className="text-[9px] text-gray-400 mt-1">↑ Kafe adından otomatik oluşturuldu</p>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="bg-white rounded-xl border border-gray-200 px-3 py-2.5 text-center">
@@ -326,14 +331,14 @@ export default function HelpPage() {
                   </div>
                 }
                 steps={[
-                  "Kafe adınızı ve kısa açıklamasını girin.",
-                  "Menü URL'inizi belirleyin (küçük harf, tire kullanın).",
-                  "İsteğe bağlı: çalışma saatleri, adres ve Google Maps linkini ekleyin.",
-                  "\"Kaydet\" butonuna tıklayın.",
+                  "Kafe adınızı girin — menü linki (URL) kafe adınızdan otomatik oluşturulur. Örneğin \"Antep Kahvesi\" yazarsanız link \"antep-kahvesi\" olur.",
+                  "İsterseniz URL'i kendiniz de düzenleyebilirsiniz. Sadece küçük harf ve tire kullanın (boşluk yok).",
+                  "İsteğe bağlı: kısa bir açıklama, çalışma saatleri, adres veya Google Maps linki ekleyin — bunlar müşteriye görünür.",
+                  "En üstteki \"Kaydet\" butonuna tıklayın.",
                 ]}
                 extra={
                   <Warning>
-                    URL'inizi bir kez belirledikten sonra değiştirmeyin. Değiştirildiğinde daha önce bastırdığınız tüm QR kodlar çalışmayı durdurur.
+                    Menü URL'inizi bir kez belirledikten sonra <strong>değiştirmeyin.</strong> Eğer URL değişirse, masalara yapıştırdığınız veya bastırdığınız QR kodlar artık çalışmaz — çünkü o QR kodlar eski adrese bağlı. Değişiklik yapmadan önce sistemi sizi uyarır.
                   </Warning>
                 }
               />
@@ -343,16 +348,16 @@ export default function HelpPage() {
             <section id="kategoriler" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[2]} />
               <SectionLayout
-                description="Menünüzü anlamlı bölümlere ayırın. Kategori sırası müşterinin gördüğü sırayla aynıdır."
+                description="Kategoriler menünüzün bölümleridir — tıpkı bir kağıt menüdeki başlıklar gibi. Müşteri menüyü açınca önce kategorileri görür, tıklayarak içine girer."
                 demo={<CategoryDemo />}
                 steps={[
-                  "Kategori adını girin ve \"Ekle\"ye tıklayın.",
-                  "Kategorileri sürükleyerek istediğiniz sıraya getirin.",
-                  "Boş kategorileri X butonu ile silebilirsiniz.",
+                  "\"Kategoriler\" bölümüne gelin, kutuya kategori adını yazın (örn. \"Soğuk Kahveler\") ve \"Ekle\"ye tıklayın.",
+                  "Birden fazla kategoriniz varsa soldaki üç çizgi ikonundan tutup sürükleyerek sırayı değiştirebilirsiniz — müşteri menüde tam bu sırayla görür.",
+                  "Silmek istediğinizde kategorinin yanındaki X'e tıklayın.",
                 ]}
                 extra={
                   <Note>
-                    İçinde ürün olan bir kategoriyi silemezsiniz. Önce ürünleri başka bir kategoriye taşıyın veya silin.
+                    İçinde ürün olan bir kategoriyi silemezsiniz — önce o kategorideki ürünleri başka bir yere taşımanız veya silmeniz gerekir.
                   </Note>
                 }
               />
@@ -362,18 +367,18 @@ export default function HelpPage() {
             <section id="urun-ekleme" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[3]} />
               <SectionLayout
-                description="Her ürün için ad, açıklama, fiyat, görsel ve içerik bilgisi girebilirsiniz. İngilizce çeviri de ekleyebilirsiniz."
+                description="Menünüze tek tek ürün ekleyebileceğiniz formdur. Zorunlu olan sadece ürün adı, fiyat ve kategori — geri kalan her şey isteğe bağlı."
                 demo={<ProductDemo />}
                 steps={[
-                  "Ürün adı ve açıklamasını yazın.",
-                  "Fiyat girin ve kategori seçin.",
-                  "İsteğe bağlı: kalori, etiketler (Vegan, Glutensiz...) ve içerik emojileri ekleyin.",
-                  "Görsel yükleyin — dosya otomatik sıkıştırılır.",
-                  "\"Ekle\" butonuna tıklayın.",
+                  "\"Yeni ürün ekle\" bölümüne gelin. Ürün adını yazın — sağda telefon önizlemesi anında güncellenir.",
+                  "Fiyatı girin ve hangi kategoriye ait olduğunu seçin. Kategori seçmezseniz otomatik olarak \"Genel\"e eklenir.",
+                  "İsteğe bağlı: açıklama, kalori bilgisi, etiketler (Vegan, Acılı, Glutensiz gibi) ve içerik emojileri ekleyin — bunlar müşteriye detay sayfasında gösterilir.",
+                  "Fotoğraf eklemek istiyorsanız \"Görsel Ekle\"ye tıklayın. Dosya boyutu ne olursa olsun sistem otomatik küçültür.",
+                  "\"Ekle\" butonuna basın, ürün menünüze eklenir.",
                 ]}
                 extra={
                   <Tip>
-                    Ürün eklenince sağdaki <strong>canlı önizleme</strong> otomatik güncellenir. Yeni eklenen ürüne otomatik scroll eder.
+                    Geniş ekranda (masaüstü) çalışıyorsanız sağ tarafta müşterinin göreceği kartın canlı önizlemesi çıkar. Ürün kaydedilince önizleme o ürüne otomatik kayar.
                   </Tip>
                 }
               />
@@ -389,17 +394,17 @@ export default function HelpPage() {
                 </div>
                 <div className="lg:col-span-2 space-y-2">
                   <p className="text-gray-600 leading-relaxed mb-5">
-                    15&apos;e kadar ürün fotoğrafı yükleyin, Gemini 2.5 Flash modeli her ürün için otomatik olarak Türkçe ve İngilizce isim + açıklama oluştursun.
+                    Çok sayıda ürün ekleyecekseniz bu özellik çok işinize yarar. Ürünlerin fotoğraflarını yüklüyorsunuz, yapay zeka her birini analiz ederek Türkçe ve İngilizce isim ile açıklama yazıyor. Siz sadece fiyat ve kategori giriyorsunuz.
                   </p>
                   <StepList steps={[
-                    "Ürün fotoğraflarını sürükleyip bırakın veya tıklayarak seçin.",
-                    "\"Analiz Et\" butonuna tıklayın — AI her ürünü tanır.",
-                    "Oluşturulan bilgileri dilediğiniz gibi düzenleyin.",
-                    "Her ürüne fiyat, kategori, etiket ve içerik ekleyin.",
-                    "\"Ürünleri Kaydet\" ile hepsini bir seferde kaydedin.",
+                    "\"AI Kayıt\" sekmesine geçin. Fotoğrafları büyük alana sürükleyin ya da tıklayıp seçin — bir seferde en fazla 15 fotoğraf yükleyebilirsiniz.",
+                    "\"Analiz Et\" butonuna tıklayın. Yapay zeka her fotoğraftaki ürünü tanıyıp isim ve açıklama yazar, birkaç saniye bekleyin.",
+                    "Oluşturulan bilgileri beğenmediyseniz üstüne tıklayıp düzenleyin.",
+                    "Her ürüne fiyat ve kategori girin — bunlar zorunlu. İsterseniz kalori, etiket ve içerik de ekleyebilirsiniz.",
+                    "\"Ürünleri Kaydet\" butonuna basın, hepsi tek seferde menünüze eklenir.",
                   ]} />
                   <Tip>
-                    En iyi sonuç için aydınlık çekilmiş, net fotoğraflar kullanın. Her fotoğrafta tek bir ürün olsun.
+                    En iyi sonuç için aydınlık, net fotoğraflar kullanın ve her fotoğrafta tek bir ürün olsun. Karanlık veya bulanık fotoğraflarda yapay zeka yanılabilir.
                   </Tip>
                 </div>
               </div>
@@ -409,7 +414,7 @@ export default function HelpPage() {
             <section id="canli-onizleme" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[5]} />
               <SectionLayout
-                description="Ürün eklerken veya düzenlerken sağ tarafta müşterinin gördüğü kart görünümü canlı olarak güncellenir."
+                description="Ürün eklerken ekranın sağ tarafında küçük bir telefon simülasyonu belirir. Yazdığınız her şey o telefonda anında güncellenir — müşterinizin gördüğünü siz de görürsünüz."
                 demo={
                   <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100 space-y-3">
                     {/* Mock split-screen */}
@@ -446,14 +451,14 @@ export default function HelpPage() {
                   </div>
                 }
                 steps={[
-                  "Ürün ekleme veya düzenleme ekranını açın.",
-                  "Herhangi bir alanı doldurun — önizleme anında güncellenir.",
-                  "Kategori değiştirdiğinizde önizleme otomatik scroll eder.",
-                  "Ürün kaydedilince önizlemede vurgulanarak gösterilir.",
+                  "Ürün ekleme formuna gelin — ekranın sağında telefon önizlemesi otomatik açılır.",
+                  "Ürün adını yazmaya başlayın, fiyat girin — her şey sağdaki telefonda anında güncellenir.",
+                  "Kategori değiştirirseniz önizleme o ürünü doğru kategoriye taşır ve otomatik kaydırır.",
+                  "\"Ekle\"ye bastıktan sonra yeni ürün önizlemede 2 saniye vurgulanır, sonra tekrar sıradaki ürüne hazır hale gelir.",
                 ]}
                 extra={
                   <Note>
-                    Önizleme yalnızca <strong>1280px ve üzeri</strong> geniş ekranlarda (masaüstü) görünür.
+                    Önizleme sadece <strong>geniş ekranda (masaüstü, 1280px+)</strong> görünür. Tablette veya telefonda bu panel gizlenir — ama eklediğiniz ürünler yine de kaydedilir, merak etmeyin.
                   </Note>
                 }
               />
@@ -463,17 +468,17 @@ export default function HelpPage() {
             <section id="gorunum" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[6]} />
               <SectionLayout
-                description="Menünüzün ana rengini, ürün düzenini ve görsel oranını özelleştirin. Tüm değişiklikler müşteri menüsüne anında yansır."
+                description="Menünüzün rengini, ürünlerin nasıl dizileceğini ve fotoğrafların hangi şekilde gösterileceğini buradan ayarlıyorsunuz. Kaydet'e bastığınız an müşteri menüsüne yansır."
                 demo={<AppearanceDemo />}
                 steps={[
-                  "Ana rengi renk paletinden seçin.",
-                  "Ürün düzenini seçin: Liste (yatay) veya Kart (2 sütun ızgara).",
-                  "Görsel oranını seçin: Kare, Geniş (16:9) veya Yuvarlak.",
-                  "\"Kaydet\" butonuna tıklayın.",
+                  "\"Görünüm\" sekmesine gelin. Renk kutusuna tıklayarak ana rengi seçin — bu renk menüdeki tüm başlıklarda, fiyatlarda ve vurgu noktalarında kullanılır.",
+                  "Ürün düzeni için iki seçenek var: \"Liste\" ürünleri yatay sıralar (isim solda, fiyat sağda), \"Kart\" ise 2 sütunlu ızgara yapar ve fotoğraflar daha büyük görünür.",
+                  "Görsel oranı fotoğraflarınızın nasıl kesildiğini belirler: Kare her ürünü eşit boyutta gösterir, Geniş yatay fotoğraflar için idealdir, Yuvarlak daha şık bir görünüm verir.",
+                  "\"Kaydet\"e tıklayın — değişiklikler müşteri menüsüne anında uygulanır.",
                 ]}
                 extra={
                   <Tip>
-                    Ürün düzeni ve görsel oranı menünüzün genel havasını büyük ölçüde değiştirir. Yemek ağırlıklı menülerde <strong>Kart + Geniş</strong>, içecek menülerinde <strong>Liste</strong> daha iyi görünebilir.
+                    Hangi kombinasyonun daha iyi görüneceğinden emin değilseniz: yemek ağırlıklı menüler için <strong>Kart + Geniş</strong>, içecek veya kısa listeli menüler için <strong>Liste + Kare</strong> genellikle iyi durur.
                   </Tip>
                 }
               />
@@ -483,16 +488,16 @@ export default function HelpPage() {
             <section id="qr-kodlar" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[7]} />
               <SectionLayout
-                description="Müşterileriniz QR kodu telefonlarıyla tarayarak menünüze anında ulaşabilir. QR kod her zaman güncel menüyü gösterir."
+                description="QR kod, müşterilerin telefonunu kameraya tuttuğunda doğrudan menünüzü açan siyah-beyaz bir koddur. Menünüzde değişiklik yaptığınızda QR kodu yeniden indirmenize gerek yok — kod her zaman en güncel menüyü gösterir."
                 demo={<QRDemo />}
                 steps={[
-                  "\"QR Kodlar\" sekmesini açın.",
-                  "\"İndir\" butonu ile PNG formatında indirip yazdırın.",
-                  "Menü linkini kopyalayıp WhatsApp, Instagram veya diğer platformlarda paylaşın.",
+                  "\"QR Kodlar\" sekmesine gelin.",
+                  "\"İndir\" butonuna tıklayın — PNG formatında bilgisayarınıza kaydedilir. Bunu yazıcıya gönderip her masa için çıktı alabilirsiniz.",
+                  "İsterseniz menü linkini de kopyalayabilirsiniz. Bu linki WhatsApp mesajında, Instagram bio'sunda veya Google işletme profilinizde paylaşabilirsiniz.",
                 ]}
                 extra={
                   <Tip>
-                    QR kodları parlak arka plana basmayın. Koyu arka zemine açık renkli veya açık arka zemine koyu renkli baskı çok daha iyi okunur.
+                    QR kodları beyaz veya açık renk arka zemine, koyu (siyah) mürekkepli yazıcıyla basın. Renkli veya karanlık arka zeminlere basılan QR kodlar bazı telefonlarda okumaz.
                   </Tip>
                 }
               />
@@ -502,17 +507,16 @@ export default function HelpPage() {
             <section id="istatistikler" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
               <SectionHeader s={SECTIONS[8]} />
               <SectionLayout
-                description="Menünüzü kaç kişinin ziyaret ettiğini ve ne zaman baktığını gerçek zamanlı olarak takip edin."
+                description="Menünüzü kaç kişinin açtığını, hangi günler daha kalabalık geçtiğini ve müşterilerin hangi saatte geldiğini buradan görebilirsiniz. Ekstra bir şey yapmanıza gerek yok — sistem otomatik sayar."
                 demo={<StatsDemo />}
                 steps={[
-                  "\"İstatistikler\" sekmesini açın.",
-                  "Günlük, haftalık ve aylık görüntüleme sayılarını inceleyin.",
-                  "Günlük grafikten hangi günlerin yoğun geçtiğini görün.",
-                  "En yoğun saati belirleyerek kampanya ve indirim zamanlaması yapın.",
+                  "\"İstatistikler\" sekmesine gelin. Bugün, bu hafta ve bu ay kaç kişinin menünüzü açtığını görürsünüz.",
+                  "Grafikteki çubuklara bakarak hangi günler daha yoğun olduğunu anlayabilirsiniz — örneğin Cuma ve Cumartesi çok daha yüksekse hafta sonu kampanya düşünebilirsiniz.",
+                  "En yoğun saat bilgisi de gösterilir — müşterilerinizin büyük çoğunluğu öğle mi geliyor, akşam mı? Bu bilgiyle sosyal medya paylaşım zamanlamanızı ayarlayabilirsiniz.",
                 ]}
                 extra={
                   <Note>
-                    İstatistikler son 30 günün verilerini kapsar. Her ziyaretçi sayımı benzersiz IP bazında yapılır.
+                    Veriler son 30 günü kapsar. Aynı kişi birden fazla kez açarsa her biri ayrı sayılır — bu yüzden rakamlar gerçek ziyaret sayısına yakın ama tam değil.
                   </Note>
                 }
               />
@@ -528,16 +532,16 @@ export default function HelpPage() {
                 </div>
                 <div className="lg:col-span-2 space-y-2">
                   <p className="text-gray-600 leading-relaxed mb-5">
-                    Müşterileriniz menü sayfasında ürünler hakkında soru sorabilir. Chatbot, menünüzdeki ürünleri tanıyarak gerçek zamanlı olarak yanıt verir.
+                    Menünüzün sağ alt köşesinde bir sohbet balonu belirir. Müşteri buna tıklayıp soru sorabilir — &quot;glutensiz bir şeyiniz var mı?&quot;, &quot;en popüler tatlınız ne?&quot; gibi. Yapay zeka sizin menünüzdeki ürünleri bilerek yanıt verir, genel bilgi vermez.
                   </p>
                   <StepList steps={[
-                    "\"Ayarlar\" sekmesinden AI Chatbot'u etkinleştirin.",
-                    "Müşteriler menü sayfasındaki chat balonuna tıklar.",
-                    "\"Glutensiz seçenekler var mı?\" gibi sorular sorabilirler.",
-                    "Bot menünüzdeki bilgilere göre Türkçe yanıt verir.",
+                    "\"Ayarlar\" sekmesine gidin ve \"AI Chatbot\" seçeneğini açın. Kaydetmenize gerek yok, anında aktif olur.",
+                    "Bundan sonra menünüzü açan her müşteri sağ altta sohbet balonunu görecek.",
+                    "Müşteri sorusunu yazar, bot birkaç saniye içinde menünüzdeki bilgilere dayanarak Türkçe yanıt verir.",
+                    "İsterseniz aynı sayfadan chatbot'u kapatabilirsiniz — müşteri tarafında balon kaybolur.",
                   ]} />
                   <Note>
-                    Giriş yapmamış ziyaretçiler günde <strong>7 mesaj</strong> gönderebilir. Kafe sahibi olarak giriş yaptığınızda bu limit uygulanmaz.
+                    Spam ve aşırı kullanımı önlemek için giriş yapmamış ziyaretçiler günde en fazla <strong>7 mesaj</strong> gönderebilir. Siz kafe sahibi olarak giriş yaptığınızda bu limit uygulanmaz, istediğiniz kadar test edebilirsiniz.
                   </Note>
                 </div>
               </div>
