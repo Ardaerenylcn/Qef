@@ -33,7 +33,7 @@ export default function AdminTabs({ email, cafeId, cafeSlug, existingCategories,
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
     { key: "menu",     label: "Menü",        icon: <UtensilsCrossed className="w-4 h-4" /> },
-    { key: "ai",       label: "AI Kayıt",    icon: <Sparkles className="w-4 h-4" /> },
+    { key: "ai",       label: "Toplu Ürün",  icon: <Sparkles className="w-4 h-4" /> },
     { key: "theme",    label: "Görünüm",     icon: <Palette className="w-4 h-4" /> },
     { key: "qr",       label: "QR Kodlar",   icon: <QrCode className="w-4 h-4" /> },
     { key: "stats",    label: "İstatistik",  icon: <BarChart2 className="w-4 h-4" /> },

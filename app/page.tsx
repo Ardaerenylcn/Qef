@@ -227,40 +227,58 @@ export default function HomePage() {
       </section>
 
       {/* DEMO */}
-      <section className="py-20 px-6 bg-gradient-to-b from-orange-50/50 to-white">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+      <section className="py-24 px-6 bg-gray-950 overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/6 rounded-full blur-[120px] pointer-events-none" />
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
 
-          {/* Sol: metin */}
-          <div className="flex-1 space-y-6 text-center md:text-left">
-            <p className="text-orange-500 font-bold text-sm uppercase tracking-widest">Canlı Demo</p>
-            <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
-              Müşteriniz tam olarak<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">
-                bunu görecek
-              </span>
-            </h2>
-            <p className="text-gray-500 leading-relaxed max-w-sm mx-auto md:mx-0">
-              Gerçek bir kafe menüsü. Ürün ara, kategorilere bak, fiyatları gör. Hepsi saniyeler içinde senin için hazır.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-6 py-3 rounded-2xl transition-all text-sm shadow-lg shadow-orange-200"
-              >
-                Kendi menünü oluştur →
-              </Link>
-              <Link
-                href="/menu/demo"
-                target="_blank"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-600 font-semibold px-6 py-3 rounded-2xl transition-all text-sm border border-gray-200 shadow-sm"
-              >
-                Tam ekranda aç
-              </Link>
+            <DemoPhoneMockup />
+
+            {/* Sağ: metin */}
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                  Canlı Demo
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Müşteriniz tam olarak<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-300 to-yellow-300">
+                    bunu görecek
+                  </span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Gerçek bir kafe menüsü. Ürün ara, kategorilere gir, fiyatları gör. Hepsi saniyeler içinde sizin için hazır — uygulama yok, link ezber yok.
+                </p>
+              </div>
+              <div className="space-y-2.5">
+                {[
+                  { title: "Tıkla, gez, keşfet", desc: "Aşağıdaki demo gerçek menü sayfası — parmağınızla kaydırın." },
+                  { title: "Her telefonda açılır", desc: "iPhone, Android, eski model fark etmez. Kamera ile tara, anında görüntüle." },
+                  { title: "Siz değiştirince anında güncellenir", desc: "Fiyat ya da ürün ekler eklemez müşteri menüsüne yansır." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-orange-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-white font-semibold text-sm">{title}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/register"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-500/25 hover:-translate-y-0.5">
+                  Kendi menünü oluştur →
+                </Link>
+                <Link href="/menu/demo" target="_blank"
+                  className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold px-8 py-4 rounded-2xl transition-all text-sm">
+                  Tam ekranda aç ↗
+                </Link>
+              </div>
             </div>
+
           </div>
-
-          <DemoPhoneMockup />
-
         </div>
       </section>
 
@@ -768,6 +786,125 @@ export default function HomePage() {
               <p className="text-sm text-gray-500 leading-relaxed max-w-xs">{desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* GOOGLE YORUMLAR */}
+      <section className="py-24 px-6 bg-gray-950 overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-green-500/6 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+            {/* Sol — Mockup */}
+            <div className="relative flex-shrink-0 flex items-center justify-center order-last lg:order-first">
+              <div className="absolute w-72 h-72 bg-green-500/15 rounded-full blur-[70px] pointer-events-none" />
+
+              {/* Yüzen rozetler */}
+              <div className="absolute -top-4 -right-2 lg:right-0 bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-3 py-2 text-xs text-white font-semibold shadow-xl animate-bounce" style={{ animationDuration: "3.2s" }}>
+                ⭐ Daha fazla yorum
+              </div>
+              <div className="absolute -bottom-4 -left-2 lg:left-0 bg-green-500/20 backdrop-blur border border-green-400/30 rounded-2xl px-3 py-2 text-xs text-green-300 font-semibold shadow-xl animate-bounce" style={{ animationDuration: "4s", animationDelay: "1s" }}>
+                📍 Google&apos;da öne çık
+              </div>
+
+              {/* Ana kart */}
+              <div className="relative w-full max-w-xs rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 bg-gray-900/80 backdrop-blur p-6 space-y-5">
+                {/* Google Rating mockup */}
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg">
+                    <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm">Google Reviews</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      {[1,2,3,4,5].map((s) => <span key={s} className="text-yellow-400 text-xs">★</span>)}
+                      <span className="text-slate-400 text-[11px] ml-1">4.9 · 128 yorum</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Son yorumlar */}
+                {[
+                  { name: "Ayşe K.", text: "Kahveler çok güzel, kesinlikle tavsiye ederim!", stars: 5 },
+                  { name: "Mert T.", text: "Atmosfer harika, fiyatlar makul. Tekrar geleceğiz.", stars: 5 },
+                  { name: "Zeynep A.", text: "Cheesecake mükemmeldi, menü çok kullanışlı.", stars: 5 },
+                ].map((r) => (
+                  <div key={r.name} className="bg-white/[0.06] border border-white/10 rounded-2xl px-3 py-2.5">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-white text-[12px] font-semibold">{r.name}</p>
+                      <div className="flex">
+                        {Array.from({ length: r.stars }).map((_, i) => <span key={i} className="text-yellow-400 text-[10px]">★</span>)}
+                      </div>
+                    </div>
+                    <p className="text-slate-400 text-[11px] leading-relaxed">{r.text}</p>
+                  </div>
+                ))}
+
+                {/* CTA buton mockup */}
+                <div className="flex items-center justify-center gap-2 w-full rounded-2xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm font-semibold text-green-300">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                  </svg>
+                  Google&apos;da Yorum Yap ⭐
+                </div>
+              </div>
+            </div>
+
+            {/* Sağ — İçerik */}
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-green-500/15 border border-green-500/30 text-green-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  Google Görünürlüğü
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Müşteriler menüden<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-300 to-yellow-300">
+                    Google&apos;a yorum yapsın
+                  </span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Müşteri QR kodu tarayıp menüyü açıyor — telefon zaten elinde. Google yorum linkinizi sisteme ekleyin; menüde &quot;Google&apos;da Yorum Yap&quot; butonu çıksın. Bir tıkla yorum sayfası açılır, sürtünme sıfır.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { title: "Daha fazla yorum = Google&apos;da üst sıra", desc: "Yorum sayısı ve puanı yüksek işletmeler Google Maps ve Arama&apos;da rakiplerin önüne geçer." },
+                  { title: "Müşteri zaten telefonda", desc: "Menüyü tarayıp açan müşteri, aynı cihazda tek tıkla yorum bırakabilir — başka uygulama gerekmez." },
+                  { title: "Kurulum 2 dakika", desc: "Google Business Profile&apos;dan yorum linkini kopyalayın, admin paneline yapıştırın. Bitti." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-green-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-white font-semibold text-sm" dangerouslySetInnerHTML={{ __html: title }} />
+                      <p className="text-slate-500 text-xs mt-0.5" dangerouslySetInnerHTML={{ __html: desc }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {["Ücretsiz dahil", "2 dakikada kurulum", "Sıfır sürtünme"].map((item) => (
+                  <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
+                ))}
+              </div>
+
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-600 hover:to-emerald-500 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-green-500/25 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

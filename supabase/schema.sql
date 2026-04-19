@@ -44,3 +44,6 @@ CREATE POLICY "Herkes kafes bilgisini okuyabilir"
 
 CREATE POLICY "Herkes ürünleri okuyabilir"
   ON products FOR SELECT USING (true);
+
+-- Google Review URL (google yorumlar özelliği)
+ALTER TABLE cafes ADD COLUMN IF NOT EXISTS google_review_url TEXT NOT NULL DEFAULT '';

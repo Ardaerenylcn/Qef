@@ -22,12 +22,13 @@ const SECTIONS = [
   { id: "kafe-bilgileri",  number: "02", label: "Kafe Bilgileri",      icon: <Coffee className="w-4 h-4" />,         color: "#f59e0b", bg: "#fffbeb" },
   { id: "kategoriler",     number: "03", label: "Kategoriler",         icon: <FolderOpen className="w-4 h-4" />,     color: "#f97316", bg: "#fff7ed" },
   { id: "urun-ekleme",     number: "04", label: "Ürün Ekleme",         icon: <Plus className="w-4 h-4" />,           color: "#10b981", bg: "#f0fdf4" },
-  { id: "ai-kayit",        number: "05", label: "AI Toplu Kayıt",      icon: <Sparkles className="w-4 h-4" />,       color: "#8b5cf6", bg: "#f5f3ff" },
+  { id: "ai-kayit",        number: "05", label: "Yapay Zeka Toplu Ürün Ekleme", icon: <Sparkles className="w-4 h-4" />, color: "#8b5cf6", bg: "#f5f3ff" },
   { id: "canli-onizleme",  number: "06", label: "Canlı Önizleme",      icon: <Smartphone className="w-4 h-4" />,     color: "#3b82f6", bg: "#eff6ff" },
   { id: "gorunum",         number: "07", label: "Görünüm & Tema",      icon: <Palette className="w-4 h-4" />,        color: "#ec4899", bg: "#fdf2f8" },
   { id: "qr-kodlar",       number: "08", label: "QR Kodlar",           icon: <QrCode className="w-4 h-4" />,         color: "#374151", bg: "#f9fafb" },
   { id: "istatistikler",   number: "09", label: "İstatistikler",       icon: <BarChart2 className="w-4 h-4" />,      color: "#22c55e", bg: "#f0fdf4" },
   { id: "chatbot",         number: "10", label: "AI Chatbot",          icon: <MessageCircle className="w-4 h-4" />,  color: "#6366f1", bg: "#eef2ff" },
+  { id: "google-yorumlar", number: "11", label: "Google Yorumlar",     icon: <Star className="w-4 h-4" />,           color: "#16a34a", bg: "#f0fdf4" },
 ] as const;
 
 // ─── Yardımcı bileşenler ─────────────────────────────────────────────
@@ -393,19 +394,31 @@ export default function HelpPage() {
                 <div className="lg:col-span-3">
                   <AIBulkScanMockup />
                 </div>
-                <div className="lg:col-span-2 space-y-2">
-                  <p className="text-gray-600 leading-relaxed mb-5">
-                    Çok sayıda ürün ekleyecekseniz bu özellik çok işinize yarar. Ürünlerin fotoğraflarını yüklüyorsunuz, yapay zeka her birini analiz ederek Türkçe ve İngilizce isim ile açıklama yazıyor. Siz sadece fiyat ve kategori giriyorsunuz.
+                <div className="lg:col-span-2 space-y-4">
+                  <p className="text-gray-600 leading-relaxed">
+                    Çok sayıda ürün ekleyecekseniz bu özellik çok işinize yarar. Ürün fotoğraflarını yükleyin — yapay zeka her birini analiz ederek Türkçe ve İngilizce isim ile açıklama otomatik yazar. Siz sadece fiyat ve kategori giriyorsunuz.
                   </p>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-purple-50 border border-purple-100 rounded-2xl px-3 py-3 text-center">
+                      <p className="text-xl font-black text-purple-600">15</p>
+                      <p className="text-[11px] text-purple-500 leading-tight mt-0.5">tek seferde ürün<br/>saniyeler içinde</p>
+                    </div>
+                    <div className="bg-purple-50 border border-purple-100 rounded-2xl px-3 py-3 text-center">
+                      <p className="text-xl font-black text-purple-600">150</p>
+                      <p className="text-[11px] text-purple-500 leading-tight mt-0.5">toplam ürün<br/>ekleme hakkı</p>
+                    </div>
+                  </div>
+
                   <StepList steps={[
-                    "\"AI Kayıt\" sekmesine geçin. Fotoğrafları büyük alana sürükleyin ya da tıklayıp seçin — bir seferde en fazla 15 fotoğraf yükleyebilirsiniz.",
-                    "\"Analiz Et\" butonuna tıklayın. Yapay zeka her fotoğraftaki ürünü tanıyıp isim ve açıklama yazar, birkaç saniye bekleyin.",
-                    "Oluşturulan bilgileri beğenmediyseniz üstüne tıklayıp düzenleyin.",
+                    "\"Toplu Ürün\" sekmesine geçin. Ürün fotoğraflarını büyük alana sürükleyin ya da tıklayıp seçin — tek seferde en fazla 15 fotoğraf yüklenebilir.",
+                    "\"Analiz Et\" butonuna tıklayın. Yapay zeka her fotoğraftaki ürünü tanır, Türkçe/İngilizce isim ve açıklama yazar — birkaç saniye içinde tamamlanır.",
+                    "Oluşturulan bilgileri beğenmediyseniz üstüne tıklayarak düzenleyin.",
                     "Her ürüne fiyat ve kategori girin — bunlar zorunlu. İsterseniz kalori, etiket ve içerik de ekleyebilirsiniz.",
-                    "\"Ürünleri Kaydet\" butonuna basın, hepsi tek seferde menünüze eklenir.",
+                    "\"Ürünleri Kaydet\"e basın — seçilen tüm ürünler tek seferde menünüze eklenir.",
                   ]} />
                   <Tip>
-                    En iyi sonuç için aydınlık, net fotoğraflar kullanın ve her fotoğrafta tek bir ürün olsun. Karanlık veya bulanık fotoğraflarda yapay zeka yanılabilir.
+                    En iyi sonuç için aydınlık ve net fotoğraflar kullanın; her fotoğrafta tek bir ürün olsun. Toplam 150 ürün limitine ulaştığınızda eski ürünleri silerek yer açabilirsiniz.
                   </Tip>
                 </div>
               </div>
@@ -617,6 +630,81 @@ export default function HelpPage() {
                   <Note>
                     Spam ve aşırı kullanımı önlemek için giriş yapmamış ziyaretçiler günde en fazla <strong>7 mesaj</strong> gönderebilir. Siz kafe sahibi olarak giriş yaptığınızda bu limit uygulanmaz, istediğiniz kadar test edebilirsiniz.
                   </Note>
+                </div>
+              </div>
+            </section>
+
+            {/* ── 11 GOOGLE YORUMLAR ───────────────────────────────── */}
+            <section id="google-yorumlar" className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+              <SectionHeader s={SECTIONS[10]} />
+
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                {/* Demo görsel */}
+                <div className="lg:col-span-2">
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 space-y-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                      </svg>
+                      <p className="text-sm font-bold text-gray-800">Menü sayfasında görünecek buton:</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-2.5 w-full rounded-2xl border-2 border-orange-200 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-500">
+                      <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                      </svg>
+                      Google&apos;da Yorum Yap ⭐
+                    </div>
+                    <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-2">
+                      <p className="text-xs font-bold text-gray-600">Linki nereden bulursunuz?</p>
+                      {[
+                        "Google&apos;da \"Google Business Profile\" arayın ve hesabınıza giriş yapın.",
+                        "Sol menüden Müşterileri al → Yorum isteği paylaş seçin.",
+                        "Çıkan kısa linki kopyalayın (g.page/r/… ile başlar).",
+                        "Kafe Bilgileri → Google Yorum Linki alanına yapıştırın.",
+                      ].map((step, i) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-700 text-[10px] font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+                          <p className="text-[11px] text-gray-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: step }} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-3 space-y-4">
+                  <p className="text-gray-600 leading-relaxed">
+                    Müşterilerinizin menüden çıkmadan doğrudan Google&apos;a yorum bırakmasını sağlayın. Menü sayfasının alt kısmında &quot;Google&apos;da Yorum Yap&quot; butonu belirir — tek tıkla yorum sayfasına gider.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { icon: "⭐", title: "Daha fazla yorum", desc: "Müşteri zaten telefondayken bir tıkla yorum sayfasına gider — bu kadar kolay." },
+                      { icon: "📍", title: "Google&apos;da öne çık", desc: "Yorum sayısı ve puanı yüksek işletmeler Google Maps aramalarda üstte çıkar." },
+                      { icon: "🔗", title: "QR&apos;dan gelir", desc: "Müşteri menüyü QR ile açıyor, aynı akışta yorum yapabiliyor — sürtünme sıfır." },
+                    ].map(({ icon, title, desc }) => (
+                      <div key={title} className="bg-green-50 border border-green-100 rounded-2xl p-4">
+                        <span className="text-xl">{icon}</span>
+                        <p className="text-sm font-bold text-gray-800 mt-2 mb-1" dangerouslySetInnerHTML={{ __html: title }} />
+                        <p className="text-xs text-gray-500 leading-relaxed" dangerouslySetInnerHTML={{ __html: desc }} />
+                      </div>
+                    ))}
+                  </div>
+
+                  <StepList steps={[
+                    "Google Business Profile hesabınıza giriş yapın (business.google.com).",
+                    "\"Müşterileri al\" → \"Yorum isteği paylaş\" bölümüne gidin. Çıkan linki kopyalayın.",
+                    "Admin panelinde Kafe Bilgileri sekmesini açın, \"Google Yorum Linki\" alanına yapıştırın ve Kaydet&apos;e basın.",
+                    "Artık müşterileriniz menüdeyken bir tıkla Google yorumlarınıza ulaşabilir.",
+                  ]} />
+                  <Tip>
+                    Yorum linki yoksa Google Business Profile hesabı açmanız gerekir. Ücretsizdir, kaydolmak 5 dakika alır. Hesabınız olduktan sonra yukarıdaki adımları izleyin.
+                  </Tip>
                 </div>
               </div>
             </section>
