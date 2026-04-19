@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -27,12 +27,11 @@ const BASE_URL = "https://qefmenu.com";
 
 const getCafe = cache(async (slug: string) => {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("cafes")
     .select("id, name, name_en, description, description_en, category_order, theme, opening_hours, address, maps_url, google_review_url, chatbot_enabled, seasonal_themes_enabled")
     .eq("slug", slug)
     .single();
-  if (error) console.error("[getCafe] error:", error.message, "slug:", slug);
   return data;
 });
 
