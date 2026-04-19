@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -93,6 +94,12 @@ export async function deactivatePlanAction(cafeId: string) {
   return { success: true };
 }
 
+export async function revalidateCafeMenuAction(slug: string) {
+  await verifySuperAdmin();
+  revalidatePath(`/menu/${slug}`);
+  return { success: true };
+}
+
 export async function setAiScanLimitAction(cafeId: string, limit: number) {
   const admin = await verifySuperAdmin();
   const { error } = await admin
@@ -120,11 +127,17 @@ export async function updateSlugAction(cafeId: string, newSlug: string) {
   if (!slug) return { error: "Geçersiz slug" };
   if (RESERVED_SLUGS.has(slug)) return { error: "Bu slug kullanılamaz (rezerve edilmiş)" };
 
+  const { data: existing } = await admin.from("cafes").select("slug").eq("id", cafeId).single();
+
   const { error } = await admin
     .from("cafes")
     .update({ slug })
     .eq("id", cafeId);
 
   if (error) return { error: "Slug zaten kullanımda olabilir" };
+
+  if (existing?.slug) revalidatePath(`/menu/${existing.slug}`);
+  revalidatePath(`/menu/${slug}`);
+
   return { success: true };
 }

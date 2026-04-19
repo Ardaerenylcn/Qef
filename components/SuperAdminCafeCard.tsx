@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn, Crown, Sparkles, RotateCcw } from "lucide-react";
-import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction, activatePlanAction, deactivatePlanAction, setAiScanLimitAction, resetAiScanCountAction } from "@/app/superadmin/actions";
+import { UtensilsCrossed, Eye, ExternalLink, Trash2, Pencil, Check, X, Mail, Phone, Send, LogIn, Crown, Sparkles, RotateCcw, RefreshCw } from "lucide-react";
+import { deleteUserAction, updateSlugAction, sendMessageAction, impersonateUserAction, activatePlanAction, deactivatePlanAction, setAiScanLimitAction, resetAiScanCountAction, revalidateCafeMenuAction } from "@/app/superadmin/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -191,10 +191,19 @@ export default function SuperAdminCafeCard({ cafe, views, userInfo }: Props) {
           </div>
 
           {!isUuid && cafe.slug && (
-            <a href={`/menu/${cafe.slug}`} target="_blank"
-              className="text-gray-300 hover:text-orange-400 transition-colors shrink-0 mt-0.5">
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+              <button
+                onClick={() => startTransition(async () => { await revalidateCafeMenuAction(cafe.slug!); router.refresh(); })}
+                disabled={isPending}
+                title="ISR cache'ini temizle"
+                className="text-gray-200 hover:text-blue-400 transition-colors disabled:opacity-40">
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
+              <a href={`/menu/${cafe.slug}`} target="_blank"
+                className="text-gray-300 hover:text-orange-400 transition-colors">
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
           )}
         </div>
 
