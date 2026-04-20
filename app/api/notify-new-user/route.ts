@@ -6,8 +6,8 @@ export async function POST(req: NextRequest) {
     const { email, fullName, venueName } = await req.json() as { email: string; fullName: string; venueName: string };
     if (!email) return NextResponse.json({ error: "email gerekli" }, { status: 400 });
     const adminEmail = process.env.SUPER_ADMIN_EMAIL;
-    await sendNewUserNotification(email, fullName ?? "", venueName ?? "");
-    return NextResponse.json({ ok: true, debug_adminEmail: adminEmail ?? "YOK" });
+    const result = await sendNewUserNotification(email, fullName ?? "", venueName ?? "");
+    return NextResponse.json({ ok: true, debug_adminEmail: adminEmail ?? "YOK", resend: result });
   } catch {
     return NextResponse.json({ ok: false });
   }

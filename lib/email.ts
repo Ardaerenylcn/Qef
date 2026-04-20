@@ -43,8 +43,8 @@ export async function sendRenewalReminder(to: string, proEndsAt: Date, cafeName:
 
 export async function sendNewUserNotification(userEmail: string, fullName: string, venueName: string) {
   const adminEmail = process.env.SUPER_ADMIN_EMAIL;
-  if (!adminEmail) return;
-  await resend.emails.send({
+  if (!adminEmail) return { error: "SUPER_ADMIN_EMAIL yok" };
+  return await resend.emails.send({
     from: FROM,
     to: adminEmail,
     subject: `Yeni kayıt: ${venueName || userEmail}`,
