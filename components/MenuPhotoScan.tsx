@@ -183,8 +183,9 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
       revalidateMenu(cafeSlug);
       setSaved(true);
       setTimeout(() => { setSaved(false); setMenuFile(null); setProducts([]); setLocalCategories([]); }, 2000);
-    } catch {
-      setError("Kayıt sırasında hata oluştu. Lütfen tekrar deneyin.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : JSON.stringify(err);
+      setError(`Kayıt hatası: ${msg}`);
     } finally {
       setSaving(false);
     }
