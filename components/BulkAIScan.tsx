@@ -465,6 +465,7 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initi
             scanCount={scanCount}
             scanLimit={scanLimit}
             onScanCountChange={setScanCount}
+            existingProducts={existingProducts}
           />
         </div>
       </div>

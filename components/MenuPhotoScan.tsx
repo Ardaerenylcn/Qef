@@ -8,6 +8,7 @@ import { validateImage } from "@/lib/validateImage";
 import { revalidateMenu } from "@/lib/revalidateMenu";
 import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
+import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
 
 interface MenuProduct {
   name: string;
@@ -30,9 +31,10 @@ interface Props {
   scanCount: number;
   scanLimit: number;
   onScanCountChange: (count: number) => void;
+  existingProducts: PhoneProduct[];
 }
 
-export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCategory, scanCount, scanLimit, onScanCountChange }: Props) {
+export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCategory, scanCount, scanLimit, onScanCountChange, existingProducts }: Props) {
   const [menuFile, setMenuFile] = useState<{ file: File; preview: string } | null>(null);
   const [scanning, setScanning] = useState(false);
   const [products, setProducts] = useState<MenuProduct[]>([]);
@@ -42,6 +44,7 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
   const [error, setError] = useState("");
   const [newCatInputIndex, setNewCatInputIndex] = useState<number | null>(null);
   const [newCatValue, setNewCatValue] = useState("");
+  const [previewIndex, setPreviewIndex] = useState(0);
   const menuFileRef = useRef<HTMLInputElement>(null);
   const productImageRefs = useRef<(HTMLInputElement | null)[]>([]);
   const supabase = createClient();
@@ -191,6 +194,17 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
     }
   }
 
+  const phoneProducts: PhoneProduct[] = products.map((p, i) => ({
+    id: `menu-${i}`,
+    name: p.name,
+    price: p.price,
+    imageUrl: p.imagePreview,
+    category: p.category || "Genel",
+    isNew: true,
+  }));
+  const allPhoneProducts = [...existingProducts, ...phoneProducts];
+  const activePhoneId = products.length > 0 ? `menu-${previewIndex}` : null;
+
   if (saved) {
     return (
       <div className="flex flex-col items-center justify-center py-12 space-y-3">
@@ -204,6 +218,16 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
   }
 
   return (
+    <>
+      {allPhoneProducts.length > 0 && (
+        <div className="hidden xl:block fixed right-8 top-1/2 -translate-y-1/2 z-30">
+          <MenuListPreviewPhone
+            products={allPhoneProducts}
+            categories={mergedCategories}
+            activeId={activePhoneId}
+          />
+        </div>
+      )}
     <div className="space-y-4">
       {/* Upload zone */}
       {products.length === 0 && (
@@ -267,7 +291,7 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
           </p>
 
           {products.map((p, i) => (
-            <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+            <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden" onClick={() => setPreviewIndex(i)}>
               <div className="flex gap-4 p-4 min-w-0">
                 {/* Optional image */}
                 <div
@@ -378,5 +402,6 @@ export default function MenuPhotoScan({ cafeId, cafeSlug, allCategories, onNewCa
         </div>
       )}
     </div>
+    </>
   );
 }
