@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import AIChatMockup from "@/components/AIChatMockup";
 import AIBulkScanMockup from "@/components/AIBulkScanMockup";
+import MenuScanMockup from "@/components/MenuScanMockup";
 import StatsDemo from "./demos/StatsDemo";
 import QRDemo from "./demos/QRDemo";
 import CategoryDemo from "./demos/CategoryDemo";
@@ -420,6 +421,50 @@ export default function HelpPage() {
                   <Tip>
                     En iyi sonuç için aydınlık ve net fotoğraflar kullanın; her fotoğrafta tek bir ürün olsun. Toplam 150 ürün limitine ulaştığınızda eski ürünleri silerek yer açabilirsiniz.
                   </Tip>
+                </div>
+              </div>
+
+              {/* Kısım 2 — Menü Fotoğrafından İçe Aktar */}
+              <div className="mt-10 pt-8 border-t border-gray-100">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-black text-orange-500">2</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800">Menü Fotoğrafından İçe Aktar</h3>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                  <div className="lg:col-span-3">
+                    <MenuScanMockup />
+                  </div>
+                  <div className="lg:col-span-2 space-y-4">
+                    <p className="text-gray-600 leading-relaxed">
+                      Elinizdeki kağıt menünün fotoğrafını çekip yükleyin — yapay zeka tüm ürünleri, kategorileri ve fiyatları otomatik olarak okur ve listelere ekler. Sıfır yazma, 30 saniyede hazır.
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="bg-orange-50 border border-orange-100 rounded-2xl px-3 py-3 text-center">
+                        <p className="text-xl font-black text-orange-500">1</p>
+                        <p className="text-[11px] text-orange-400 leading-tight mt-0.5">fotoğraf yeterli<br/>tüm menü için</p>
+                      </div>
+                      <div className="bg-orange-50 border border-orange-100 rounded-2xl px-3 py-3 text-center">
+                        <p className="text-xl font-black text-orange-500">~30s</p>
+                        <p className="text-[11px] text-orange-400 leading-tight mt-0.5">onlarca ürün<br/>saniyeler içinde</p>
+                      </div>
+                    </div>
+
+                    <StepList steps={[
+                      "\"Toplu Ürün\" sekmesine geçin, aşağı inin — \"Kısım 2: Menü Fotoğrafından İçe Aktar\" bölümünü bulun.",
+                      "Fiziksel menünüzün net bir fotoğrafını alana sürükleyin ya da tıklayıp seçin.",
+                      "\"Menüyü Oku\" butonuna basın. Yapay zeka menüdeki tüm ürünleri, kategorileri ve fiyatları otomatik çıkarır.",
+                      "Listelenen ürünleri gözden geçirin, yanlış okunan bilgileri düzeltin. İsterseniz her ürüne ayrıca görsel de ekleyebilirsiniz.",
+                      "\"Ürünleri Kaydet\" butonuna basın — tümü tek seferde menünüze eklenir.",
+                    ]} />
+
+                    <Tip>
+                      Fotoğraf ne kadar aydınlık ve okunabilir olursa sonuç o kadar iyi olur. Kötü ışıkta ya da bulanık çekimlerde bazı ürünler atlanabilir. Fiyat sütunu net görünmüyorsa AI boş bırakabilir, siz sonradan doldurursunuz.
+                    </Tip>
+                  </div>
                 </div>
               </div>
             </section>
