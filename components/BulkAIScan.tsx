@@ -238,8 +238,11 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initi
     isNew: true,
   }));
 
-  const allPhoneProducts: PhoneProduct[] = [...existingProducts, ...scannedPhoneProducts];
-  const activePhoneId = products.length > 0 ? `new-${previewIndex}` : null;
+  const [menuPhoneProducts, setMenuPhoneProducts] = useState<PhoneProduct[]>([]);
+  const [menuActiveId, setMenuActiveId] = useState<string | null>(null);
+
+  const allPhoneProducts: PhoneProduct[] = [...existingProducts, ...scannedPhoneProducts, ...menuPhoneProducts];
+  const activePhoneId = products.length > 0 ? `new-${previewIndex}` : menuActiveId;
 
   return (
     <>
@@ -465,7 +468,7 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initi
             scanCount={scanCount}
             scanLimit={scanLimit}
             onScanCountChange={setScanCount}
-            existingProducts={existingProducts}
+            onPhoneProductsChange={(prods, activeId) => { setMenuPhoneProducts(prods); setMenuActiveId(activeId); }}
           />
         </div>
       </div>
