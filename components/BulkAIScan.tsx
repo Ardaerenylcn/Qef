@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, Upload, X, Loader2, Check, ChevronDown, Plus } from "lucide-react";
+import { Sparkles, Upload, X, Loader2, Check, ChevronDown, Plus, Camera } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { compressImage } from "@/lib/compressImage";
 import { validateImage } from "@/lib/validateImage";
@@ -10,6 +10,7 @@ import TagSelector from "./TagSelector";
 import IngredientSelector from "./IngredientSelector";
 import MenuListPreviewPhone, { type PhoneProduct } from "./MenuListPreviewPhone";
 import HelpButton from "./HelpButton";
+import MenuPhotoScan from "./MenuPhotoScan";
 
 interface ScannedProduct {
   index: number;
@@ -286,6 +287,17 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initi
           </div>
         </div>
 
+        {/* Kısım 1 başlığı */}
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-bold text-orange-500">1</span>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-800 text-sm">Ürün Görsellerini Yükle</p>
+            <p className="text-xs text-gray-400">Her görsel için AI otomatik ad ve açıklama oluşturur</p>
+          </div>
+        </div>
+
         {/* Upload alanı */}
         {products.length === 0 && (
           <div
@@ -434,6 +446,27 @@ export default function BulkAIScan({ cafeId, cafeSlug, existingCategories, initi
             </div>
           </div>
         )}
+        {/* Kısım 2 */}
+        <div className="border-t border-gray-100 pt-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-xs font-bold text-orange-500">2</span>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-800 text-sm">Menü Fotoğrafından İçe Aktar</p>
+              <p className="text-xs text-gray-400">Fiziksel menünün fotoğrafını yükle, tüm ürünler otomatik listelensin</p>
+            </div>
+          </div>
+          <MenuPhotoScan
+            cafeId={cafeId}
+            cafeSlug={cafeSlug}
+            allCategories={allCategories}
+            onNewCategory={(cat) => { if (!allCategories.includes(cat)) setAllCategories(prev => [...prev, cat]); }}
+            scanCount={scanCount}
+            scanLimit={scanLimit}
+            onScanCountChange={setScanCount}
+          />
+        </div>
       </div>
     </>
   );
