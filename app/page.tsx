@@ -5,6 +5,7 @@ import { QrCode, Smartphone, Zap, Star, Check, ChevronRight, Palette, Globe, Meg
 import DemoPhoneMockup from "@/components/DemoPhoneMockup";
 import AIChatMockup from "@/components/AIChatMockup";
 import AIBulkScanMockup from "@/components/AIBulkScanMockup";
+import MenuScanMockup from "@/components/MenuScanMockup";
 import AppearanceDemo from "@/components/help/demos/AppearanceDemo";
 import QRDemo from "@/components/help/demos/QRDemo";
 
@@ -664,6 +665,66 @@ export default function HomePage() {
 
               <a href="/register"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5">
+                Hemen Ücretsiz Dene →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MENU SCAN */}
+      <section className="py-24 px-6 bg-gray-900 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-orange-500/8 rounded-full blur-[100px]" />
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+
+            <MenuScanMockup />
+
+            {/* Sağ — İçerik */}
+            <div className="flex-1 space-y-7">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-bold px-4 py-2 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                  Yapay Zeka
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.15]">
+                  Menünü at,<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-300">
+                    30 sn&apos;de hazır
+                  </span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed text-[15px]">
+                  Kağıt menünün fotoğrafını çek — AI tüm ürünleri, kategorileri ve fiyatları okuyup dijital menüne aktarsın.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { title: "Fotoğraf çek, yükle", desc: "Tek bir görsel yeterli. Menünün tamamını tarar." },
+                  { title: "Kategoriler otomatik", desc: "Çorbalar, ana yemekler, tatlılar — başlıkları kendisi ayırır." },
+                  { title: "Fiyatlar dahil", desc: "Her ürünün fiyatını da okur, sen sadece kontrol edersin." },
+                ].map(({ title, desc }) => (
+                  <div key={title} className="flex items-start gap-4 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl px-5 py-4 transition-colors">
+                    <div className="w-2 h-2 rounded-full bg-orange-400 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="text-white font-semibold text-sm">{title}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {["Pro dahil", "Sıfır yazma", "Tüm menü tek seferde"].map((item) => (
+                  <span key={item} className="text-xs text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{item}</span>
+                ))}
+              </div>
+
+              <a href="/register"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold px-8 py-4 rounded-2xl transition-all text-sm shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5">
                 Hemen Ücretsiz Dene →
               </a>
             </div>
