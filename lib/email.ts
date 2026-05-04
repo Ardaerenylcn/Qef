@@ -42,7 +42,7 @@ export async function sendRenewalReminder(to: string, proEndsAt: Date, cafeName:
 }
 
 export async function sendNewUserNotification(userEmail: string, fullName: string, venueName: string) {
-  const adminEmail = process.env.SUPER_ADMIN_EMAIL;
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL ?? process.env.SUPER_ADMIN_EMAIL;
   if (!adminEmail) return;
   await resend.emails.send({
     from: FROM,
