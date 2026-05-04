@@ -25,7 +25,12 @@ export default function OpenStatusBadge({ hours, isEn = false }: Props) {
 
       const pad = (n: number) => String(n).padStart(2, "0");
       const currentTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-      setIsOpen(currentTime >= todayHours.open && currentTime <= todayHours.close);
+      const { open, close } = todayHours;
+      // Gece yarısını geçen saatler: close < open (örn. 09:00–02:00)
+      const overnight = close < open;
+      setIsOpen(overnight
+        ? currentTime >= open || currentTime <= close
+        : currentTime >= open && currentTime <= close);
     }
 
     compute();
