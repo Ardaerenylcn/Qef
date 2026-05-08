@@ -1,48 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Crown, Loader2, Check, ArrowLeft } from "lucide-react";
+import { Crown, Check, ArrowLeft, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+
+const WHATSAPP_URL = "https://wa.me/905377414699?text=Merhaba%2C%20Qef%20Pro%20plan%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.";
 
 export default function UpgradePage() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  async function handleCheckout() {
-    setLoading(true);
-    setError("");
-    try {
-      // Session'ı client-side'dan yenile, token'ı header'a ekle
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.href = "/register?next=/upgrade";
-        return;
-      }
-
-      const res = await fetch("/api/iyzico/checkout", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      });
-      let data: Record<string, unknown> = {};
-      try { data = await res.json(); } catch { /* HTML error page */ }
-      if (!res.ok || !data.checkoutFormContent) {
-        setError(`Ödeme sayfası açılamadı: ${data.detail ?? data.error ?? `HTTP ${res.status}`}`);
-        setLoading(false);
-        return;
-      }
-      // iyzico form içeriğini tam HTML yapısıyla sayfaya yaz
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ödeme</title></head><body>${data.checkoutFormContent as string}</body></html>`;
-      document.open();
-      document.write(html);
-      document.close();
-    } catch (e) {
-      setError(`Bir hata oluştu: ${String(e)}`);
-      setLoading(false);
-    }
-  }
-
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-md space-y-6">
@@ -83,21 +46,18 @@ export default function UpgradePage() {
               ))}
             </ul>
 
-            {error && (
-              <p className="text-sm text-red-400 bg-red-50 border border-red-100 rounded-xl px-3 py-2">{error}</p>
-            )}
-
-            <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 disabled:opacity-60 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-200 text-sm"
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5c] text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-green-200 text-sm"
             >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Crown className="w-5 h-5" />}
-              {loading ? "Yönlendiriliyor..." : "Şimdi Satın Al"}
-            </button>
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp ile Satın Al
+            </a>
 
             <p className="text-center text-xs text-gray-400">
-              Güvenli ödeme · iyzico altyapısı
+              Mesaj atın, size hemen dönelim.
             </p>
           </div>
         </div>
