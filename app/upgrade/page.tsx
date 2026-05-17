@@ -53,7 +53,7 @@ export default function UpgradePage() {
               className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5c] text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-green-200 text-sm"
             >
               <MessageCircle className="w-5 h-5" />
-              WhatsApp ile Satın Al
+              Bizimle İletişime Geçin
             </a>
 
             <p className="text-center text-xs text-gray-400">
